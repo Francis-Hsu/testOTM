@@ -5,20 +5,38 @@
 
 using namespace Rcpp;
 
-// powDiag
-List powDiag(const NumericMatrix& X);
-RcppExport SEXP _testOTM_powDiag(SEXP XSEXP) {
+// powerDiag2D
+List powerDiag2D(const NumericMatrix& X, double epsilon, int maxit, bool verbose);
+RcppExport SEXP _testOTM_powerDiag2D(SEXP XSEXP, SEXP epsilonSEXP, SEXP maxitSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const NumericMatrix& >::type X(XSEXP);
-    rcpp_result_gen = Rcpp::wrap(powDiag(X));
+    Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(powerDiag2D(X, epsilon, maxit, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
+// GoF2D
+List GoF2D(const NumericMatrix& X, const NumericMatrix& Y, const NumericMatrix& XY, const NumericMatrix& U);
+RcppExport SEXP _testOTM_GoF2D(SEXP XSEXP, SEXP YSEXP, SEXP XYSEXP, SEXP USEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type XY(XYSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type U(USEXP);
+    rcpp_result_gen = Rcpp::wrap(GoF2D(X, Y, XY, U));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_testOTM_powDiag", (DL_FUNC) &_testOTM_powDiag, 1},
+    {"_testOTM_powerDiag2D", (DL_FUNC) &_testOTM_powerDiag2D, 4},
+    {"_testOTM_GoF2D", (DL_FUNC) &_testOTM_GoF2D, 4},
     {NULL, NULL, 0}
 };
 
