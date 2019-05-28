@@ -11,7 +11,7 @@ OTM_2D(data, epsilon = 0.001, maxit = 100, verbose = F, na.rm = F)
 
 \item{epsilon}{Convergence threshold for optimization.}
 
-\item{maxit}{Max number of iteration before termination.}
+\item{maxit}{Max number of iterations before termination.}
 
 \item{verbose}{Wether to display messages during optimization.}
 

@@ -3,7 +3,7 @@
 #' Computes the semi-continuous optimal transport map from a uniform measure on [0, 1]^2 to a given data set.
 #' @param data Input coordinate matrix, of size \eqn{n} by \eqn{2}.
 #' @param epsilon Convergence threshold for optimization.
-#' @param maxit Max number of iteration before termination.
+#' @param maxit Max number of iterations before termination.
 #' @param verbose Wether to display messages during optimization.
 #' @param na.rm a logical value indicating whether NA values should be stripped before the computation proceeds.
 #' @return A list describing the resulting Laguerre diagram.

@@ -1,26 +1,48 @@
-GoF_2D = function(X, Y, mc, type = "max", epsilon = 1e-3, maxit = 100, na.rm = F) {
-  N = nrow(X) + nrow(Y)
+#' 2D goodness-of-test statistic
+#' 
+#' Computes the 2D goodness-of-test statistic using rank defined through the semi-continuous optimal transport map.
+#' @param X Sample data matrix, of size \eqn{n} by \eqn{2}.
+#' @param Y Sample data matrix, of size \eqn{m} by \eqn{2}.
+#' @param mc Number of Monte Carlo iteration samples used to evaluate the test statistic.
+#' @param type Method used to choose the rank over the Voronoi cell boundary.
+#' @param maxit Max number of iterations before termination.
+#' @param verbose Wether to display messages during optimization.
+#' @param na.rm a logical value indicating whether NA values should be stripped before the computation proceeds.
+#' @export
+GoF_2D = function(X, Y, mc = 1000, type = "max", epsilon = 1e-3, maxit = 100, na.rm = F) {
   if (!is.matrix(X) || !is.matrix(Y) || ncol(X) < 2 || ncol(Y) < 2) {
     stop("Data must be matrices with ncol >= 2.")
   }
+  
+  type_id = switch(type,
+                   max = 1,
+                   min = 2,
+                   stop("Unknown type of rank method!"))
   
   if (na.rm) {
     X = X[complete.cases(X), ]
     Y = Y[complete.cases(Y), ]
   }
-  
+
   U = sobol(mc, 2)
+  XY = rbind(X, Y)
   gof_list = GoF2D(X, Y, XY, U)
-  cell_id = c(gof_list$U_Map_X, nrow(X) + gof_list$U_Map_Y)
+  cell_id_x = gof_list$U_Map_X + 1
+  cell_id_y = gof_list$U_Map_Y + 1 + nrow(X)
   colnames(gof_list$Vert_XY) = c("vert.x", "vert.y", "cell")
-  l2norm = rowSums(gof_list$Vert_XY[, 1:2]^2)
+  gof_verts = gof_list$Vert_XY
+  gof_rank = t(sapply(split(data.frame(gof_verts)[, -ncol(gof_verts)], gof_verts[, ncol(gof_verts)]), choose_vert, type = type_id))
+  gof_stat = mean(rowSums((gof_rank[cell_id_x, ] - gof_rank[cell_id_y, ])^2))
   
-  max_norm = rep(0, N)
-  for (i in 1:N) {
-    vert_ids = which(gof_list$Vert_XY[, 3] == i - 1)
-    max_norm[i] = max(l2norm[vert_ids])
+  return(gof_stat)
+}
+
+choose_vert = function(V, type = 1) {
+  if (type == 1) {
+    as.numeric(V[which.max(rowSums(V^2)), , drop = F])
+  } else if (type == 2) {
+    as.numeric(V[which.min(rowSums(V^2)), , drop = F])
+  } else {
+    stop("Unknown type of rank method!")
   }
-  class(otm_list) = "OTM_2D"
-  
-  return(otm_list)
 }
