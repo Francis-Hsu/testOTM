@@ -79,6 +79,22 @@ NumericMatrix CubeVert(int d) {
   return rtn;
 }
 
+double getWeightedVerts(NumericMatrix &X, double &wMax, double* weights) {
+  int d = X.ncol(); // work for 3D?
+  int n = X.nrow();
+  
+  double wVX[(d + 1) * n];
+  for (int i = 0; i < (d + 1) * n; i++) {
+    if (i % (d + 1) == d) {
+      wVX[i] = (double) std::sqrt(wMax - weights[i / (d + 1)]);
+    } else {
+      wVX[i] = X(i / (d + 1), i % (d + 1));
+    }
+  }
+  
+  return wVX;
+}
+
 void extractWeights(GEO::OptimalTransportMap &OTM, double &wMax, double* weights) {
   wMax = OTM.weight(0);
   for (unsigned int i = 0; i < OTM.nb_points(); i++) {
@@ -113,7 +129,10 @@ NumericMatrix extractVertices(GEO::Mesh &M) {
       Vert(accuVert[i] + j, 2) = i;
     }
   }
-
+  
+  delete[] nbVert;
+  delete[] accuVert;
+  
   return Vert;
 }
 
