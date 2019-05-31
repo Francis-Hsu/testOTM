@@ -3,7 +3,7 @@ LIB_DIR = ../inst/include
 
 EXPORTS = -Dgeogram_EXPORTS -Dexploragram_EXPORTS
 OPTIONS = -DGEOGRAM_WITH_HLBFGS -DGEOGRAM_WITH_TETGEN -DGEOGRAM_WITH_TRIANGLE -Wno-unknown-pragmas
-FLIBS = `gfortran -print-search-dirs | grep ^libraries: | sed 's|libraries: =||' | sed 's|:| -L|g' | sed 's|^|-L|'`
+FLIBS = `gfortran -print-search-dirs | grep '^libraries:' | sed 's|libraries: =||' | sed 's|:| -L|g' | sed 's|^|-L|'`
 
 PKG_CXXFLAGS = -I$(ROOT_DIR) -I$(LIB_DIR) $(EXPORTS) $(OPTIONS)
 PKG_LIBS = $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
