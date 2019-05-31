@@ -137,9 +137,6 @@ NumericMatrix getEdges(GEO::Mesh &M) {
   return Edge;
 }
 
-  
-// write a wrapper struct?
-
 void OTM2D(GEO::OptimalTransportMap2d &OTM, const NumericMatrix &X, double epsilon, int maxit, bool verbose) {
   int n = X.nrow();
   int d = 2;
