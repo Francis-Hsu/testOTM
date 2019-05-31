@@ -10,8 +10,8 @@
 #' @param na.rm a logical value indicating whether NA values should be stripped before the computation proceeds.
 #' @export
 GoF_2D = function(X, Y, mc = 1000, type = "max", epsilon = 1e-3, maxit = 100, na.rm = F) {
-  if (!is.matrix(X) || !is.matrix(Y) || ncol(X) < 2 || ncol(Y) < 2) {
-    stop("Data must be matrices with ncol >= 2.")
+  if (!is.matrix(X) || !is.matrix(Y) || ncol(X) != 2 || ncol(Y) != 2) {
+    stop("Input data must be matrices with ncol = 2.")
   }
   
   type_id = switch(type,

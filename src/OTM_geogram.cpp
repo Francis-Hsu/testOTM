@@ -1,31 +1,4 @@
-#include <geogram/basic/command_line_args.h>
-#include <geogram/basic/logger.h>
-#include <geogram/mesh/mesh.h>
- 
-#include <exploragram/optimal_transport/optimal_transport.h>
-#include <exploragram/optimal_transport/optimal_transport_2d.h>
-#include <exploragram/optimal_transport/optimal_transport_3d.h>
-#include <exploragram/optimal_transport/sampling.h>
-
-#include <geogram/mesh/mesh_io.h>
-#include <geogram/mesh/mesh_geometry.h>
-#include <geogram/mesh/mesh_AABB.h>
-
-#include <geogram/voronoi/CVT.h>
-#include <geogram/voronoi/RVD.h>
-#include <geogram/voronoi/generic_RVD_vertex.h>
-#include <geogram/voronoi/RVD_callback.h>
-#include <geogram/voronoi/generic_RVD_cell.h>
- 
-#include <geogram/delaunay/delaunay_2d.h>
-#include <geogram/delaunay/delaunay_3d.h>
-
-#include <geogram/points/nn_search.h>
-#include <geogram/numerics/optimizer.h>
-#include <geogram/numerics/lbfgs_optimizers.h>
- 
-#include <geogram/basic/command_line.h>
-#include <geogram/basic/memory.h>
+#include "geogram.h"
 
 #ifdef Realloc
 #undef Realloc
@@ -52,8 +25,6 @@ namespace GEO {
   }
 }
 
-// write a wrapper struct?
-
 // R-like modulo operator
 inline int divisorModulo(int a, int b) {
   return ((a % b) + b) % b;
@@ -79,24 +50,34 @@ NumericMatrix CubeVert(int d) {
   return rtn;
 }
 
-void extractWeights(GEO::OptimalTransportMap &OTM, double &wMax, double* weights) {
+void getWeights(GEO::OptimalTransportMap &OTM, double &wMax, double* w) {
   wMax = OTM.weight(0);
   for (unsigned int i = 0; i < OTM.nb_points(); i++) {
-    weights[i] = OTM.weight(i);
-    if (wMax < weights[i]) {
-      wMax = weights[i];
+    w[i] = OTM.weight(i);
+    if (wMax < w[i]) {
+      wMax = w[i];
     }
   }
 }
 
-NumericMatrix extractVertices(GEO::Mesh &M) {
+void getWeightedVerts(const NumericMatrix &X, double &wMax, double* w, int n, int d, double* wV) {
+  for (int i = 0; i < (d + 1) * n; i++) {
+    if (i % (d + 1) == d) {
+      wV[i] = (double) std::sqrt(wMax - w[i / (d + 1)]);
+    } else {
+      wV[i] = X(i / (d + 1), i % (d + 1));
+    }
+  }
+}
+
+NumericMatrix getVertices(GEO::Mesh &M) {
   GEO::vec3 v;
   unsigned int nFacets = M.facets.nb();
   unsigned int vertID;
 
   int totalNbVert = 0;
-  int* nbVert = new int[nFacets];
-  int* accuVert = new int[nFacets];
+  int nbVert[nFacets];
+  int accuVert[nFacets];
   for (unsigned int i = 0; i < nFacets; i++) {
     nbVert[i] = M.facets.nb_vertices(i);
     accuVert[i] = totalNbVert;
@@ -113,15 +94,15 @@ NumericMatrix extractVertices(GEO::Mesh &M) {
       Vert(accuVert[i] + j, 2) = i;
     }
   }
-
+  
   return Vert;
 }
 
-NumericMatrix extractEdges(GEO::Mesh &M) {
+NumericMatrix getEdges(GEO::Mesh &M) {
   GEO::vec3 v;
   unsigned int nVerts = M.vertices.nb();
   unsigned int nFacets = M.facets.nb();
-
+  
   // extract vertices in order
   NumericMatrix Vert(nVerts, 2);
   for (unsigned int i = 0; i < nVerts; i++) {
@@ -129,15 +110,15 @@ NumericMatrix extractEdges(GEO::Mesh &M) {
     Vert(i, 0) = v.x;
     Vert(i, 1) = v.y;
   }
-
+  
   // find out number of vertices in each cell
   int totalNbVert = 0;
-  int* nbVert = new int[nFacets];
+  int nbVert[nFacets];
   for (unsigned int i = 0; i < nFacets; i++) {
     nbVert[i] = M.facets.nb_vertices(i);
     totalNbVert += nbVert[i];
   }
-
+  
   // store edges
   int currVertID, currNbVert, currAccuVert = 0;
   NumericMatrix Edge(totalNbVert, 4);
@@ -152,13 +133,16 @@ NumericMatrix extractEdges(GEO::Mesh &M) {
     }
     currAccuVert += currNbVert;
   }
-
+  
   return Edge;
 }
 
+  
+// write a wrapper struct?
+
 void OTM2D(GEO::OptimalTransportMap2d &OTM, const NumericMatrix &X, double epsilon, int maxit, bool verbose) {
-  int d = 2;
   int n = X.nrow();
+  int d = 2;
 
   // create a mesh for data points
   GEO::Mesh dataMesh(d, false);
@@ -215,25 +199,19 @@ List powerDiag2D(const NumericMatrix &X, double epsilon, int maxit, bool verbose
   OTM2D(OTM, X, epsilon, maxit, verbose);
   
   // store centroids
-  double* Centroids = new double[n * d];
-  OTM.compute_Laguerre_centroids(Centroids);
-  NumericMatrix centroids(n, d);
+  double ct[n * d];
+  OTM.compute_Laguerre_centroids(ct);
+  NumericMatrix Centroid(n, d);
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < d; j++) {
-      centroids(i, j) = Centroids[i * d + j];
+      Centroid(i, j) = ct[i * d + j];
     }
   }
 
   // store weights
-  double* Weights = new double[n];
-  double wMax = OTM.weight(0);
-  extractWeights(OTM, wMax, Weights);
-
-  // store the normalized weights
-  NumericVector weight(n, wMax);
-  for (int i = 0; i < n; i++) {
-    weight(i) -= Weights[i];
-  }
+  double w[n];
+  double wMax;
+  getWeights(OTM, wMax, w);
 
   // create a squared uniform mesh
   unifMesh.clear();
@@ -244,15 +222,9 @@ List powerDiag2D(const NumericMatrix &X, double epsilon, int maxit, bool verbose
   unifMesh.facets.create_quad(0, 2, 3, 1);
 
   // setup weighted vertices
-  double* weightedVerts = new double[(d + 1) * n];
-  for (int i = 0; i < (d + 1) * n; i++) {
-    if (i % (d + 1) == d) {
-      weightedVerts[i] = (double) std::sqrt(wMax - Weights[i / (d + 1)]);
-    } else {
-      weightedVerts[i] = X(i / (d + 1), i % (d + 1));
-    }
-  }
-
+  double weightedVerts[(d + 1) * n];
+  getWeightedVerts(X, wMax, w, n, d, weightedVerts);
+  
   // generate a new regular triangulation based on weights computed
   GEO::Delaunay_var transTri = GEO::Delaunay2d::create(d + 1);
   transTri->set_vertices(n, weightedVerts);
@@ -261,21 +233,23 @@ List powerDiag2D(const NumericMatrix &X, double epsilon, int maxit, bool verbose
   GEO::RestrictedVoronoiDiagram_var RVD = GEO::RestrictedVoronoiDiagram::create(transTri, &unifMesh);
   GEO::Mesh transMap;
   RVD->compute_RVD(transMap);
-
+  
+  // get the weights
+  NumericVector Weight(w, w + sizeof(w) / sizeof(*w));
+  
   // extract all vertices
-  NumericMatrix Vert = extractVertices(transMap);
+  NumericMatrix Vert = getVertices(transMap);
 
   // store edges
-  NumericMatrix Edge = extractEdges(transMap);
+  NumericMatrix Edge = getEdges(transMap);
   
   List ret;
   ret["Data"] = X;
-  ret["MaxWeight"] = wMax;
-  ret["Weight"] = weight;
+  ret["Centroids"] = Centroid;
+  ret["Weight"] = Weight;
   ret["Vert"] = Vert;
   ret["Edge"] = Edge;
-  ret["Centroids"] = centroids;
-
+  
   return ret;
 }
 
@@ -285,6 +259,14 @@ List GoF2D(const NumericMatrix &X, const NumericMatrix &Y, const NumericMatrix &
   int n = X.nrow();
   int m = Y.nrow();
   int k = U.nrow();
+
+  // initialize the Geogram library.
+  GEO::initialize();
+  
+  // import command line arguments.
+  GEO::CmdLine::import_arg_group("standard");
+  GEO::CmdLine::import_arg_group("algo");
+  GEO::CmdLine::set_arg("algo:predicates", "exact");
 
   // create a mesh for 2D uniform measure
   GEO::Mesh unifMesh(d, false);
@@ -309,44 +291,21 @@ List GoF2D(const NumericMatrix &X, const NumericMatrix &Y, const NumericMatrix &
   OTM2D(OTMXY, XY, 1e-3, 250, false);
   
   // get weights
-  double* wX = new double[n];
-  double* wY = new double[m];
-  double* wXY = new double[n + m];
-  double xwMax = OTMX.weight(0);
-  double ywMax = OTMY.weight(0);
-  double xywMax = OTMXY.weight(0);
-  extractWeights(OTMX, xwMax, wX);
-  extractWeights(OTMY, ywMax, wY);
-  extractWeights(OTMXY, xywMax, wXY);
+  double wX[n];
+  double wY[m];
+  double wXY[n + m];
+  double xwMax, ywMax, xywMax;
+  getWeights(OTMX, xwMax, wX);
+  getWeights(OTMY, ywMax, wY);
+  getWeights(OTMXY, xywMax, wXY);
 
-  // // setup weighted vertices for X and Y
-  double* wVX = new double[(d + 1) * n];
-  double* wVY = new double[(d + 1) * m];
-  double* wVXY = new double[(d + 1) * (n + m)];
-  //
-  for (int i = 0; i < (d + 1) * n; i++) {
-    if (i % (d + 1) == d) {
-      wVX[i] = (double) std::sqrt(xwMax - wX[i / (d + 1)]);
-    } else {
-      wVX[i] = X(i / (d + 1), i % (d + 1));
-    }
-  }
-  //
-  for (int i = 0; i < (d + 1) * m; i++) {
-    if (i % (d + 1) == d) {
-      wVY[i] = (double) std::sqrt(ywMax - wY[i / (d + 1)]);
-    } else {
-      wVY[i] = Y(i / (d + 1), i % (d + 1));
-    }
-  }
-
-  for (int i = 0; i < (d + 1) * (n + m); i++) {
-    if (i % (d + 1) == d) {
-      wVXY[i] = (double) std::sqrt(xywMax - wXY[i / (d + 1)]);
-    } else {
-      wVXY[i] = XY(i / (d + 1), i % (d + 1));
-    }
-  }
+  // setup weighted vertices for X and Y
+  double wVX[(d + 1) * n];
+  double wVY[(d + 1) * m];
+  double wVXY[(d + 1) * (n + m)];
+  getWeightedVerts(X, xwMax, wX, n, d, wVX);
+  getWeightedVerts(Y, ywMax, wY, m, d, wVY);
+  getWeightedVerts(XY, xywMax, wXY, n + m, d, wVXY);
 
   // triangulate
   GEO::Delaunay_var transTriX = GEO::Delaunay2d::create(d + 1);
@@ -355,8 +314,8 @@ List GoF2D(const NumericMatrix &X, const NumericMatrix &Y, const NumericMatrix &
   transTriX->set_vertices(n, wVX);
   transTriY->set_vertices(m, wVY);
   transTriXY->set_vertices(n + m, wVXY);
-  //
-  double* p = new double[2];
+
+  double p[2];
   IntegerVector uX(k), uY(k);
   for (int i = 0; i < k; i++) {
     p[0] = U(i, 0);
@@ -364,8 +323,8 @@ List GoF2D(const NumericMatrix &X, const NumericMatrix &Y, const NumericMatrix &
     uX(i) = transTriX->nearest_vertex(p);
     uY(i) = transTriY->nearest_vertex(p);
   }
-  //
-  // // create a squared uniform mesh
+  
+  // create a squared uniform mesh
   unifMesh.clear();
   unifMesh.vertices.create_vertices(cubeVertices.nrow());
   for (int i = 0; i < cubeVertices.nrow(); i++) {
@@ -379,8 +338,8 @@ List GoF2D(const NumericMatrix &X, const NumericMatrix &Y, const NumericMatrix &
   RVDXY->compute_RVD(transMapXY);
 
   // extract all vertices
-  NumericMatrix Vert = extractVertices(transMapXY);
-
+  NumericMatrix Vert = getVertices(transMapXY);
+  
   List rtn;
   rtn["U_Map_X"] = uX;
   rtn["U_Map_Y"] = uY;
