@@ -18,10 +18,13 @@ OTM_2D = function(data, epsilon = 1e-3, maxit = 100, verbose = F, na.rm = F) {
     data = data[complete.cases(data), ]
   }
   
-  otm_list = powerDiag2D(data, epsilon, maxit, verbose)
-  colnames(otm_list$Vert) = c("vert.x", "vert.y", "cell")
-  colnames(otm_list$Edge) = c("source.x", "source.y", "target.x", "target.y")
-  colnames(otm_list$Centroids) = c("cent.x", "cent.y")
+  otm_list = dualGraphes2D(data, epsilon, maxit, verbose)
+  colnames(otm_list$Centroid) = c("x", "y")
+  colnames(otm_list$Vertex.RDT) = c("cell", "x", "y")
+  colnames(otm_list$Vertex.RVD) = c("cell", "x", "y")
+  
+  otm_list$Vertex.RDT = as.data.frame(otm_list$Vertex.RDT)
+  otm_list$Vertex.RVD = as.data.frame(otm_list$Vertex.RVD)
   
   class(otm_list) = "OTM_2D"
   

@@ -5,9 +5,9 @@
 
 using namespace Rcpp;
 
-// powerDiag2D
-List powerDiag2D(const NumericMatrix& X, double epsilon, int maxit, bool verbose);
-RcppExport SEXP _testOTM_powerDiag2D(SEXP XSEXP, SEXP epsilonSEXP, SEXP maxitSEXP, SEXP verboseSEXP) {
+// dualGraphes2D
+List dualGraphes2D(const NumericMatrix& X, double epsilon, int maxit, bool verbose);
+RcppExport SEXP _testOTM_dualGraphes2D(SEXP XSEXP, SEXP epsilonSEXP, SEXP maxitSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -15,7 +15,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
     Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(powerDiag2D(X, epsilon, maxit, verbose));
+    rcpp_result_gen = Rcpp::wrap(dualGraphes2D(X, epsilon, maxit, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -35,7 +35,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_testOTM_powerDiag2D", (DL_FUNC) &_testOTM_powerDiag2D, 4},
+    {"_testOTM_dualGraphes2D", (DL_FUNC) &_testOTM_dualGraphes2D, 4},
     {"_testOTM_GoF2D", (DL_FUNC) &_testOTM_GoF2D, 4},
     {NULL, NULL, 0}
 };

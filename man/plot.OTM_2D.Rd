@@ -4,14 +4,28 @@
 \alias{plot.OTM_2D}
 \title{2D semi-continuous optimal transport map plot}
 \usage{
-\method{plot}{OTM_2D}(Obj, col.data = "cornflowerblue",
-  col.center = "firebrick", col.edge = "black", connect = F, ...)
+\method{plot}{OTM_2D}(object, which = "Both",
+  col.data = "cornflowerblue", col.center = "firebrick",
+  col.edge = "black", draw.center = T, draw.map = F, ...)
 }
 \arguments{
-\item{Obj}{Fitted optimal transport map.}
+\item{object}{fitted 2D optimal transport map object.}
+
+\item{which}{specify which graph to plot. Can be "RVD", "RDT", or "Both".}
+
+\item{col.data}{color of the data points}
+
+\item{col.center}{color of the Voronoi centroids}
+
+\item{col.edge}{color of the edges in plotting RVD and RDT}
+
+\item{draw.center}{logical indicating if the centroids should be plotted.}
+
+\item{draw.map}{logical indicating if dashed lines should be added to show mapping between the data and the Laguerre cells.}
 }
 \description{
-Plot OTM
+Plot the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of the 
+2D semi-continuous optimal transport map.
 }
 \keyword{Laguerre}
 \keyword{Voronoi,}

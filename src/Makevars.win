@@ -2,9 +2,9 @@ ROOT_DIR = .
 LIB_DIR = ../inst/include
 
 EXPORTS = -Dgeogram_EXPORTS -Dexploragram_EXPORTS
-OPTIONS = -DGEOGRAM_WITH_HLBFGS -DGEOGRAM_WITH_TETGEN -DGEOGRAM_WITH_TRIANGLE -Wno-unknown-pragmas
+OPTIONS = -DGEOGRAM_WITH_HLBFGS -DGEOGRAM_WITH_TETGEN -DGEOGRAM_WITH_TRIANGLE
 
-PKG_CXXFLAGS = -I$(ROOT_DIR) -I$(LIB_DIR) $(EXPORTS) $(OPTIONS)
+PKG_CXXFLAGS = -I$(ROOT_DIR) -I$(LIB_DIR) $(EXPORTS) $(OPTIONS) -Wno-unknown-pragmas -ggdb
 PKG_LIBS = $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
 PKG_CFLAGS = -I$(ROOT_DIR) -I$(LIB_DIR) $(EXPORTS) $(OPTIONS)
 CXX_STD = CXX11
@@ -96,10 +96,10 @@ GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/HLBFGS/HLBFGS.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/HLBFGS/HLBFGS_BLAS.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/HLBFGS/Lite_Sparse_Matrix.cpp
 
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/PoissonRecon/poisson_geogram.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/PoissonRecon/Geometry.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/PoissonRecon/MarchingCubes.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/PoissonRecon/Factor.cpp
+#GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/PoissonRecon/poisson_geogram.cpp
+#GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/PoissonRecon/Geometry.cpp
+#GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/PoissonRecon/MarchingCubes.cpp
+#GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/PoissonRecon/Factor.cpp
 
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/gzstream/gzstream.cpp
 
@@ -170,7 +170,7 @@ GEO_SOURCES_CPP+= $(LIB_DIR)/geogram/image/image_serializer_xpm.cpp
 GEO_OBJECTS_C = $(GEO_SOURCES_C:.c=.o)
 GEO_OBJECTS_CPP = $(GEO_SOURCES_CPP:.cpp=.o)
 
-R_SOURCES = OTM_geogram.cpp RcppExports.cpp
+R_SOURCES = OTM_2D.cpp utilities.cpp RcppExports.cpp
 R_OBJECTS = $(R_SOURCES:.cpp=.o)
 
 OBJECTS = $(GEO_OBJECTS_C) $(GEO_OBJECTS_CPP) $(R_OBJECTS)
