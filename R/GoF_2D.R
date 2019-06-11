@@ -1,13 +1,13 @@
 #' 2D goodness-of-test statistic
 #' 
 #' Computes the 2D goodness-of-test statistic using rank defined through the semi-continuous optimal transport map.
-#' @param X Sample data matrix, of size \eqn{n} by \eqn{2}.
-#' @param Y Sample data matrix, of size \eqn{m} by \eqn{2}.
-#' @param mc Number of Monte Carlo iteration samples used to evaluate the test statistic.
-#' @param type Method used to choose the rank over the Voronoi cell boundary.
-#' @param maxit Max number of iterations before termination.
-#' @param verbose Wether to display messages during optimization.
-#' @param na.rm a logical value indicating whether NA values should be stripped before the computation proceeds.
+#' @param X sample data matrix, of size \eqn{n} by \eqn{2}.
+#' @param Y sample data matrix, of size \eqn{m} by \eqn{2}.
+#' @param mc number of Monte Carlo iteration samples used to evaluate the test statistic.
+#' @param type method used to choose the rank over the Voronoi cell boundary.
+#' @param maxit max number of iterations before termination.
+#' @param verbose logical indicating wether to display optimization messages.
+#' @param na.rm logical indicating whether NA values should be stripped before the computation proceeds.
 #' @export
 GoF_2D = function(X, Y, mc = 1000, type = "max", epsilon = 1e-3, maxit = 100, na.rm = F) {
   if (!is.matrix(X) || !is.matrix(Y) || ncol(X) != 2 || ncol(Y) != 2) {

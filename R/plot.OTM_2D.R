@@ -5,7 +5,7 @@
 #' @param object fitted 2D optimal transport map object.
 #' @param which specify which graph to plot. Can be "RVD", "RDT", or "Both".
 #' @param draw.center logical indicating if the centroids should be plotted.
-#' @param draw.map logical indicating if dashed lines should be added to show mapping between the data and the Laguerre cells.
+#' @param draw.map logical indicating if dashed lines should be added to show mapping between the data and the Voronoi cells.
 #' @param col.data color of the data points
 #' @param col.center color of the Voronoi centroids
 #' @param col.edge color of the edges in plotting RVD and RDT

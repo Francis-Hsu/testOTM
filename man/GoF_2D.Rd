@@ -8,19 +8,19 @@ GoF_2D(X, Y, mc = 1000, type = "max", epsilon = 0.001, maxit = 100,
   na.rm = F)
 }
 \arguments{
-\item{X}{Sample data matrix, of size \eqn{n} by \eqn{2}.}
+\item{X}{sample data matrix, of size \eqn{n} by \eqn{2}.}
 
-\item{Y}{Sample data matrix, of size \eqn{m} by \eqn{2}.}
+\item{Y}{sample data matrix, of size \eqn{m} by \eqn{2}.}
 
-\item{mc}{Number of Monte Carlo iteration samples used to evaluate the test statistic.}
+\item{mc}{number of Monte Carlo iteration samples used to evaluate the test statistic.}
 
-\item{type}{Method used to choose the rank over the Voronoi cell boundary.}
+\item{type}{method used to choose the rank over the Voronoi cell boundary.}
 
-\item{maxit}{Max number of iterations before termination.}
+\item{maxit}{max number of iterations before termination.}
 
-\item{na.rm}{a logical value indicating whether NA values should be stripped before the computation proceeds.}
+\item{na.rm}{logical indicating whether NA values should be stripped before the computation proceeds.}
 
-\item{verbose}{Wether to display messages during optimization.}
+\item{verbose}{logical indicating wether to display optimization messages.}
 }
 \description{
 Computes the 2D goodness-of-test statistic using rank defined through the semi-continuous optimal transport map.

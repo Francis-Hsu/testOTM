@@ -8,9 +8,7 @@ void OTM2D(GEO::OptimalTransportMap2d &OTM, const NumericMatrix &X, double epsil
   // create a mesh for data points
   GEO::Mesh dataMesh(d, false);
   dataMesh.vertices.create_vertices(n);
-  for (int i = 0; i < n; i++) {
-    setMeshPoint(dataMesh, X, i);
-  }
+  setMeshPoint(dataMesh, X);
 
   // embed in 3-dimension
   dataMesh.vertices.set_dimension(d + 1);
@@ -32,20 +30,13 @@ List dualGraphes2D(const NumericMatrix &X, double epsilon, int maxit, bool verbo
   int d = 2;
   
   // initialize the Geogram library.
-  GEO::initialize();
-  
-  // import command line arguments.
-  GEO::CmdLine::import_arg_group("standard");
-  GEO::CmdLine::import_arg_group("algo");
-  GEO::CmdLine::set_arg("algo:predicates", "fast");
+  initializeGeogram();
   
   // create a mesh for 2D uniform measure
   GEO::Mesh unifMesh(d, false);
   const NumericMatrix cubeVertices = cubeVert(2);
   unifMesh.vertices.create_vertices(cubeVertices.nrow());
-  for (int i = 0; i < cubeVertices.nrow(); i++) {
-    setMeshPoint(unifMesh, cubeVertices, i);
-  }
+  setMeshPoint(unifMesh, cubeVertices);
 
   // must triangulate for OTM
   unifMesh.facets.create_triangle(0, 1, 2);
@@ -77,10 +68,9 @@ List dualGraphes2D(const NumericMatrix &X, double epsilon, int maxit, bool verbo
   // create a squared uniform mesh
   unifMesh.clear();
   unifMesh.vertices.create_vertices(cubeVertices.nrow());
-  for (int i = 0; i < cubeVertices.nrow(); i++) {
-    setMeshPoint(unifMesh, cubeVertices, i);
-  }
+  setMeshPoint(unifMesh, cubeVertices);
   unifMesh.facets.create_quad(0, 2, 3, 1);
+  unifMesh.vertices.set_dimension(d + 1);
 
   // setup weighted vertices
   double wV[(d + 1) * n];
@@ -96,9 +86,6 @@ List dualGraphes2D(const NumericMatrix &X, double epsilon, int maxit, bool verbo
   RVD->compute_RDT(otmRDT);
   RVD->compute_RVD(otmRVD);
   
-  // get the weights
-  NumericVector Weight(w, w + sizeof(w) / sizeof(*w));
-  
   // extract all vertices of RVD and RDT
   NumericMatrix rdtVert = getVertices(otmRDT);
   NumericMatrix rvdVert = getVertices(otmRVD);
@@ -106,7 +93,7 @@ List dualGraphes2D(const NumericMatrix &X, double epsilon, int maxit, bool verbo
   List ret;
   ret["Data"] = X;
   ret["Centroid"] = Centroid;
-  ret["Weight"] = Weight;
+  ret["Weight"] = NumericVector(w, w + sizeof(w) / sizeof(*w));
   ret["Vertex.RDT"] = rdtVert;
   ret["Vertex.RVD"] = rvdVert;
   ret["N.Triangles"] = otmRDT.facets.nb();
@@ -115,9 +102,29 @@ List dualGraphes2D(const NumericMatrix &X, double epsilon, int maxit, bool verbo
   return ret;
 }
 
-List OTMRank2D(const NumericMatrix &X, const NumericVector &w, const double) {
+// under construction
+// [[Rcpp::export]]
+void OTMRank2D(const NumericMatrix &X, NumericVector &weight, double wMax) {
   int n = X.nrow();
   int d = 2;
+  
+  // initialize the Geogram library.
+  initializeGeogram();
+  
+  double* w = weight.begin();
+  double wV[(d + 1) * n];
+  getWeightedVerts(X, wMax, w, n, d, wV);
+  
+  GEO::Delaunay_var otmRWD = GEO::Delaunay::create(d + 1, "BPOW2d");
+  otmRWD->set_vertices(n, wV);
+  
+  for (unsigned int i = 0; i < otmRWD->nb_cells(); i++) {
+    Rcout << i << std::endl;
+    for (int j = 0; j <= 2; j++) {
+      Rcout << X(otmRWD->cell_vertex(i, j), 0) << " " 
+      << X(otmRWD->cell_vertex(i, j), 1) << std::endl;
+    }
+  }
 }
 
 // [[Rcpp::export]]
@@ -128,20 +135,13 @@ List GoF2D(const NumericMatrix &X, const NumericMatrix &Y, const NumericMatrix &
   int k = U.nrow();
 
   // initialize the Geogram library.
-  GEO::initialize();
-  
-  // import command line arguments.
-  GEO::CmdLine::import_arg_group("standard");
-  GEO::CmdLine::import_arg_group("algo");
-  GEO::CmdLine::set_arg("algo:predicates", "exact");
+  initializeGeogram();
 
   // create a mesh for 2D uniform measure
   GEO::Mesh unifMesh(d, false);
   const NumericMatrix cubeVertices = cubeVert(2);
   unifMesh.vertices.create_vertices(cubeVertices.nrow());
-  for (int i = 0; i < cubeVertices.nrow(); i++) {
-    setMeshPoint(unifMesh, cubeVertices, i);
-  }
+  setMeshPoint(unifMesh, cubeVertices);
 
   // must triangulate for OTM
   unifMesh.facets.create_triangle(0, 1, 2);
@@ -194,9 +194,7 @@ List GoF2D(const NumericMatrix &X, const NumericMatrix &Y, const NumericMatrix &
   // create a squared uniform mesh
   unifMesh.clear();
   unifMesh.vertices.create_vertices(cubeVertices.nrow());
-  for (int i = 0; i < cubeVertices.nrow(); i++) {
-    setMeshPoint(unifMesh, cubeVertices, i);
-  }
+  setMeshPoint(unifMesh, cubeVertices);
   unifMesh.facets.create_quad(0, 2, 3, 1);
 
   // create new RVDs

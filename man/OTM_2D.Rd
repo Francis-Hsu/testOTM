@@ -7,18 +7,18 @@
 OTM_2D(data, epsilon = 0.001, maxit = 100, verbose = F, na.rm = F)
 }
 \arguments{
-\item{data}{Input coordinate matrix, of size \eqn{n} by \eqn{2}.}
+\item{data}{input coordinate matrix, of size \eqn{n} by \eqn{2}.}
 
-\item{epsilon}{Convergence threshold for optimization.}
+\item{epsilon}{convergence threshold for optimization.}
 
-\item{maxit}{Max number of iterations before termination.}
+\item{maxit}{max number of iterations before termination.}
 
-\item{verbose}{Wether to display messages during optimization.}
+\item{verbose}{logical indicating wether to display optimization messages.}
 
-\item{na.rm}{a logical value indicating whether NA values should be stripped before the computation proceeds.}
+\item{na.rm}{logical indicating whether NA values should be stripped before the computation proceeds.}
 }
 \value{
-A list describing the resulting Laguerre diagram.
+a list describing the resulting Laguerre diagram.
 }
 \description{
 Computes the semi-continuous optimal transport map from a uniform measure on [0, 1]^2 to a given data set.

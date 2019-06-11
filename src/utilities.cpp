@@ -1,10 +1,24 @@
 #include "utilities.h"
 using namespace Rcpp;
 
-void setMeshPoint(GEO::Mesh &M, const NumericMatrix &X, int row) {
-  double* p = M.vertices.point_ptr(row);
-  for (int col = 0; col < X.ncol(); col++) {
-    p[col] = X(row, col);
+void initializeGeogram() {
+  // use std::call_once?
+  
+  // initialize the Geogram library.
+  GEO::initialize();
+  
+  // import command line arguments.
+  GEO::CmdLine::import_arg_group("standard");
+  GEO::CmdLine::import_arg_group("algo");
+  GEO::CmdLine::set_arg("algo:predicates", "fast");
+}
+
+void setMeshPoint(GEO::Mesh &M, const NumericMatrix &X) {
+  for (int i = 0; i < X.nrow(); i++) {
+    double* p = M.vertices.point_ptr(i);
+    for (int j = 0; j < X.ncol(); j++) {
+      p[j] = X(i, j);
+    }
   }
 }
 
