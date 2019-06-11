@@ -115,6 +115,11 @@ List dualGraphes2D(const NumericMatrix &X, double epsilon, int maxit, bool verbo
   return ret;
 }
 
+List OTMRank2D(const NumericMatrix &X, const NumericVector &w, const double) {
+  int n = X.nrow();
+  int d = 2;
+}
+
 // [[Rcpp::export]]
 List GoF2D(const NumericMatrix &X, const NumericMatrix &Y, const NumericMatrix &XY, const NumericMatrix &U) {
   int d = 2;

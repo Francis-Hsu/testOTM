@@ -4,12 +4,29 @@ LIB_DIR = ../inst/include
 EXPORTS = -Dgeogram_EXPORTS -Dexploragram_EXPORTS
 OPTIONS = -DGEOGRAM_WITH_HLBFGS -DGEOGRAM_WITH_TETGEN -DGEOGRAM_WITH_TRIANGLE
 
-PKG_CXXFLAGS = -I$(ROOT_DIR) -I$(LIB_DIR) $(EXPORTS) $(OPTIONS) -Wno-unknown-pragmas -ggdb
+PKG_CXXFLAGS = -I$(ROOT_DIR) -I$(LIB_DIR) $(EXPORTS) $(OPTIONS) -Wno-unknown-pragmas
 PKG_LIBS = $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
 PKG_CFLAGS = -I$(ROOT_DIR) -I$(LIB_DIR) $(EXPORTS) $(OPTIONS)
 CXX_STD = CXX11
 
-GEO_SOURCES_C = $(LIB_DIR)/geogram/third_party/LM7/libmeshb7.c
+GEO_SOURCES_C = $(LIB_DIR)/geogram/NL/nl_arpack.c
+GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_context.c
+GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_superlu.c
+GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_cuda.c
+GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_mkl.c
+GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_preconditioners.c
+GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_blas.c
+GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_cholmod.c
+GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_os.c
+GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_iterative_solvers.c
+GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_api.c
+GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_matrix.c
+
+GEO_SOURCES_C += $(LIB_DIR)/geogram/third_party/LM7/libmeshb7.c
+
+GEO_SOURCES_C += $(LIB_DIR)/geogram/third_party/rply/rply.c
+
+GEO_SOURCES_C += $(LIB_DIR)/geogram/third_party/triangle/triangle.c
 
 GEO_SOURCES_C += $(LIB_DIR)/geogram/third_party/zlib/inflate.c
 GEO_SOURCES_C += $(LIB_DIR)/geogram/third_party/zlib/deflate.c
@@ -25,26 +42,6 @@ GEO_SOURCES_C += $(LIB_DIR)/geogram/third_party/zlib/gzread.c
 GEO_SOURCES_C += $(LIB_DIR)/geogram/third_party/zlib/inffast.c
 GEO_SOURCES_C += $(LIB_DIR)/geogram/third_party/zlib/zutil.c
 GEO_SOURCES_C += $(LIB_DIR)/geogram/third_party/zlib/uncompr.c
-
-#GEO_SOURCES_C+= $(LIB_DIR)/geogram/third_party/triangle/triangle.c
-#GEO_SOURCES_C+= $(LIB_DIR)/geogram/third_party/rply/rply.c
-
-GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_arpack.c
-GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_context.c
-GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_superlu.c
-GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_cuda.c
-GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_mkl.c
-GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_preconditioners.c
-GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_blas.c
-GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_cholmod.c
-GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_os.c
-GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_iterative_solvers.c
-GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_api.c
-GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_matrix.c
-
-GEO_SOURCES_C+= $(LIB_DIR)/geogram/third_party/triangle/triangle.c
-
-GEO_SOURCES_C+= $(LIB_DIR)/geogram/third_party/rply/rply.c
 
 GEO_SOURCES_CPP = $(LIB_DIR)/geogram/basic/environment.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/basic/geometry.cpp
@@ -71,13 +68,8 @@ GEO_SOURCES_CPP += $(LIB_DIR)/geogram/basic/process.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/basic/file_system.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/basic/process_win.cpp
 
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/voronoi/CVT.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/voronoi/RVD_callback.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/voronoi/RVD_mesh_builder.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/voronoi/generic_RVD_cell.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/voronoi/integration_simplex.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/voronoi/generic_RVD_polygon.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/voronoi/RVD.cpp
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/bibliography/embedded_references.cpp
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/bibliography/bibliography.cpp
 
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/delaunay/delaunay.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/delaunay/parallel_delaunay_3d.cpp
@@ -88,20 +80,13 @@ GEO_SOURCES_CPP += $(LIB_DIR)/geogram/delaunay/LFS.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/delaunay/delaunay_triangle.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/delaunay/delaunay_tetgen.cpp
 
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/tetgen/tetgen.cpp
-
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/HLBFGS/ICFS.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/HLBFGS/LineSearch.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/HLBFGS/HLBFGS.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/HLBFGS/HLBFGS_BLAS.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/HLBFGS/Lite_Sparse_Matrix.cpp
-
-#GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/PoissonRecon/poisson_geogram.cpp
-#GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/PoissonRecon/Geometry.cpp
-#GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/PoissonRecon/MarchingCubes.cpp
-#GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/PoissonRecon/Factor.cpp
-
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/gzstream/gzstream.cpp
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/image/colormap.cpp
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/image/image.cpp
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/image/image_library.cpp
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/image/image_serializer.cpp
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/image/image_serializer_pgm.cpp
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/image/image_serializer_stb.cpp
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/image/image_serializer_xpm.cpp
 
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/mesh/mesh_reorder.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/mesh/mesh_compare.cpp
@@ -127,15 +112,6 @@ GEO_SOURCES_CPP += $(LIB_DIR)/geogram/mesh/mesh_halfedges.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/mesh/triangle_intersection.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/mesh/mesh_io.cpp
 
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/parameterization/mesh_PGP_2d.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/parameterization/mesh_param_validator.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/parameterization/mesh_global_param.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/parameterization/mesh_atlas_maker.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/parameterization/mesh_param_packer.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/parameterization/mesh_ABF.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/parameterization/mesh_segmentation.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/parameterization/mesh_LSCM.cpp
-
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/numerics/predicates.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/numerics/matrix_util.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/numerics/optimizer.cpp
@@ -143,13 +119,27 @@ GEO_SOURCES_CPP += $(LIB_DIR)/geogram/numerics/expansion_nt.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/numerics/multi_precision.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/numerics/lbfgs_optimizers.cpp
 
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/bibliography/embedded_references.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/bibliography/bibliography.cpp
-
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/points/co3ne.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/points/nn_search.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/points/kd_tree.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/points/colocate.cpp
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/points/principal_axes.cpp
+
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/HLBFGS/ICFS.cpp
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/HLBFGS/LineSearch.cpp
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/HLBFGS/HLBFGS.cpp
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/HLBFGS/HLBFGS_BLAS.cpp
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/HLBFGS/Lite_Sparse_Matrix.cpp
+
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/tetgen/tetgen.cpp
+
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/voronoi/CVT.cpp
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/voronoi/RVD_callback.cpp
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/voronoi/RVD_mesh_builder.cpp
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/voronoi/generic_RVD_cell.cpp
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/voronoi/integration_simplex.cpp
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/voronoi/generic_RVD_polygon.cpp
+GEO_SOURCES_CPP += $(LIB_DIR)/geogram/voronoi/RVD.cpp
 
 GEO_SOURCES_CPP += $(LIB_DIR)/exploragram/optimal_transport/sampling.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/exploragram/optimal_transport/linear_least_squares.cpp
@@ -158,14 +148,6 @@ GEO_SOURCES_CPP += $(LIB_DIR)/exploragram/optimal_transport/optimal_transport_3d
 GEO_SOURCES_CPP += $(LIB_DIR)/exploragram/optimal_transport/optimal_transport.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/exploragram/optimal_transport/optimal_transport_on_surface.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/exploragram/optimal_transport/optimal_transport_2d.cpp
-
-GEO_SOURCES_CPP+= $(LIB_DIR)/geogram/image/colormap.cpp
-GEO_SOURCES_CPP+= $(LIB_DIR)/geogram/image/image.cpp
-GEO_SOURCES_CPP+= $(LIB_DIR)/geogram/image/image_library.cpp
-GEO_SOURCES_CPP+= $(LIB_DIR)/geogram/image/image_serializer.cpp
-GEO_SOURCES_CPP+= $(LIB_DIR)/geogram/image/image_serializer_pgm.cpp
-GEO_SOURCES_CPP+= $(LIB_DIR)/geogram/image/image_serializer_stb.cpp
-GEO_SOURCES_CPP+= $(LIB_DIR)/geogram/image/image_serializer_xpm.cpp
 
 GEO_OBJECTS_C = $(GEO_SOURCES_C:.c=.o)
 GEO_OBJECTS_CPP = $(GEO_SOURCES_CPP:.cpp=.o)
