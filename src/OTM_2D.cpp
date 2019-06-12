@@ -4,23 +4,24 @@ using namespace Rcpp;
 void OTM2D(GEO::OptimalTransportMap2d &OTM, const NumericMatrix &X, double epsilon, int maxit, bool verbose) {
   int n = X.nrow();
   int d = 2;
-
+  
   // create a mesh for data points
   GEO::Mesh dataMesh(d, false);
   dataMesh.vertices.create_vertices(n);
   setMeshPoint(dataMesh, X);
-
+  
   // embed in 3-dimension
   dataMesh.vertices.set_dimension(d + 1);
-
+  
   // setup OTM
   OTM.set_points(n, dataMesh.vertices.point_ptr(0), dataMesh.vertices.dimension());
-
+  
   // optmizer settings
   OTM.set_verbose(verbose);
   OTM.set_epsilon(epsilon);
   OTM.set_regularization(0.0);
-  OTM.set_Newton(true); // BFGS not implemented?
+  OTM.set_Newton(true);
+  
   OTM.optimize(maxit);
 }
 
@@ -37,7 +38,7 @@ List dualGraphes2D(const NumericMatrix &X, double epsilon, int maxit, bool verbo
   const NumericMatrix cubeVertices = cubeVert(2);
   unifMesh.vertices.create_vertices(cubeVertices.nrow());
   setMeshPoint(unifMesh, cubeVertices);
-
+  
   // must triangulate for OTM
   unifMesh.facets.create_triangle(0, 1, 2);
   unifMesh.facets.create_triangle(2, 1, 3);
@@ -71,25 +72,17 @@ List dualGraphes2D(const NumericMatrix &X, double epsilon, int maxit, bool verbo
   setMeshPoint(unifMesh, cubeVertices);
   unifMesh.facets.create_quad(0, 2, 3, 1);
   unifMesh.vertices.set_dimension(d + 1);
-
-  // setup weighted vertices
-  double wV[(d + 1) * n];
-  getWeightedVerts(X, wMax, w, n, d, wV);
   
-  // generate a new regular triangulation based on weights computed
-  GEO::Delaunay_var otmRWD = GEO::Delaunay::create(d + 1);
-  otmRWD->set_vertices(n, wV);
-  
-  // create a new RVD and RDT
-  GEO::RestrictedVoronoiDiagram_var RVD = GEO::RestrictedVoronoiDiagram::create(otmRWD, &unifMesh);
+  // get RVD and RDT
   GEO::Mesh otmRDT, otmRVD;
-  RVD->compute_RDT(otmRDT);
-  RVD->compute_RVD(otmRVD);
+  OTM.get_RVD(otmRVD);
+  OTM.RVD()->set_volumetric(false);
+  OTM.RVD()->compute_RDT(otmRDT);
   
-  // extract all vertices of RVD and RDT
+  // extract vertices from RVD and RDT
   NumericMatrix rdtVert = getVertices(otmRDT);
   NumericMatrix rvdVert = getVertices(otmRVD);
-  
+
   List ret;
   ret["Data"] = X;
   ret["Centroid"] = Centroid;

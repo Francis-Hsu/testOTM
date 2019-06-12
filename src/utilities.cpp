@@ -76,14 +76,14 @@ NumericMatrix cubeVert(int d) {
   }
   
   int x = 0;
-  NumericMatrix rtn(std::pow(2, d), d);
-  for (int  i = 0; i < std::pow(2, d); i++) {
+  NumericMatrix verts(std::pow(2, d), d);
+  for (int i = 0; i < verts.nrow(); i++) {
     x = i;
     for (int j = 0; j < d; j++) {
-      rtn(i, d - j - 1) = x % 2;
+      verts(i, d - j - 1) = x % 2;
       x /= 2;
     }
   }
   
-  return rtn;
+  return verts;
 }
