@@ -5,8 +5,8 @@ dualGraphes2D <- function(X, epsilon, maxit, verbose) {
     .Call('_testOTM_dualGraphes2D', PACKAGE = 'testOTM', X, epsilon, maxit, verbose)
 }
 
-OTMRank2D <- function(X, weight, wMax) {
-    invisible(.Call('_testOTM_OTMRank2D', PACKAGE = 'testOTM', X, weight, wMax))
+OTMRank2D <- function(X, weight, wMax, Q) {
+    invisible(.Call('_testOTM_OTMRank2D', PACKAGE = 'testOTM', X, weight, wMax, Q))
 }
 
 GoF2D <- function(X, Y, XY, U) {

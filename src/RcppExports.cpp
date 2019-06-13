@@ -20,14 +20,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // OTMRank2D
-void OTMRank2D(const NumericMatrix& X, NumericVector& weight, double wMax);
-RcppExport SEXP _testOTM_OTMRank2D(SEXP XSEXP, SEXP weightSEXP, SEXP wMaxSEXP) {
+void OTMRank2D(const NumericMatrix& X, NumericVector& weight, double wMax, const NumericMatrix& Q);
+RcppExport SEXP _testOTM_OTMRank2D(SEXP XSEXP, SEXP weightSEXP, SEXP wMaxSEXP, SEXP QSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const NumericMatrix& >::type X(XSEXP);
     Rcpp::traits::input_parameter< NumericVector& >::type weight(weightSEXP);
     Rcpp::traits::input_parameter< double >::type wMax(wMaxSEXP);
-    OTMRank2D(X, weight, wMax);
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type Q(QSEXP);
+    OTMRank2D(X, weight, wMax, Q);
     return R_NilValue;
 END_RCPP
 }
@@ -48,7 +49,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_testOTM_dualGraphes2D", (DL_FUNC) &_testOTM_dualGraphes2D, 4},
-    {"_testOTM_OTMRank2D", (DL_FUNC) &_testOTM_OTMRank2D, 3},
+    {"_testOTM_OTMRank2D", (DL_FUNC) &_testOTM_OTMRank2D, 4},
     {"_testOTM_GoF2D", (DL_FUNC) &_testOTM_GoF2D, 4},
     {NULL, NULL, 0}
 };

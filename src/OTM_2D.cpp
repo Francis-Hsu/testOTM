@@ -97,7 +97,7 @@ List dualGraphes2D(const NumericMatrix &X, double epsilon, int maxit, bool verbo
 
 // under construction
 // [[Rcpp::export]]
-void OTMRank2D(const NumericMatrix &X, NumericVector &weight, double wMax) {
+void OTMRank2D(const NumericMatrix &X, NumericVector &weight, double wMax, const NumericMatrix &Q) {
   int n = X.nrow();
   int d = 2;
   
@@ -108,15 +108,33 @@ void OTMRank2D(const NumericMatrix &X, NumericVector &weight, double wMax) {
   double wV[(d + 1) * n];
   getWeightedVerts(X, wMax, w, n, d, wV);
   
-  GEO::Delaunay_var otmRWD = GEO::Delaunay::create(d + 1, "BPOW2d");
+  GEO::RegularWeightedDelaunay2d* otmRWD = dynamic_cast<GEO::RegularWeightedDelaunay2d*>(GEO::Delaunay::create(d + 1, "BPOW2d"));
+  //otmRWD->set_keeps_infinite(true);
   otmRWD->set_vertices(n, wV);
   
+  //GEO::index_t cellID;
+  Rcout << "#########" << std::endl;
+  double q[2];
+  for (int i = 0; i < Q.nrow(); i++) {
+    q[0] = Q(i, 0);
+    q[1] = Q(i, 1);
+    
+    Rcout << otmRWD->locate(q) << std::endl;
+    //Rcout << otmRWD->nearest_vertex(q) << std::endl;
+    //Rcout << otmRWD->cell_vertex(cellID, 0) << " " << otmRWD->triangle_vertex(cellID, 0) << std::endl;
+    //Rcout << otmRWD->cell_vertex(cellID, 1) << " " << otmRWD->triangle_vertex(cellID, 1) << std::endl;
+    //Rcout << otmRWD->cell_vertex(cellID, 2) << " " << otmRWD->triangle_vertex(cellID, 2) << std::endl;
+  }
+  
+  Rcout << "#####" << std::endl;
   for (unsigned int i = 0; i < otmRWD->nb_cells(); i++) {
-    Rcout << i << std::endl;
-    for (int j = 0; j <= 2; j++) {
-      Rcout << X(otmRWD->cell_vertex(i, j), 0) << " " 
-      << X(otmRWD->cell_vertex(i, j), 1) << std::endl;
-    }
+    Rcout << otmRWD->triangle_adjacent(i, 0) << " " << 
+      otmRWD->triangle_adjacent(i, 1) << " " << otmRWD->triangle_adjacent(i, 2) << std::endl;
+    // Rcout << i << std::endl;
+    // for (int j = 0; j <= 2; j++) {
+    //   Rcout << X(otmRWD->cell_vertex(i, j), 0) << " "
+    //         << X(otmRWD->cell_vertex(i, j), 1) << std::endl;
+    // }
   }
 }
 
