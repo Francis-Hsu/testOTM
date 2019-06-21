@@ -18,7 +18,7 @@ OTM_2D = function(data, epsilon = 1e-3, maxit = 100, verbose = F, na.rm = F) {
     data = data[complete.cases(data), ]
   }
   
-  otm_list = dualGraphes2D(data, epsilon, maxit, verbose)
+  otm_list = dualGraphs2D(data, epsilon, maxit, verbose)
   colnames(otm_list$Centroid) = c("x", "y")
   colnames(otm_list$Vertex.RDT) = c("cell", "x", "y")
   colnames(otm_list$Vertex.RVD) = c("cell", "x", "y")

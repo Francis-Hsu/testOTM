@@ -5,9 +5,9 @@
 
 using namespace Rcpp;
 
-// dualGraphes2D
-List dualGraphes2D(const NumericMatrix& X, double epsilon, int maxit, bool verbose);
-RcppExport SEXP _testOTM_dualGraphes2D(SEXP XSEXP, SEXP epsilonSEXP, SEXP maxitSEXP, SEXP verboseSEXP) {
+// dualGraphs2D
+List dualGraphs2D(const NumericMatrix& X, double epsilon, int maxit, bool verbose);
+RcppExport SEXP _testOTM_dualGraphs2D(SEXP XSEXP, SEXP epsilonSEXP, SEXP maxitSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -15,7 +15,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
     Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(dualGraphes2D(X, epsilon, maxit, verbose));
+    rcpp_result_gen = Rcpp::wrap(dualGraphs2D(X, epsilon, maxit, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -33,8 +33,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // GoF2D
-List GoF2D(const NumericMatrix& X, const NumericMatrix& Y, const NumericMatrix& XY, const NumericMatrix& U);
-RcppExport SEXP _testOTM_GoF2D(SEXP XSEXP, SEXP YSEXP, SEXP XYSEXP, SEXP USEXP) {
+List GoF2D(const NumericMatrix& X, const NumericMatrix& Y, const NumericMatrix& XY, const NumericMatrix& U, double epsilon, int maxit, bool verbose);
+RcppExport SEXP _testOTM_GoF2D(SEXP XSEXP, SEXP YSEXP, SEXP XYSEXP, SEXP USEXP, SEXP epsilonSEXP, SEXP maxitSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -42,15 +42,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const NumericMatrix& >::type Y(YSEXP);
     Rcpp::traits::input_parameter< const NumericMatrix& >::type XY(XYSEXP);
     Rcpp::traits::input_parameter< const NumericMatrix& >::type U(USEXP);
-    rcpp_result_gen = Rcpp::wrap(GoF2D(X, Y, XY, U));
+    Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(GoF2D(X, Y, XY, U, epsilon, maxit, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_testOTM_dualGraphes2D", (DL_FUNC) &_testOTM_dualGraphes2D, 4},
+    {"_testOTM_dualGraphs2D", (DL_FUNC) &_testOTM_dualGraphs2D, 4},
     {"_testOTM_OTMRank2D", (DL_FUNC) &_testOTM_OTMRank2D, 4},
-    {"_testOTM_GoF2D", (DL_FUNC) &_testOTM_GoF2D, 4},
+    {"_testOTM_GoF2D", (DL_FUNC) &_testOTM_GoF2D, 7},
     {NULL, NULL, 0}
 };
 

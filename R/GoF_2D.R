@@ -9,7 +9,7 @@
 #' @param verbose logical indicating wether to display optimization messages.
 #' @param na.rm logical indicating whether NA values should be stripped before the computation proceeds.
 #' @export
-GoF_2D = function(X, Y, mc = 1000, type = "max", epsilon = 1e-3, maxit = 100, na.rm = F) {
+GoF_2D = function(X, Y, mc = 1000, type = "max", epsilon = 1e-3, maxit = 100, verbose = F, na.rm = F) {
   if (!is.matrix(X) || !is.matrix(Y) || ncol(X) != 2 || ncol(Y) != 2) {
     stop("Input data must be matrices with ncol = 2.")
   }
@@ -26,12 +26,12 @@ GoF_2D = function(X, Y, mc = 1000, type = "max", epsilon = 1e-3, maxit = 100, na
 
   U = sobol(mc, 2)
   XY = rbind(X, Y)
-  gof_list = GoF2D(X, Y, XY, U)
+  gof_list = GoF2D(X, Y, XY, U, epsilon, maxit, verbose)
   cell_id_x = gof_list$U_Map_X + 1
   cell_id_y = gof_list$U_Map_Y + 1 + nrow(X)
   colnames(gof_list$Vert_XY) = c("vert.x", "vert.y", "cell")
   gof_verts = gof_list$Vert_XY
-  gof_rank = t(sapply(split(data.frame(gof_verts)[, -ncol(gof_verts)], gof_verts[, ncol(gof_verts)]), choose_vert, type = type_id))
+  gof_rank = t(sapply(split(data.frame(gof_verts)[, -1], gof_verts[, 1]), choose_vert, type = type_id))
   gof_stat = mean(rowSums((gof_rank[cell_id_x, ] - gof_rank[cell_id_y, ])^2))
   
   return(gof_stat)

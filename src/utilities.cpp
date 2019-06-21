@@ -32,10 +32,13 @@ void getWeights(GEO::OptimalTransportMap &OTM, double &wMax, double* w) {
   }
 }
 
-void getWeightedVerts(const NumericMatrix &X, double &wMax, double* w, int n, int d, double* wV) {
+void getWeightedVerts(const NumericMatrix &X, double &wMax, double* w, double* wV) {
+  int n = X.nrow();
+  int d = X.ncol();
+  
   for (int i = 0; i < (d + 1) * n; i++) {
     if (i % (d + 1) == d) {
-      wV[i] = (double) std::sqrt(wMax - w[i / (d + 1)]);
+      wV[i] = std::sqrt(wMax - w[i / (d + 1)]);
     } else {
       wV[i] = X(i / (d + 1), i % (d + 1));
     }

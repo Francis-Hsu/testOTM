@@ -20,7 +20,7 @@
 void initializeGeogram();
 void setMeshPoint(GEO::Mesh &M, const Rcpp::NumericMatrix &X);
 void getWeights(GEO::OptimalTransportMap &OTM, double &wMax, double* w);
-void getWeightedVerts(const Rcpp::NumericMatrix &X, double &wMax, double* w, int n, int d, double* wV);
+void getWeightedVerts(const Rcpp::NumericMatrix &X, double &wMax, double* w, double* wV);
 Rcpp::NumericMatrix getVertices(GEO::Mesh &M);
 Rcpp::NumericMatrix cubeVert(int d);
 
