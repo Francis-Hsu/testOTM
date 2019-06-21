@@ -77,17 +77,14 @@ List dualGraphs2D(const NumericMatrix &X, double epsilon, int maxit, bool verbos
   OTM.get_RVD(otmRVD); // 2D ordered incorrectly? See get_RVD()
   OTM.RVD()->set_volumetric(false);
   OTM.RVD()->compute_RDT(otmRDT);
-  
-  // extract vertices from RVD and RDT
-  NumericMatrix rdtVert = getVertices(otmRDT);
-  NumericMatrix rvdVert = getVertices(otmRVD);
 
+  // collect objects to return
   List ret;
   ret["Data"] = X;
   ret["Centroid"] = Centroid;
   ret["Weight"] = NumericVector(w, w + sizeof(w) / sizeof(*w));
-  ret["Vertex.RDT"] = rdtVert;
-  ret["Vertex.RVD"] = rvdVert;
+  ret["Vertex.RDT"] = getVertices(otmRDT);
+  ret["Vertex.RVD"] = getVertices(otmRVD);
   ret["N.Triangles"] = otmRDT.facets.nb();
   ret["N.Cells"] = otmRVD.facets.nb();
   
@@ -206,47 +203,11 @@ List GoF2D(const NumericMatrix &X, const NumericMatrix &Y, const NumericMatrix &
   setMeshPoint(unifMesh, cubeVertices);
   unifMesh.facets.create_quad(0, 2, 3, 1);
   
-  // extract all vertices
-  std::vector<double> RVDVerts;
-  GEO::Attribute<double> vertex_weight;
-  vertex_weight.bind_if_is_defined(
-    unifMesh.vertices.attributes(), "weight"
-  );
-  GEOGen::Polygon P;
-  P.initialize_from_mesh_facet(&unifMesh, 0, false, vertex_weight);
-  GEOGen::Polygon* cellIntersect;
-  GEOGen::RestrictedVoronoiDiagram<3> transMapXY(OTMXY.RVD()->delaunay(), &unifMesh);
-  
-  // extract vertices
-  int totalNbVert = 0;
-  int nbVert[n + m];
-  int accuVert[n + m];
-  for (int i = 0; i < n + m; i++) {
-    cellIntersect = transMapXY.intersect_cell_facet(i, P);
-    nbVert[i] = cellIntersect->nb_vertices();
-    accuVert[i] = totalNbVert;
-    totalNbVert += nbVert[i];
-    for (unsigned int j = 0; j < cellIntersect->nb_vertices(); j++) {
-      RVDVerts.push_back(cellIntersect->vertex(j).point()[0]);
-      RVDVerts.push_back(cellIntersect->vertex(j).point()[1]);
-    }
-  }
-
-  int currID;
-  NumericMatrix Vert(totalNbVert, d + 1);
-  for (int i = 0; i < n + m; i++) {
-    for (int j = 0; j < nbVert[i]; j++) {
-      currID = accuVert[i] + j;
-      Vert(currID, 0) = i + 1;
-      Vert(currID, 1) = RVDVerts[2 * currID];
-      Vert(currID, 2) = RVDVerts[2 * currID + 1];
-    }
-  }
-  
+  // collect objects to return
   List rtn;
   rtn["U_Map_X"] = uX;
   rtn["U_Map_Y"] = uY;
-  rtn["Vert_XY"] = Vert;
+  rtn["Vert_XY"] = getVertices(unifMesh, OTMXY);
 
   return rtn;
 }

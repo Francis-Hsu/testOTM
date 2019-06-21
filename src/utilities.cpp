@@ -71,6 +71,59 @@ NumericMatrix getVertices(GEO::Mesh &M) {
   return Vert;
 }
 
+Rcpp::NumericMatrix getVertices(GEO::Mesh &S, GEO::OptimalTransportMap &OTM) {
+  unsigned int n = OTM.nb_points();
+  unsigned int d = OTM.dimension();
+  
+  // construct polygon from source mesh
+
+  GEO::Attribute<double> vertex_weight;
+  vertex_weight.bind_if_is_defined(
+    S.vertices.attributes(), "weight"
+  );
+  GEOGen::Polygon P;
+  P.initialize_from_mesh_facet(&S, 0, false, vertex_weight);
+  
+  // some containers
+  GEOGen::Polygon* cP; // polygon storing intersection
+  std::vector<double> RVDVerts; 
+  int totalNbVert = 0;
+  int nbVert[n];
+  int accuVert[n];
+  
+  // construct generic RVD
+  if (d == 2) {
+    GEOGen::RestrictedVoronoiDiagram<3> transMapGen(OTM.RVD()->delaunay(), &S);
+    // compute intersections
+    for (int i = 0; i < n; i++) {
+      cP = transMapGen.intersect_cell_facet(i, P);
+      nbVert[i] = cP->nb_vertices();
+      accuVert[i] = totalNbVert;
+      totalNbVert += nbVert[i];
+      for (unsigned int j = 0; j < cP->nb_vertices(); j++) {
+        RVDVerts.push_back(cP->vertex(j).point()[0]); 
+        RVDVerts.push_back(cP->vertex(j).point()[1]);
+      }
+    }
+  } else {
+    // take care 3d case in future
+    GEOGen::RestrictedVoronoiDiagram<4> transMapGen(OTM.RVD()->delaunay(), &S);
+  }
+  
+  int currID;
+  NumericMatrix Vert(totalNbVert, d + 1);
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < nbVert[i]; j++) {
+      currID = accuVert[i] + j;
+      Vert(currID, 0) = i + 1;
+      Vert(currID, 1) = RVDVerts[2 * currID];
+      Vert(currID, 2) = RVDVerts[2 * currID + 1];
+    }
+  }
+  
+  return Vert;
+}
+
 // compute the vertices of a unit hypercube using binary expansion
 // this will generate a matrix with 2^d rows
 NumericMatrix cubeVert(int d) {
