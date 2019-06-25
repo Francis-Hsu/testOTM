@@ -34,7 +34,7 @@ plot.OTM_2D = function(object,
     for (i in 1:object$N.Cells) {
       curr.cell = subset(object$Vertex.RVD, cell == i, select = c(x, y))
       for (j in 1:nrow(curr.cell)) {
-        # sort by norm
+        # sort by l1 norm, everything positive!
         if (curr.cell[j, 1] + curr.cell[j, 2] <= 
             curr.cell[1 + j %% nrow(curr.cell), 1] + 
             curr.cell[1 + j %% nrow(curr.cell), 2]) {
@@ -79,13 +79,33 @@ plot.OTM_2D = function(object,
          xlab = expression('u'[1]), ylab = expression('u'[2]), ...)
     
     # plot triangles
+    n.edge = nrow(object$Vertex.RDT)
+    rdt.edges = matrix(0, n.edge, 4)
+    curr.row = 1
     for (i in 1:object$N.Triangles) {
       curr.cell = subset(object$Vertex.RDT, cell == i, select = c(x, y))
       for (j in 1:nrow(curr.cell)) {
-        segments(curr.cell[j, 1], curr.cell[j, 2], 
-                 curr.cell[1 + j %% nrow(curr.cell), 1], curr.cell[1 + j %% nrow(curr.cell), 2], 
-                 col = col.edge, ...)
+        # sort by l1 norm, everything positive!
+        if (curr.cell[j, 1] + curr.cell[j, 2] <= 
+            curr.cell[1 + j %% nrow(curr.cell), 1] + 
+            curr.cell[1 + j %% nrow(curr.cell), 2]) {
+          rdt.edges[curr.row, ] = c(curr.cell[j, 1], curr.cell[j, 2], 
+                                    curr.cell[1 + j %% nrow(curr.cell), 1],
+                                    curr.cell[1 + j %% nrow(curr.cell), 2])
+        } else {
+          rdt.edges[curr.row, ] = c(curr.cell[1 + j %% nrow(curr.cell), 1],
+                                    curr.cell[1 + j %% nrow(curr.cell), 2],
+                                    curr.cell[j, 1], curr.cell[j, 2])
+        }
+        curr.row = curr.row + 1
       }
+    }
+    
+    rdt.edges = unique(round(rdt.edges, 8))
+    for (i in 1:nrow(rdt.edges)) {
+      segments(rdt.edges[i, 1], rdt.edges[i, 2], 
+               rdt.edges[i, 3], rdt.edges[i, 4], 
+               col = col.edge, ...)
     }
   }
 }

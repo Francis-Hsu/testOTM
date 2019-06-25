@@ -25,7 +25,7 @@ OTM_2D = function(data, epsilon = 1e-3, maxit = 100, verbose = F, na.rm = F) {
   
   object$Vertex.RDT = as.data.frame(object$Vertex.RDT)
   object$Vertex.RVD = as.data.frame(object$Vertex.RVD)
-  object$Height = -(rowSums(A$Dat^2) + A$Weight) / 2 # use for computing Alexandrov's potential
+  object$Height = -(rowSums(object$Data^2) + object$Weight) / 2 # use for computing Alexandrov's potential
   
   class(object) = "OTM_2D"
   
