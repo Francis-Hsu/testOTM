@@ -22,19 +22,38 @@ plot.OTM_2D = function(object,
   
   # plot the restricted Voronoi diagram
   if (which == "RVD" || which == "Both") {
-    # plot data again
+    # plot data
     plot(object$Data[, 1], object$Data[, 2], 
          xlim = c(0, 1), ylim = c(0, 1), col = col.data, pch = 20, 
          xlab = expression('u'[1]), ylab = expression('u'[2]), ...)
     
     # plot Laguerre cells
+    n.edge = nrow(object$Vertex.RVD)
+    rvd.edges = matrix(0, n.edge, 4)
+    curr.row = 1
     for (i in 1:object$N.Cells) {
       curr.cell = subset(object$Vertex.RVD, cell == i, select = c(x, y))
       for (j in 1:nrow(curr.cell)) {
-        segments(curr.cell[j, 1], curr.cell[j, 2], 
-                 curr.cell[1 + j %% nrow(curr.cell), 1], curr.cell[1 + j %% nrow(curr.cell), 2], 
-                 col = col.edge, ...)
+        # sort by norm
+        if (curr.cell[j, 1] + curr.cell[j, 2] <= 
+            curr.cell[1 + j %% nrow(curr.cell), 1] + 
+            curr.cell[1 + j %% nrow(curr.cell), 2]) {
+          rvd.edges[curr.row, ] = c(curr.cell[j, 1], curr.cell[j, 2], 
+                                    curr.cell[1 + j %% nrow(curr.cell), 1],
+                                    curr.cell[1 + j %% nrow(curr.cell), 2])
+        } else {
+          rvd.edges[curr.row, ] = c(curr.cell[1 + j %% nrow(curr.cell), 1],
+                                    curr.cell[1 + j %% nrow(curr.cell), 2],
+                                    curr.cell[j, 1], curr.cell[j, 2])
+        }
+        curr.row = curr.row + 1
       }
+    }
+    rvd.edges = unique(round(rvd.edges, 8))
+    for (i in 1:nrow(rvd.edges)) {
+      segments(rvd.edges[i, 1], rvd.edges[i, 2], 
+               rvd.edges[i, 3], rvd.edges[i, 4], 
+               col = col.edge, ...)
     }
     
     # plot centroids
