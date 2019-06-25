@@ -18,15 +18,16 @@ OTM_2D = function(data, epsilon = 1e-3, maxit = 100, verbose = F, na.rm = F) {
     data = data[complete.cases(data), ]
   }
   
-  otm_list = dualGraphs2D(data, epsilon, maxit, verbose)
-  colnames(otm_list$Centroid) = c("x", "y")
-  colnames(otm_list$Vertex.RDT) = c("cell", "x", "y")
-  colnames(otm_list$Vertex.RVD) = c("cell", "x", "y")
+  object = dualGraphs2D(data, epsilon, maxit, verbose)
+  colnames(object$Centroid) = c("x", "y")
+  colnames(object$Vertex.RDT) = c("cell", "x", "y")
+  colnames(object$Vertex.RVD) = c("cell", "x", "y")
   
-  otm_list$Vertex.RDT = as.data.frame(otm_list$Vertex.RDT)
-  otm_list$Vertex.RVD = as.data.frame(otm_list$Vertex.RVD)
+  object$Vertex.RDT = as.data.frame(object$Vertex.RDT)
+  object$Vertex.RVD = as.data.frame(object$Vertex.RVD)
+  object$Height = -(rowSums(A$Dat^2) + A$Weight) / 2 # use for computing Alexandrov's potential
   
-  class(otm_list) = "OTM_2D"
+  class(object) = "OTM_2D"
   
-  return(otm_list)
+  return(object)
 }

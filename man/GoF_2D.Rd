@@ -5,7 +5,7 @@
 \title{2D goodness-of-test statistic}
 \usage{
 GoF_2D(X, Y, mc = 1000, type = "max", epsilon = 0.001, maxit = 100,
-  na.rm = F)
+  verbose = F, na.rm = F)
 }
 \arguments{
 \item{X}{sample data matrix, of size \eqn{n} by \eqn{2}.}
@@ -18,9 +18,9 @@ GoF_2D(X, Y, mc = 1000, type = "max", epsilon = 0.001, maxit = 100,
 
 \item{maxit}{max number of iterations before termination.}
 
-\item{na.rm}{logical indicating whether NA values should be stripped before the computation proceeds.}
-
 \item{verbose}{logical indicating wether to display optimization messages.}
+
+\item{na.rm}{logical indicating whether NA values should be stripped before the computation proceeds.}
 }
 \description{
 Computes the 2D goodness-of-test statistic using rank defined through the semi-continuous optimal transport map.

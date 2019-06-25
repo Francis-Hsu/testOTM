@@ -15,14 +15,15 @@
 #undef ERROR
 #endif
 
-#include <Rcpp.h>
+#include <RcppArmadillo.h>
 
 void initializeGeogram();
-void setMeshPoint(GEO::Mesh &M, const Rcpp::NumericMatrix &X);
-void getWeights(GEO::OptimalTransportMap &OTM, double &wMax, double* w);
-void getWeightedVerts(const Rcpp::NumericMatrix &X, double &wMax, double* w, double* wV);
-Rcpp::NumericMatrix getVertices(GEO::Mesh &M);
-Rcpp::NumericMatrix getVertices(GEO::Mesh &S, GEO::OptimalTransportMap &OTM);
-Rcpp::NumericMatrix cubeVert(int d);
+void setMeshPoint(GEO::Mesh &M, const arma::mat &X);
+void getWeightedVerts(const arma::mat &X, const arma::vec &w, double* wV);
+arma::vec getWeights(GEO::OptimalTransportMap &OTM);
+arma::mat getCentroids(GEO::OptimalTransportMap &OTM);
+arma::mat getVertices(GEO::Mesh &M);
+arma::mat getVertices(GEO::Mesh &S, GEO::OptimalTransportMap &OTM);
+arma::mat cubeVert(int d);
 
 #endif

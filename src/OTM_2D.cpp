@@ -1,8 +1,8 @@
 #include "utilities.h"
 using namespace Rcpp;
 
-void OTM2D(GEO::OptimalTransportMap2d &OTM, const NumericMatrix &X, double epsilon, int maxit, bool verbose) {
-  int n = X.nrow();
+void OTM2D(GEO::OptimalTransportMap2d &OTM, const arma::mat &X, double epsilon, int maxit, bool verbose) {
+  int n = X.n_rows;
   int d = 2;
   
   // create a mesh for data points
@@ -26,8 +26,7 @@ void OTM2D(GEO::OptimalTransportMap2d &OTM, const NumericMatrix &X, double epsil
 }
 
 // [[Rcpp::export]]
-List dualGraphs2D(const NumericMatrix &X, double epsilon, int maxit, bool verbose) {
-  int n = X.nrow();
+List dualGraphs2D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
   int d = 2;
   
   // initialize the Geogram library.
@@ -35,8 +34,8 @@ List dualGraphs2D(const NumericMatrix &X, double epsilon, int maxit, bool verbos
   
   // create a mesh for 2D uniform measure
   GEO::Mesh unifMesh(d, false);
-  const NumericMatrix cubeVertices = cubeVert(2);
-  unifMesh.vertices.create_vertices(cubeVertices.nrow());
+  const arma::mat cubeVertices = cubeVert(2);
+  unifMesh.vertices.create_vertices(cubeVertices.n_rows);
   setMeshPoint(unifMesh, cubeVertices);
   
   // must triangulate for OTM
@@ -51,58 +50,51 @@ List dualGraphs2D(const NumericMatrix &X, double epsilon, int maxit, bool verbos
   GEO::OptimalTransportMap2d OTM(&unifMesh);
   OTM2D(OTM, X, epsilon, maxit, verbose);
   
-  // store centroids
-  double ct[n * d];
-  OTM.compute_Laguerre_centroids(ct);
-  NumericMatrix Centroid(n, d);
-  for (int i = 0; i < n; i++) {
-    for (int j = 0; j < d; j++) {
-      Centroid(i, j) = ct[i * d + j];
-    }
-  }
+  // must save centroids before remesh
+  arma::mat Centroid = getCentroids(OTM);
 
   // store weights
-  double w[n];
-  double wMax;
-  getWeights(OTM, wMax, w);
+  arma::vec W = getWeights(OTM);
 
   // create a squared uniform mesh
   unifMesh.clear();
-  unifMesh.vertices.create_vertices(cubeVertices.nrow());
+  unifMesh.vertices.create_vertices(cubeVertices.n_rows);
   setMeshPoint(unifMesh, cubeVertices);
   unifMesh.facets.create_quad(0, 2, 3, 1);
   
-  // get RVD and RDT
-  GEO::Mesh otmRDT, otmRVD;
-  OTM.get_RVD(otmRVD); // 2D ordered incorrectly? See get_RVD()
+  // this will not return the correct cell order
+  // GEO::Mesh otmRVD;
+  // OTM.get_RVD(otmRVD);
+  
+  // get the RDT
+  GEO::Mesh otmRDT;
   OTM.RVD()->set_volumetric(false);
   OTM.RVD()->compute_RDT(otmRDT);
 
   // collect objects to return
-  List ret;
-  ret["Data"] = X;
-  ret["Centroid"] = Centroid;
-  ret["Weight"] = NumericVector(w, w + sizeof(w) / sizeof(*w));
-  ret["Vertex.RDT"] = getVertices(otmRDT);
-  ret["Vertex.RVD"] = getVertices(otmRVD);
-  ret["N.Triangles"] = otmRDT.facets.nb();
-  ret["N.Cells"] = otmRVD.facets.nb();
+  List lst;
+  lst["Data"] = X;
+  lst["Centroid"] = Centroid;
+  lst["Weight"] = W;
+  lst["Vertex.RDT"] = getVertices(otmRDT);
+  lst["Vertex.RVD"] = getVertices(unifMesh, OTM);
+  lst["N.Triangles"] = otmRDT.facets.nb();
+  lst["N.Cells"] = OTM.nb_points();
   
-  return ret;
+  return lst;
 }
 
 // under construction
 // [[Rcpp::export]]
-void OTMRank2D(const NumericMatrix &X, NumericVector &weight, double wMax, const NumericMatrix &Q) {
-  int n = X.nrow();
+void OTMRank2D(const arma::mat &X, arma::vec &weight, double wMax, const arma::mat &Q) {
+  int n = X.n_rows;
   int d = 2;
   
   // initialize the Geogram library.
   initializeGeogram();
   
-  double* w = weight.begin();
   double wV[(d + 1) * n];
-  getWeightedVerts(X, wMax, w, wV);
+  getWeightedVerts(X, weight, wV);
   
   GEO::RegularWeightedDelaunay2d* otmRWD = dynamic_cast<GEO::RegularWeightedDelaunay2d*>(GEO::Delaunay::create(d + 1, "BPOW2d"));
   //otmRWD->set_keeps_infinite(true);
@@ -111,7 +103,7 @@ void OTMRank2D(const NumericMatrix &X, NumericVector &weight, double wMax, const
   GEO::index_t cellID;
   Rcout << "#########" << std::endl;
   double q[2];
-  for (int i = 0; i < Q.nrow(); i++) {
+  for (unsigned int i = 0; i < Q.n_rows; i++) {
     q[0] = Q(i, 0);
     q[1] = Q(i, 1);
     
@@ -136,20 +128,20 @@ void OTMRank2D(const NumericMatrix &X, NumericVector &weight, double wMax, const
 }
 
 // [[Rcpp::export]]
-List GoF2D(const NumericMatrix &X, const NumericMatrix &Y, const NumericMatrix &XY, const NumericMatrix &U, 
+List GoF2D(const arma::mat &X, const arma::mat &Y, const arma::mat &XY, const arma::mat &U, 
            double epsilon, int maxit, bool verbose) {
   int d = 2;
-  int n = X.nrow();
-  int m = Y.nrow();
-  int k = U.nrow();
+  int n = X.n_rows;
+  int m = Y.n_rows;
+  int k = U.n_rows;
 
   // initialize the Geogram library.
   initializeGeogram();
 
   // create a mesh for 2D uniform measure
   GEO::Mesh unifMesh(d, false);
-  const NumericMatrix cubeVertices = cubeVert(2);
-  unifMesh.vertices.create_vertices(cubeVertices.nrow());
+  const arma::mat cubeVertices = cubeVert(2);
+  unifMesh.vertices.create_vertices(cubeVertices.n_rows);
   setMeshPoint(unifMesh, cubeVertices);
   
   // must triangulate for OTM
@@ -169,17 +161,14 @@ List GoF2D(const NumericMatrix &X, const NumericMatrix &Y, const NumericMatrix &
   OTM2D(OTMXY, XY, epsilon, maxit, verbose);
   
   // get weights
-  double wX[n];
-  double wY[m];
-  double xwMax, ywMax;
-  getWeights(OTMX, xwMax, wX);
-  getWeights(OTMY, ywMax, wY);
+  arma::vec wX = getWeights(OTMX);
+  arma::vec wY = getWeights(OTMY);
 
   // setup weighted vertices for X and Y
   double wVX[(d + 1) * n];
   double wVY[(d + 1) * m];
-  getWeightedVerts(X, xwMax, wX, wVX);
-  getWeightedVerts(Y, ywMax, wY, wVY);
+  getWeightedVerts(X, wX, wVX);
+  getWeightedVerts(Y, wY, wVY);
   
   // build Kd-tree
   GEO::NearestNeighborSearch* treeX = GEO::NearestNeighborSearch::create(d + 1, "BNN");
@@ -199,15 +188,16 @@ List GoF2D(const NumericMatrix &X, const NumericMatrix &Y, const NumericMatrix &
   
   // create a squared uniform mesh
   unifMesh.clear();
-  unifMesh.vertices.create_vertices(cubeVertices.nrow());
+  unifMesh.vertices.create_vertices(cubeVertices.n_rows);
   setMeshPoint(unifMesh, cubeVertices);
   unifMesh.facets.create_quad(0, 2, 3, 1);
   
   // collect objects to return
-  List rtn;
-  rtn["U_Map_X"] = uX;
-  rtn["U_Map_Y"] = uY;
-  rtn["Vert_XY"] = getVertices(unifMesh, OTMXY);
+  List lst;
+  lst["U_Map_X"] = uX;
+  lst["U_Map_Y"] = uY;
+  lst["Vert_XY"] = getVertices(unifMesh, OTMXY);
+  lst["Cent_XY"] = getCentroids(OTMXY);
 
-  return rtn;
+  return lst;
 }
