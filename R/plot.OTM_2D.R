@@ -2,7 +2,7 @@
 #' 
 #' Plot the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of the 
 #' 2D semi-continuous optimal transport map.
-#' @param object fitted 2D optimal transport map object.
+#' @param object a fitted 2D optimal transport map object.
 #' @param which specify which graph to plot. Can be "RVD", "RDT", or "Both".
 #' @param draw.center logical indicating if the centroids should be plotted.
 #' @param draw.map logical indicating if dashed lines should be added to show mapping between the data and the Voronoi cells.
@@ -31,25 +31,29 @@ plot.OTM_2D = function(object,
     n.edge = nrow(object$Vertex.RVD)
     rvd.edges = matrix(0, n.edge, 4)
     curr.row = 1
+    
+    # extract edges
     for (i in 1:object$N.Cells) {
       curr.cell = subset(object$Vertex.RVD, cell == i, select = c(x, y))
       for (j in 1:nrow(curr.cell)) {
+        p.id = j
+        q.id = 1 + j %% nrow(curr.cell)
+        
         # sort by l1 norm, everything positive!
-        if (curr.cell[j, 1] + curr.cell[j, 2] <= 
-            curr.cell[1 + j %% nrow(curr.cell), 1] + 
-            curr.cell[1 + j %% nrow(curr.cell), 2]) {
-          rvd.edges[curr.row, ] = c(curr.cell[j, 1], curr.cell[j, 2], 
-                                    curr.cell[1 + j %% nrow(curr.cell), 1],
-                                    curr.cell[1 + j %% nrow(curr.cell), 2])
+        if (curr.cell[p.id, 1] + curr.cell[p.id, 2] <= curr.cell[q.id, 1] + curr.cell[q.id, 2]) {
+          rvd.edges[curr.row, ] = c(curr.cell[p.id, 1], curr.cell[p.id, 2], 
+                                    curr.cell[q.id, 1], curr.cell[q.id, 2])
         } else {
-          rvd.edges[curr.row, ] = c(curr.cell[1 + j %% nrow(curr.cell), 1],
-                                    curr.cell[1 + j %% nrow(curr.cell), 2],
-                                    curr.cell[j, 1], curr.cell[j, 2])
+          rvd.edges[curr.row, ] = c(curr.cell[q.id, 1], curr.cell[q.id, 2],
+                                    curr.cell[p.id, 1], curr.cell[p.id, 2])
         }
         curr.row = curr.row + 1
       }
     }
+    
+    # remove duplicated edges
     rvd.edges = unique(round(rvd.edges, 8))
+    
     for (i in 1:nrow(rvd.edges)) {
       segments(rvd.edges[i, 1], rvd.edges[i, 2], 
                rvd.edges[i, 3], rvd.edges[i, 4], 
@@ -82,26 +86,29 @@ plot.OTM_2D = function(object,
     n.edge = nrow(object$Vertex.RDT)
     rdt.edges = matrix(0, n.edge, 4)
     curr.row = 1
+    
+    # extract edges
     for (i in 1:object$N.Triangles) {
       curr.cell = subset(object$Vertex.RDT, cell == i, select = c(x, y))
       for (j in 1:nrow(curr.cell)) {
+        p.id = j
+        q.id = 1 + j %% nrow(curr.cell)
+        
         # sort by l1 norm, everything positive!
-        if (curr.cell[j, 1] + curr.cell[j, 2] <= 
-            curr.cell[1 + j %% nrow(curr.cell), 1] + 
-            curr.cell[1 + j %% nrow(curr.cell), 2]) {
-          rdt.edges[curr.row, ] = c(curr.cell[j, 1], curr.cell[j, 2], 
-                                    curr.cell[1 + j %% nrow(curr.cell), 1],
-                                    curr.cell[1 + j %% nrow(curr.cell), 2])
+        if (curr.cell[p.id, 1] + curr.cell[p.id, 2] <= curr.cell[q.id, 1] + curr.cell[q.id, 2]) {
+          rdt.edges[curr.row, ] = c(curr.cell[p.id, 1], curr.cell[p.id, 2], 
+                                    curr.cell[q.id, 1], curr.cell[q.id, 2])
         } else {
-          rdt.edges[curr.row, ] = c(curr.cell[1 + j %% nrow(curr.cell), 1],
-                                    curr.cell[1 + j %% nrow(curr.cell), 2],
-                                    curr.cell[j, 1], curr.cell[j, 2])
+          rdt.edges[curr.row, ] = c(curr.cell[q.id, 1], curr.cell[q.id, 2],
+                                    curr.cell[p.id, 1], curr.cell[p.id, 2])
         }
         curr.row = curr.row + 1
       }
     }
     
+    # remove duplicated edges
     rdt.edges = unique(round(rdt.edges, 8))
+    
     for (i in 1:nrow(rdt.edges)) {
       segments(rdt.edges[i, 1], rdt.edges[i, 2], 
                rdt.edges[i, 3], rdt.edges[i, 4], 
