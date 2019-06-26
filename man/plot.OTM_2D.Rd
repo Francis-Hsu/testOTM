@@ -9,7 +9,7 @@
   col.edge = "black", draw.center = T, draw.map = F, ...)
 }
 \arguments{
-\item{object}{fitted 2D optimal transport map object.}
+\item{object}{a fitted 2D optimal transport map object.}
 
 \item{which}{specify which graph to plot. Can be "RVD", "RDT", or "Both".}
 

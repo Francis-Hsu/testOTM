@@ -6,9 +6,9 @@
 #' @param x a \eqn{n} by \eqn{2} numeric matrix.
 #' @return a matrix containing dual potentials of the data.
 #' @keywords Voronoi, Laguerre
-#' @importFrom lpSolveAPI make.lp set.objfn add.constraint delete.constraint get.objective get.variables solve
+#' @importFrom lpSolveAPI make.lp set.objfn add.constraint delete.constraint get.objective get.variables solve.lpExtPtr
 #' @export
-rank.OTM_2D = function(object, X) {
+potential.OTM_2D = function(object, X) {
   m = nrow(X)
   n = nrow(object$Data)
   d = 2
