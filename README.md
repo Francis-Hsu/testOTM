@@ -1,5 +1,5 @@
 # testOTM
-This repository contains a package which implements multivariate ranks and quantiles, together with their application in statistical testing, that based upon semi-discrete optimal transport theory. The underlying geometric computation is done through [Geogram](http://alice.loria.fr/index.php/software/4-library/75-geogram.html).
+This repository contains a package which implements the multivariate ranks and quantiles, together with their application in statistical testing, that based on the semi-discrete optimal transportation. The underlying geometric computation is performed by the [Geogram](http://alice.loria.fr/index.php/software/4-library/75-geogram.html) library.
 
 ## Installation
 In R console, run `devtools::install_github("Francis-Hsu/testOTM")`.
