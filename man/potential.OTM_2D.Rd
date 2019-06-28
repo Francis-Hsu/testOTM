@@ -16,7 +16,7 @@ a matrix containing dual potentials of the data.
 }
 \description{
 Compute the Legendre-Fenchel dual of the Alexandrov potential
-2D semi-continuous optimal transport dual potential.
+2D semi-discrete optimal transport dual potential.
 }
 \keyword{Laguerre}
 \keyword{Voronoi,}

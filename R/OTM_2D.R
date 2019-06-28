@@ -1,6 +1,6 @@
 #' 2D semi-continuous optimal transport map
 #' 
-#' Computes the semi-continuous optimal transport map from a uniform measure on [0, 1]^2 to a given data set.
+#' Computes the semi-discrete optimal transport map from a uniform measure on [0, 1]^2 to a given data set.
 #' @param data input coordinate matrix, of size \eqn{n} by \eqn{2}.
 #' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.

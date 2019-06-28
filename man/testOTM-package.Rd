@@ -4,15 +4,20 @@
 \name{testOTM-package}
 \alias{testOTM}
 \alias{testOTM-package}
-\title{testOTM: Optimal transport with Geogram}
+\title{testOTM: Multivariate Ranks and Quantiles using Optimal Transportation}
 \description{
-Optimal transport in R using the geogram library.
-}
-\details{
-Computes optimal transportation map with Geogram.
+This package implements the multivariate ranks and quantiles, together with their application in statistical testing, that based on the semi-discrete optimal transportion. The underlying geometric computation is performed by the Geogram library.
 }
 \references{
 Geogram, \url{http://alice.loria.fr/software/geogram/doc/html/index.html}.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/Francis-Hsu/testOTM}
+  \item Report bugs at \url{https://github.com/Francis-Hsu/testOTM/issues}
+}
+
 }
 \author{
 \strong{Maintainer}: Peng Xu \email{px2132@columbia.edu}

@@ -86,6 +86,26 @@ List dualGraphs2D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
 
 // under construction
 // [[Rcpp::export]]
+void dualPotential2D {const arma::mat &Y, const arma::mat &X, const arma::mat &V, const arma::vec &h, 
+                      const arma::uvec nVerts) {
+  int m = Y.n_rows;
+  int n = X.n_rows;
+  
+  double currMax, currObj;
+  int accuVerts = 0;
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      for (int k = accuVerts; k < accuVerts + nVerts(i); k++) {
+        currObj = Y.row(i) * (V.row(k) - X.row(j));
+      }
+    }
+  }
+
+}
+  
+}
+// under construction
+// [[Rcpp::export]]
 void OTMRank2D(const arma::mat &X, arma::vec &weight, double wMax, const arma::mat &Q) {
   int n = X.n_rows;
   int d = 2;

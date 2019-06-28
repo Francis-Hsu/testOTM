@@ -1,7 +1,7 @@
 #' 2D semi-continuous optimal transport dual potential
 #' 
 #' Compute the Legendre-Fenchel dual of the Alexandrov potential
-#' 2D semi-continuous optimal transport dual potential.
+#' 2D semi-discrete optimal transport dual potential.
 #' @param object a fitted 2D optimal transport map object.
 #' @param x a \eqn{n} by \eqn{2} numeric matrix.
 #' @return a matrix containing dual potentials of the data.
@@ -35,6 +35,8 @@ potential.OTM_2D = function(object, X) {
   delete.lp(lp.mdl)
   
   # compute the infeasible set with other method
+  # number of vertices in each RVD cell
+  n.verts = as.vector(table(object$Vertex.RVD$cell))
   
   return(lp.objective)
 }

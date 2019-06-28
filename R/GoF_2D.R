@@ -1,6 +1,6 @@
 #' 2D goodness-of-test statistic
 #' 
-#' Computes the 2D goodness-of-test statistic using rank defined through the semi-continuous optimal transport map.
+#' Computes the 2D goodness-of-test statistic using rank defined through the semi-discrete optimal transport map.
 #' @param X sample data matrix, of size \eqn{n} by \eqn{2}.
 #' @param Y sample data matrix, of size \eqn{m} by \eqn{2}.
 #' @param mc number of Monte Carlo iteration samples used to evaluate the test statistic.

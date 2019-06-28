@@ -23,5 +23,5 @@ GoF_2D(X, Y, mc = 1000, type = "max", epsilon = 0.001, maxit = 100,
 \item{na.rm}{logical indicating whether NA values should be stripped before the computation proceeds.}
 }
 \description{
-Computes the 2D goodness-of-test statistic using rank defined through the semi-continuous optimal transport map.
+Computes the 2D goodness-of-test statistic using rank defined through the semi-discrete optimal transport map.
 }

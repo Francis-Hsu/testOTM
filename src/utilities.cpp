@@ -129,6 +129,8 @@ arma::mat getVertices(GEO::Mesh &S, GEO::OptimalTransportMap &OTM) {
     GEOGen::RestrictedVoronoiDiagram<4> transMapGen(OTM.RVD()->delaunay(), &S);
   }
   
+  // get the vertices of each cell
+  // should be in ccw orientation
   int currID;
   arma::mat Vert(totalNbVert, d + 1);
   for (unsigned int i = 0; i < n; i++) {

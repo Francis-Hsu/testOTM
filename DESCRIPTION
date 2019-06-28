@@ -1,17 +1,20 @@
 Package: testOTM
 Type: Package
-Title: Optimal transport with Geogram
-Version: 0.02
-Date: 2019-06-25
+Title: Multivariate Ranks and Quantiles using Optimal Transportation
+Version: 0.03
+Date: 2019-06-28
 Authors@R: person(given = "Peng", family = "Xu", role = c("aut", "cre"), email = "px2132@columbia.edu")
 Author: Peng Xu <px2132@columbia.edu> [aut, cre]
 Maintainer: Peng Xu <px2132@columbia.edu>
-Description: Optimal transport in R using the geogram library.
+Description: This package implements the multivariate ranks and quantiles, together with their application in statistical testing, that based on the semi-discrete optimal transportion. The underlying geometric computation is performed by the Geogram library.
 License: GPL (>= 3)
+URL: https://github.com/Francis-Hsu/testOTM
+BugReports: https://github.com/Francis-Hsu/testOTM/issues
 Imports: 
   Rcpp,
   randtoolbox (>= 1.30.0),
-  lpSolveAPI (>= 5.5.2.0-17.1)
+  lpSolveAPI (>= 5.5.2.0-17.1),
+  plot3D (>= 1.1.1)
 LinkingTo: 
   Rcpp,
   RcppArmadillo

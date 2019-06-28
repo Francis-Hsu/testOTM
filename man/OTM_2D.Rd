@@ -21,7 +21,7 @@ OTM_2D(data, epsilon = 0.001, maxit = 100, verbose = F, na.rm = F)
 a list describing the resulting Laguerre diagram.
 }
 \description{
-Computes the semi-continuous optimal transport map from a uniform measure on [0, 1]^2 to a given data set.
+Computes the semi-discrete optimal transport map from a uniform measure on [0, 1]^2 to a given data set.
 }
 \keyword{Laguerre}
 \keyword{Voronoi,}
