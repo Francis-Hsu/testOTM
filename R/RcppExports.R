@@ -5,6 +5,10 @@ dualGraphs2D <- function(X, epsilon, maxit, verbose) {
     .Call('_testOTM_dualGraphs2D', PACKAGE = 'testOTM', X, epsilon, maxit, verbose)
 }
 
+dualPotential2D <- function(Y, X, V, h, accuVerts) {
+    .Call('_testOTM_dualPotential2D', PACKAGE = 'testOTM', Y, X, V, h, accuVerts)
+}
+
 OTMRank2D <- function(X, weight, wMax, Q) {
     invisible(.Call('_testOTM_OTMRank2D', PACKAGE = 'testOTM', X, weight, wMax, Q))
 }

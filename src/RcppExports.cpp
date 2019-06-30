@@ -20,6 +20,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// dualPotential2D
+arma::vec dualPotential2D(const arma::mat& Y, const arma::mat& X, const arma::mat& V, const arma::vec& h, const arma::uvec accuVerts);
+RcppExport SEXP _testOTM_dualPotential2D(SEXP YSEXP, SEXP XSEXP, SEXP VSEXP, SEXP hSEXP, SEXP accuVertsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type V(VSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type h(hSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec >::type accuVerts(accuVertsSEXP);
+    rcpp_result_gen = Rcpp::wrap(dualPotential2D(Y, X, V, h, accuVerts));
+    return rcpp_result_gen;
+END_RCPP
+}
 // OTMRank2D
 void OTMRank2D(const arma::mat& X, arma::vec& weight, double wMax, const arma::mat& Q);
 RcppExport SEXP _testOTM_OTMRank2D(SEXP XSEXP, SEXP weightSEXP, SEXP wMaxSEXP, SEXP QSEXP) {
@@ -53,6 +68,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_testOTM_dualGraphs2D", (DL_FUNC) &_testOTM_dualGraphs2D, 4},
+    {"_testOTM_dualPotential2D", (DL_FUNC) &_testOTM_dualPotential2D, 5},
     {"_testOTM_OTMRank2D", (DL_FUNC) &_testOTM_OTMRank2D, 4},
     {"_testOTM_GoF2D", (DL_FUNC) &_testOTM_GoF2D, 7},
     {NULL, NULL, 0}
