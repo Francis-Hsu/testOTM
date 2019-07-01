@@ -2,7 +2,7 @@
 % Please edit documentation in R/OTM_2D.R
 \name{OTM_2D}
 \alias{OTM_2D}
-\title{2D semi-continuous optimal transport map}
+\title{2D semi-discrete optimal transport map}
 \usage{
 OTM_2D(data, epsilon = 0.001, maxit = 100, verbose = F, na.rm = F)
 }
@@ -18,10 +18,10 @@ OTM_2D(data, epsilon = 0.001, maxit = 100, verbose = F, na.rm = F)
 \item{na.rm}{logical indicating whether NA values should be stripped before the computation proceeds.}
 }
 \value{
-a list describing the resulting Laguerre diagram.
+a list describing the resulting optimal transport map.
 }
 \description{
 Computes the semi-discrete optimal transport map from a uniform measure on [0, 1]^2 to a given data set.
 }
-\keyword{Laguerre}
-\keyword{Voronoi,}
+\keyword{graphs}
+\keyword{optimize,}

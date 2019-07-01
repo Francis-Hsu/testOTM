@@ -25,3 +25,5 @@ GoF_2D(X, Y, mc = 1000, type = "max", epsilon = 0.001, maxit = 100,
 \description{
 Computes the 2D goodness-of-test statistic using rank defined through the semi-discrete optimal transport map.
 }
+\keyword{htest}
+\keyword{multivariate,}

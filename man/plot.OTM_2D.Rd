@@ -27,5 +27,4 @@
 Plot the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of the 
 2D semi-continuous optimal transport map.
 }
-\keyword{Laguerre}
-\keyword{Voronoi,}
+\keyword{hplot}

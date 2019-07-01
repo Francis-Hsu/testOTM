@@ -9,7 +9,7 @@
 #' @param col.data color of the data points
 #' @param col.center color of the Voronoi centroids
 #' @param col.edge color of the edges in plotting RVD and RDT
-#' @keywords Voronoi, Laguerre
+#' @keywords hplot
 #' @export
 plot.OTM_2D = function(object, 
                        which = "Both", 

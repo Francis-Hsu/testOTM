@@ -107,7 +107,7 @@ arma::vec dualPotential2D(const arma::mat &Y, const arma::mat &X, const arma::ma
   return psi;
 }
 
-// find the triangles that contains a set Q of query points
+// find the triangles that contain a set Q of query points
 // [[Rcpp::export]]
 arma::ivec locateTriangles2D(const arma::mat &V, const arma::mat &Q) {
   int m = Q.n_rows; // number of query points
@@ -148,8 +148,6 @@ arma::ivec locateTriangles2D(const arma::mat &V, const arma::mat &Q) {
         } else {
           // point q_i is inside the triangle
           location(i) = j + 1;
-          Rcout << lambda(0) * V(3 * j, 0) + lambda(1) * V(3 * j + 1, 0) + lambda(2) * V(3 * j + 2, 0) << std::endl;
-          Rcout << lambda(0) * V(3 * j, 1) + lambda(1) * V(3 * j + 1, 1) + lambda(2) * V(3 * j + 2, 1) << std::endl;
         }
         break;
       }

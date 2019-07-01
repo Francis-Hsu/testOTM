@@ -78,13 +78,16 @@ arma::mat getVertices(GEO::Mesh &M) {
     totalNbVert += nbVert[i];
   }
   
-  arma::mat Vert(totalNbVert, 3);
+  unsigned int id;
+  arma::mat Vert(totalNbVert, 4);
   for (unsigned int i = 0; i < nFacets; i++) {
     for (int j = 0; j < nbVert[i]; j++) {
-      v = M.vertices.point(M.facets.vertex(i, j));
+      id = M.facets.vertex(i, j);
+      v = M.vertices.point(id);
       Vert(accuVert[i] + j, 0) = i + 1;
       Vert(accuVert[i] + j, 1) = v.x;
       Vert(accuVert[i] + j, 2) = v.y;
+      Vert(accuVert[i] + j, 3) = id + 1;
     }
   }
   
