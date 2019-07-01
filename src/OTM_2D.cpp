@@ -117,6 +117,8 @@ arma::ivec locateTriangles2D(const arma::mat &V, const arma::mat &Q) {
   // 0 means q is not in any triangles, negative index means q is on the edge
   arma::ivec location(m, arma::fill::zeros);
   
+  // implement memoization later
+  
   // help computes the barycentric coordinates
   double y2_y3, x3_x2, x1_x3, y1_y3, det;
   arma::vec lambda(3);
