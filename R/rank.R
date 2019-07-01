@@ -27,21 +27,22 @@ otm.rank.OTM_2D = function(object, X, h = 1e-7) {
   otm.rank = matrix(0, n, d)
   
   # compute the ranks geometrically
-  location.id = testOTM:::locateTriangles2D(as.matrix(object$Vertex.RDT[, 2:3]), X)
+  location.id = locateTriangles2D(as.matrix(object$Vertex.RDT[, 2:3]), X)
   inside.id = (1:n)[location.id > 0]
-  on.edge.id = (1:n)[location.id < 0] # need to figure this out
+  on.edge.id = (1:n)[location.id < 0] # need to figure this out later
   outside.id = (1:n)[location.id == 0]
   for (i in inside.id) {
-    # get cells that dual to the triangle we found
+    # get cells that are dual to the triangle we found
     cell.id = unlist(subset(object$Vertex.RDT, cell == location.id[i], select = id))
     
-    # we round to the 8th digit for vertex comparison
+    # we round to the 8th digit for the vertices comparison
     rvd.vert.freq = as.data.frame(table(round(subset(object$Vertex.RVD, 
                                                      cell %in% cell.id, select = c("x", "y")), 8)), 
                                   stringsAsFactors = F)
     
-    # we search for the common vertex shared by all three cells of RVD
-    # there should always be such vertex since we searched on the dual of RVD
+    # we search for the common vertex shared by all three cells from the RVD
+    # there should always be such a vertex since we located the query point
+    # on the dual (RDT) of RVD
     otm.rank[i, ] = as.numeric(rvd.vert.freq[match(3, rvd.vert.freq$Freq), 1:2])
   }
   
