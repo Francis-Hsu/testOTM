@@ -23,7 +23,6 @@ GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_preconditioners.c
 GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_superlu.c
 GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_arpack.c
 
-
 GEO_SOURCES_C += $(LIB_DIR)/geogram/third_party/LM7/libmeshb7.c
 
 GEO_SOURCES_C += $(LIB_DIR)/geogram/third_party/rply/rply.c

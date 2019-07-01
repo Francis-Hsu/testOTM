@@ -52,10 +52,10 @@ List dualGraphs2D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
   
   // must save centroids before remesh
   arma::mat Centroid = getCentroids(OTM);
-
+  
   // store weights
   arma::vec W = getWeights(OTM);
-
+  
   // create a squared uniform mesh
   unifMesh.clear();
   unifMesh.vertices.create_vertices(cubeVertices.n_rows);
@@ -70,7 +70,7 @@ List dualGraphs2D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
   GEO::Mesh otmRDT;
   OTM.RVD()->set_volumetric(false);
   OTM.RVD()->compute_RDT(otmRDT);
-
+  
   // collect objects to return
   List lst;
   lst["Data"] = X;
@@ -107,48 +107,58 @@ arma::vec dualPotential2D(const arma::mat &Y, const arma::mat &X, const arma::ma
   return psi;
 }
 
-// under construction
+// find the triangles that contains a set Q of query points
 // [[Rcpp::export]]
-void OTMRank2D(const arma::mat &X, arma::vec &weight, double wMax, const arma::mat &Q) {
-  int n = X.n_rows;
-  int d = 2;
+arma::ivec locateTriangles2D(const arma::mat &V, const arma::mat &Q) {
+  int m = Q.n_rows; // number of query points
+  int n = V.n_rows / 3; // number of triangles
   
-  // initialize the Geogram library.
-  initializeGeogram();
+  // vector recording the indices of triangles that contains the queries
+  // 0 means q is not in any triangles, negative index means q is on the edge
+  arma::ivec location(m, arma::fill::zeros);
   
-  double wV[(d + 1) * n];
-  getWeightedVerts(X, weight, wV);
-  
-  GEO::RegularWeightedDelaunay2d* otmRWD = dynamic_cast<GEO::RegularWeightedDelaunay2d*>(GEO::Delaunay::create(d + 1, "BPOW2d"));
-  //otmRWD->set_keeps_infinite(true);
-  otmRWD->set_vertices(n, wV);
-  
-  GEO::index_t cellID;
-  Rcout << "#########" << std::endl;
-  double q[2];
-  for (unsigned int i = 0; i < Q.n_rows; i++) {
-    q[0] = Q(i, 0);
-    q[1] = Q(i, 1);
-    
-    cellID = otmRWD->locate(q);
-    Rcout << cellID << std::endl;
-    //Rcout << otmRWD->nearest_vertex(q) << std::endl;
-    Rcout << X(otmRWD->cell_vertex(cellID, 0), 0) << " " << X(otmRWD->triangle_vertex(cellID, 0), 1) << std::endl;
-    Rcout << X(otmRWD->cell_vertex(cellID, 1), 0) << " " << X(otmRWD->triangle_vertex(cellID, 1), 1) << std::endl;
-    Rcout << X(otmRWD->cell_vertex(cellID, 2), 0) << " " << X(otmRWD->triangle_vertex(cellID, 2), 1) << std::endl;
+  // help computes the barycentric coordinates
+  double y2_y3, x3_x2, x1_x3, y1_y3, det;
+  arma::vec lambda(3);
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      // compute the barycentric coordinates of q_i
+      y1_y3 = V(3 * j, 1) - V(3 * j + 2, 1);
+      y2_y3 = V(3 * j + 1, 1) - V(3 * j + 2, 1);
+      x1_x3 = V(3 * j, 0) - V(3 * j + 2, 0);
+      x3_x2 = V(3 * j + 2, 0) - V(3 * j + 1, 0);
+      det = y2_y3 * x1_x3 + x3_x2 * y1_y3;
+      
+      // first coordinate
+      lambda(0) = y2_y3 * (Q(i, 0) - V(3 * j + 2, 0)) + x3_x2 * (Q(i, 1) - V(3 * j + 2, 1));
+      lambda(0) /= det;
+      
+      // second coordinate
+      lambda(1) = -y1_y3 * (Q(i, 0) - V(3 * j + 2, 0)) + x1_x3 * (Q(i, 1) - V(3 * j + 2, 1));
+      lambda(1) /= det;
+      
+      // third coordinate
+      lambda(2) = 1.0 - lambda(0) - lambda(1);
+      
+      // check the relative position
+      if (all(lambda >= 0) && all(lambda <= 1)) {
+        if (any(lambda == 0)) {
+          // point q_i is on the edge
+          location(i) = -j - 1;
+        } else {
+          // point q_i is inside the triangle
+          location(i) = j + 1;
+          Rcout << lambda(0) * V(3 * j, 0) + lambda(1) * V(3 * j + 1, 0) + lambda(2) * V(3 * j + 2, 0) << std::endl;
+          Rcout << lambda(0) * V(3 * j, 1) + lambda(1) * V(3 * j + 1, 1) + lambda(2) * V(3 * j + 2, 1) << std::endl;
+        }
+        break;
+      }
+    }
   }
   
-  Rcout << "#####" << std::endl;
-  for (unsigned int i = 0; i < otmRWD->nb_cells(); i++) {
-    //Rcout << otmRWD->triangle_adjacent(i, 0) << " " << 
-    //  otmRWD->triangle_adjacent(i, 1) << " " << otmRWD->triangle_adjacent(i, 2) << std::endl;
-    // Rcout << i << std::endl;
-    // for (int j = 0; j <= 2; j++) {
-    //   Rcout << X(otmRWD->cell_vertex(i, j), 0) << " "
-    //         << X(otmRWD->cell_vertex(i, j), 1) << std::endl;
-    // }
-  }
+  return location;
 }
+
 
 // [[Rcpp::export]]
 List GoF2D(const arma::mat &X, const arma::mat &Y, const arma::mat &XY, const arma::mat &U, 
@@ -157,10 +167,10 @@ List GoF2D(const arma::mat &X, const arma::mat &Y, const arma::mat &XY, const ar
   int n = X.n_rows;
   int m = Y.n_rows;
   int k = U.n_rows;
-
+  
   // initialize the Geogram library.
   initializeGeogram();
-
+  
   // create a mesh for 2D uniform measure
   GEO::Mesh unifMesh(d, false);
   const arma::mat cubeVertices = cubeVert(2);
@@ -174,7 +184,7 @@ List GoF2D(const arma::mat &X, const arma::mat &Y, const arma::mat &XY, const ar
   
   // embed in 3-dimension
   unifMesh.vertices.set_dimension(d + 1);
-
+  
   // compute OTMs
   GEO::OptimalTransportMap2d OTMX(&unifMesh);
   GEO::OptimalTransportMap2d OTMY(&unifMesh);
@@ -186,7 +196,7 @@ List GoF2D(const arma::mat &X, const arma::mat &Y, const arma::mat &XY, const ar
   // get weights
   arma::vec wX = getWeights(OTMX);
   arma::vec wY = getWeights(OTMY);
-
+  
   // setup weighted vertices for X and Y
   double wVX[(d + 1) * n];
   double wVY[(d + 1) * m];
@@ -221,6 +231,6 @@ List GoF2D(const arma::mat &X, const arma::mat &Y, const arma::mat &XY, const ar
   lst["U_Map_Y"] = uY;
   lst["Vert_XY"] = getVertices(unifMesh, OTMXY);
   lst["Cent_XY"] = getCentroids(OTMXY);
-
+  
   return lst;
 }

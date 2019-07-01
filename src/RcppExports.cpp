@@ -35,17 +35,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// OTMRank2D
-void OTMRank2D(const arma::mat& X, arma::vec& weight, double wMax, const arma::mat& Q);
-RcppExport SEXP _testOTM_OTMRank2D(SEXP XSEXP, SEXP weightSEXP, SEXP wMaxSEXP, SEXP QSEXP) {
+// locateTriangles2D
+arma::ivec locateTriangles2D(const arma::mat& V, const arma::mat& Q);
+RcppExport SEXP _testOTM_locateTriangles2D(SEXP VSEXP, SEXP QSEXP) {
 BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
-    Rcpp::traits::input_parameter< arma::vec& >::type weight(weightSEXP);
-    Rcpp::traits::input_parameter< double >::type wMax(wMaxSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type V(VSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Q(QSEXP);
-    OTMRank2D(X, weight, wMax, Q);
-    return R_NilValue;
+    rcpp_result_gen = Rcpp::wrap(locateTriangles2D(V, Q));
+    return rcpp_result_gen;
 END_RCPP
 }
 // GoF2D
@@ -69,7 +68,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_testOTM_dualGraphs2D", (DL_FUNC) &_testOTM_dualGraphs2D, 4},
     {"_testOTM_dualPotential2D", (DL_FUNC) &_testOTM_dualPotential2D, 5},
-    {"_testOTM_OTMRank2D", (DL_FUNC) &_testOTM_OTMRank2D, 4},
+    {"_testOTM_locateTriangles2D", (DL_FUNC) &_testOTM_locateTriangles2D, 2},
     {"_testOTM_GoF2D", (DL_FUNC) &_testOTM_GoF2D, 7},
     {NULL, NULL, 0}
 };

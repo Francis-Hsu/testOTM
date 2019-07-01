@@ -139,7 +139,7 @@ namespace GEO {
         virtual index_t nearest_vertex(const double* p) const;
 
 
-    public:
+    protected:
 
         /**
          * \brief Symbolic constant for uninitialized hint.

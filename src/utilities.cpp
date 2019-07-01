@@ -68,7 +68,7 @@ arma::mat getCentroids(GEO::OptimalTransportMap &OTM) {
 arma::mat getVertices(GEO::Mesh &M) {
   GEO::vec3 v;
   unsigned int nFacets = M.facets.nb();
-
+  
   int totalNbVert = 0;
   int nbVert[nFacets];
   int accuVert[nFacets];
@@ -77,7 +77,7 @@ arma::mat getVertices(GEO::Mesh &M) {
     accuVert[i] = totalNbVert;
     totalNbVert += nbVert[i];
   }
-
+  
   arma::mat Vert(totalNbVert, 3);
   for (unsigned int i = 0; i < nFacets; i++) {
     for (int j = 0; j < nbVert[i]; j++) {

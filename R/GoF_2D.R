@@ -24,7 +24,7 @@ GoF_2D = function(X, Y, mc = 1000, type = "max", epsilon = 1e-3, maxit = 100, ve
     X = X[complete.cases(X), ]
     Y = Y[complete.cases(Y), ]
   }
-
+  
   U = sobol(mc, 2)
   XY = rbind(X, Y)
   gof_list = GoF2D(X, Y, XY, U, epsilon, maxit, verbose)
