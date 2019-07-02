@@ -114,30 +114,33 @@ arma::ivec locateTriangles2D(const arma::mat &V, const arma::mat &Q) {
   int n = V.n_rows / 3; // number of triangles
   
   // vector recording the indices of triangles that contains the queries
-  // 0 means q is not in any triangles, negative index means q is on the edge
+  // 0 means q is not in any triangle, negative index means q is on the edge
   arma::ivec location(m, arma::fill::zeros);
   
-  // implement memoization later
+  // memoization for barycentric coordinates
+  arma::mat memBaryCoord(n, 5);
+  for (int j = 0; j < n; j++) {
+    memBaryCoord(j, 0) = V(3 * j, 1) - V(3 * j + 2, 1);
+    memBaryCoord(j, 1) = V(3 * j + 1, 1) - V(3 * j + 2, 1);
+    memBaryCoord(j, 2) = V(3 * j, 0) - V(3 * j + 2, 0);
+    memBaryCoord(j, 3) = V(3 * j + 2, 0) - V(3 * j + 1, 0);
+    memBaryCoord(j, 4) = memBaryCoord(j, 1) * memBaryCoord(j, 2);
+    memBaryCoord(j, 4) += memBaryCoord(j, 3) * memBaryCoord(j, 0);
+  }
   
-  // help computes the barycentric coordinates
-  double y2_y3, x3_x2, x1_x3, y1_y3, det;
   arma::vec lambda(3);
   for (int i = 0; i < m; i++) {
     for (int j = 0; j < n; j++) {
       // compute the barycentric coordinates of q_i
-      y1_y3 = V(3 * j, 1) - V(3 * j + 2, 1);
-      y2_y3 = V(3 * j + 1, 1) - V(3 * j + 2, 1);
-      x1_x3 = V(3 * j, 0) - V(3 * j + 2, 0);
-      x3_x2 = V(3 * j + 2, 0) - V(3 * j + 1, 0);
-      det = y2_y3 * x1_x3 + x3_x2 * y1_y3;
-      
       // first coordinate
-      lambda(0) = y2_y3 * (Q(i, 0) - V(3 * j + 2, 0)) + x3_x2 * (Q(i, 1) - V(3 * j + 2, 1));
-      lambda(0) /= det;
+      lambda(0) = memBaryCoord(j, 1) * (Q(i, 0) - V(3 * j + 2, 0));
+      lambda(0) += memBaryCoord(j, 3) * (Q(i, 1) - V(3 * j + 2, 1));
+      lambda(0) /= memBaryCoord(j, 4);
       
       // second coordinate
-      lambda(1) = -y1_y3 * (Q(i, 0) - V(3 * j + 2, 0)) + x1_x3 * (Q(i, 1) - V(3 * j + 2, 1));
-      lambda(1) /= det;
+      lambda(1) = -memBaryCoord(j, 0) * (Q(i, 0) - V(3 * j + 2, 0));
+      lambda(1) += memBaryCoord(j, 2) * (Q(i, 1) - V(3 * j + 2, 1));
+      lambda(1) /= memBaryCoord(j, 4);
       
       // third coordinate
       lambda(2) = 1.0 - lambda(0) - lambda(1);
@@ -151,7 +154,7 @@ arma::ivec locateTriangles2D(const arma::mat &V, const arma::mat &Q) {
           // point q_i is inside the triangle
           location(i) = j + 1;
         }
-        break;
+        break; // didn't find anything
       }
     }
   }
