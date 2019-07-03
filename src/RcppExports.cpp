@@ -35,15 +35,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// locateTriangles2D
-arma::ivec locateTriangles2D(const arma::mat& V, const arma::mat& Q);
-RcppExport SEXP _testOTM_locateTriangles2D(SEXP VSEXP, SEXP QSEXP) {
+// locateRVD2D
+arma::ivec locateRVD2D(const arma::mat& Q, const arma::mat& X, const arma::vec& w);
+RcppExport SEXP _testOTM_locateRVD2D(SEXP QSEXP, SEXP XSEXP, SEXP wSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::mat& >::type V(VSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Q(QSEXP);
-    rcpp_result_gen = Rcpp::wrap(locateTriangles2D(V, Q));
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type w(wSEXP);
+    rcpp_result_gen = Rcpp::wrap(locateRVD2D(Q, X, w));
+    return rcpp_result_gen;
+END_RCPP
+}
+// locateRDT2D
+arma::ivec locateRDT2D(const arma::mat& Q, const arma::mat& V);
+RcppExport SEXP _testOTM_locateRDT2D(SEXP QSEXP, SEXP VSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type Q(QSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type V(VSEXP);
+    rcpp_result_gen = Rcpp::wrap(locateRDT2D(Q, V));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -68,7 +81,8 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_testOTM_dualGraphs2D", (DL_FUNC) &_testOTM_dualGraphs2D, 4},
     {"_testOTM_dualPotential2D", (DL_FUNC) &_testOTM_dualPotential2D, 5},
-    {"_testOTM_locateTriangles2D", (DL_FUNC) &_testOTM_locateTriangles2D, 2},
+    {"_testOTM_locateRVD2D", (DL_FUNC) &_testOTM_locateRVD2D, 3},
+    {"_testOTM_locateRDT2D", (DL_FUNC) &_testOTM_locateRDT2D, 2},
     {"_testOTM_GoF2D", (DL_FUNC) &_testOTM_GoF2D, 7},
     {NULL, NULL, 0}
 };

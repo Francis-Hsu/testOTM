@@ -107,15 +107,42 @@ arma::vec dualPotential2D(const arma::mat &Y, const arma::mat &X, const arma::ma
   return psi;
 }
 
+// find the cells that a set Q of query points was transported to
+// [[Rcpp::export]]
+arma::ivec locateRVD2D(const arma::mat &Q, const arma::mat &X, const arma::vec &w) {
+  int m = Q.n_rows;
+  int n = X.n_rows;
+  int d = 2;
+  
+  // setup weighted vertices for X
+  double wX[(d + 1) * n];
+  getWeightedVerts(X, w, wX);
+  
+  // build a Kd-tree
+  GEO::NearestNeighborSearch* treeX = GEO::NearestNeighborSearch::create(d + 1, "BNN");
+  treeX->set_points(n, wX);
+  
+  double p[d + 1] = {};
+  arma::ivec cellID(m, arma::fill::zeros);
+  for (int i = 0; i < m; i++) {
+    p[0] = Q(i, 0);
+    p[1] = Q(i, 1);
+    
+    cellID(i) = treeX->get_nearest_neighbor(p) + 1;
+  }
+  
+  return cellID;
+}
+
 // find the triangles that contain a set Q of query points
 // [[Rcpp::export]]
-arma::ivec locateTriangles2D(const arma::mat &V, const arma::mat &Q) {
+arma::ivec locateRDT2D(const arma::mat &Q, const arma::mat &V) {
   int m = Q.n_rows; // number of query points
   int n = V.n_rows / 3; // number of triangles
   
   // vector recording the indices of triangles that contains the queries
   // 0 means q is not in any triangle, negative index means q is on the edge
-  arma::ivec location(m, arma::fill::zeros);
+  arma::ivec triID(m, arma::fill::zeros);
   
   // memoization for barycentric coordinates
   arma::mat memBaryCoord(n, 5);
@@ -128,7 +155,7 @@ arma::ivec locateTriangles2D(const arma::mat &V, const arma::mat &Q) {
     memBaryCoord(j, 4) += memBaryCoord(j, 3) * memBaryCoord(j, 0);
   }
   
-  arma::vec lambda(3);
+  arma::vec lambda(3, arma::fill::zeros);
   for (int i = 0; i < m; i++) {
     for (int j = 0; j < n; j++) {
       // compute the barycentric coordinates of q_i
@@ -149,17 +176,17 @@ arma::ivec locateTriangles2D(const arma::mat &V, const arma::mat &Q) {
       if (all(lambda >= 0) && all(lambda <= 1)) {
         if (any(lambda == 0)) {
           // point q_i is on the edge
-          location(i) = -j - 1;
+          triID(i) = -j - 1;
         } else {
           // point q_i is inside the triangle
-          location(i) = j + 1;
+          triID(i) = j + 1;
         }
         break; // didn't find anything
       }
     }
   }
   
-  return location;
+  return triID;
 }
 
 
@@ -167,9 +194,6 @@ arma::ivec locateTriangles2D(const arma::mat &V, const arma::mat &Q) {
 List GoF2D(const arma::mat &X, const arma::mat &Y, const arma::mat &XY, const arma::mat &U, 
            double epsilon, int maxit, bool verbose) {
   int d = 2;
-  int n = X.n_rows;
-  int m = Y.n_rows;
-  int k = U.n_rows;
   
   // initialize the Geogram library.
   initializeGeogram();
@@ -200,27 +224,12 @@ List GoF2D(const arma::mat &X, const arma::mat &Y, const arma::mat &XY, const ar
   arma::vec wX = getWeights(OTMX);
   arma::vec wY = getWeights(OTMY);
   
-  // setup weighted vertices for X and Y
-  double wVX[(d + 1) * n];
-  double wVY[(d + 1) * m];
-  getWeightedVerts(X, wX, wVX);
-  getWeightedVerts(Y, wY, wVY);
+  // get the optimal transport mapping
+  arma::ivec uX = locateRVD2D(U, X, wX);
+  arma::ivec uY = locateRVD2D(U, Y, wY);
   
-  // build Kd-tree
-  GEO::NearestNeighborSearch* treeX = GEO::NearestNeighborSearch::create(d + 1, "BNN");
-  GEO::NearestNeighborSearch* treeY = GEO::NearestNeighborSearch::create(d + 1, "BNN");
-  treeX->set_points(n, wVX);
-  treeY->set_points(m, wVY);
-  
-  double p[3] = {};
-  IntegerVector uX(k), uY(k);
-  for (int i = 0; i < k; i++) {
-    p[0] = U(i, 0);
-    p[1] = U(i, 1);
-    
-    uX(i) = treeX->get_nearest_neighbor(p);
-    uY(i) = treeY->get_nearest_neighbor(p);
-  }
+  // must save centroids before remesh
+  arma::mat centroidXY = getCentroids(OTMXY);
   
   // create a squared uniform mesh
   unifMesh.clear();
@@ -233,7 +242,7 @@ List GoF2D(const arma::mat &X, const arma::mat &Y, const arma::mat &XY, const ar
   lst["U_Map_X"] = uX;
   lst["U_Map_Y"] = uY;
   lst["Vert_XY"] = getVertices(unifMesh, OTMXY);
-  lst["Cent_XY"] = getCentroids(OTMXY);
+  lst["Cent_XY"] = centroidXY;
   
   return lst;
 }

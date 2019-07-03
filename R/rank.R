@@ -24,13 +24,12 @@ otm.rank.OTM_2D = function(object, X, h = 1e-7) {
   n = nrow(X)
   d = 2
   
-  otm.rank = matrix(0, n, d)
+  otm.ranks = matrix(0, n, d)
   
   # compute the ranks geometrically
-  location.id = locateTriangles2D(as.matrix(object$Vertex.RDT[, 2:3]), X)
+  location.id = locateRDT2D(X, as.matrix(object$Vertex.RDT[, 2:3]))
   inside.id = (1:n)[location.id > 0]
-  on.edge.id = (1:n)[location.id < 0] # need to figure this out later
-  outside.id = (1:n)[location.id == 0]
+  outside.id = (1:n)[location.id <= 0]
   for (i in inside.id) {
     # get cells that are dual to the triangle we found
     cell.id = unlist(subset(object$Vertex.RDT, cell == location.id[i], select = id))
@@ -43,17 +42,18 @@ otm.rank.OTM_2D = function(object, X, h = 1e-7) {
     # we search for the common vertex shared by all three cells from the RVD
     # there should always be such a vertex since we located the query point
     # on the dual (RDT) of RVD
-    otm.rank[i, ] = as.numeric(rvd.vert.freq[match(3, rvd.vert.freq$Freq), 1:2])
+    otm.ranks[i, ] = as.numeric(rvd.vert.freq[match(3, rvd.vert.freq$Freq), 1:2])
   }
+  otm.ranks[outside.id, ] = object$Centroid[locateRVD2D(X[outside.id, ], object$Data, object$Weight), ]
   
   # compute the ranks numerically
-  for (j in 1:d) {
-    Xp = X[outside.id, ]
-    Xn = X[outside.id, ]
-    Xp[, j] = Xp[, j] + h
-    Xn[, j] = Xn[, j] - h
-    otm.rank[outside.id, j] = (otm.potential(object, Xp) - otm.potential(object, Xn)) / (2 * h)
-  }
+  # for (j in 1:d) {
+  #   Xp = X[outside.id, ]
+  #   Xn = X[outside.id, ]
+  #   Xp[, j] = Xp[, j] + h
+  #   Xn[, j] = Xn[, j] - h
+  #   otm.ranks[outside.id, j] = (otm.potential(object, Xp) - otm.potential(object, Xn)) / (2 * h)
+  # }
   
-  return(otm.rank)
+  return(otm.ranks)
 }

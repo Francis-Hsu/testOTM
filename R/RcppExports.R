@@ -9,8 +9,12 @@ dualPotential2D <- function(Y, X, V, h, accuVerts) {
     .Call('_testOTM_dualPotential2D', PACKAGE = 'testOTM', Y, X, V, h, accuVerts)
 }
 
-locateTriangles2D <- function(V, Q) {
-    .Call('_testOTM_locateTriangles2D', PACKAGE = 'testOTM', V, Q)
+locateRVD2D <- function(Q, X, w) {
+    .Call('_testOTM_locateRVD2D', PACKAGE = 'testOTM', Q, X, w)
+}
+
+locateRDT2D <- function(Q, V) {
+    .Call('_testOTM_locateRDT2D', PACKAGE = 'testOTM', Q, V)
 }
 
 GoF2D <- function(X, Y, XY, U, epsilon, maxit, verbose) {
