@@ -2,7 +2,7 @@
 % Please edit documentation in R/OTM_2D.R
 \name{OTM_2D}
 \alias{OTM_2D}
-\title{2D semi-discrete optimal transport map}
+\title{2D Semi-discrete Optimal Transport Map}
 \usage{
 OTM_2D(data, epsilon = 0.001, maxit = 100, verbose = F, na.rm = F)
 }

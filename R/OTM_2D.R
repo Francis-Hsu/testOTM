@@ -1,4 +1,4 @@
-#' 2D semi-discrete optimal transport map
+#' 2D Semi-discrete Optimal Transport Map
 #' 
 #' Computes the semi-discrete optimal transport map from a uniform measure on [0, 1]^2 to a given data set.
 #' @param data input coordinate matrix, of size \eqn{n} by \eqn{2}.

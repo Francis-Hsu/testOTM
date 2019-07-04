@@ -1,7 +1,6 @@
-#' Semi-discrete optimal transport dual potential
+#' Semi-discrete Optimal Transport Dual Potential
 #' 
-#' Compute the Legendre-Fenchel dual of the Alexandrov potential
-#' Semi-discrete optimal transport dual potential.
+#' Compute the Legendre-Fenchel dual of the Alexandrov potential.
 #' @param object a fitted optimal transport map object.
 #' @param X a \eqn{n} by \eqn{2} numeric matrix.
 #' @return a matrix containing dual potentials of the data.
@@ -10,10 +9,9 @@ otm.potential = function(object, X, ...) {
   UseMethod("otm.potential")
 }
 
-#' 2D semi-discrete optimal transport dual potential
+#' 2D Semi-discrete Optimal Transport Dual Potential
 #' 
-#' Compute the Legendre-Fenchel dual of the Alexandrov potential
-#' 2D semi-discrete optimal transport dual potential.
+#' Compute the Legendre-Fenchel dual of the Alexandrov potential.
 #' @param object a fitted 2D optimal transport map object.
 #' @param X a \eqn{n} by \eqn{2} numeric matrix.
 #' @return a matrix containing dual potentials of the data.

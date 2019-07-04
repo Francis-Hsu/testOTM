@@ -2,7 +2,7 @@
 % Please edit documentation in R/rank.R
 \name{otm.rank}
 \alias{otm.rank}
-\title{Semi-discrete optimal transport rank}
+\title{Semi-discrete Optimal Transport Rank}
 \usage{
 otm.rank(object, X, h, ...)
 }

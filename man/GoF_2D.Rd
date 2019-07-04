@@ -2,7 +2,7 @@
 % Please edit documentation in R/GoF_2D.R
 \name{GoF_2D}
 \alias{GoF_2D}
-\title{2D goodness-of-test statistic}
+\title{2D Goodness-of-test Statistic}
 \usage{
 GoF_2D(X, Y, mc = 1000, type = "max", epsilon = 0.001, maxit = 100,
   verbose = F, na.rm = F)

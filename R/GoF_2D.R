@@ -1,4 +1,4 @@
-#' 2D goodness-of-test statistic
+#' 2D Goodness-of-test Statistic
 #' 
 #' Computes the 2D goodness-of-test statistic using rank defined through the semi-discrete optimal transport map.
 #' @param X sample data matrix, of size \eqn{n} by \eqn{2}.

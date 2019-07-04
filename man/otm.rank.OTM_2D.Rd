@@ -2,7 +2,7 @@
 % Please edit documentation in R/rank.R
 \name{otm.rank.OTM_2D}
 \alias{otm.rank.OTM_2D}
-\title{2D semi-discrete optimal transport rank}
+\title{2D Semi-discrete Optimal Transport Rank}
 \usage{
 \method{otm.rank}{OTM_2D}(object, X, h = 1e-07)
 }
@@ -14,9 +14,8 @@
 \item{h}{step size for the numerical differentiation.}
 }
 \value{
-a matrix containing the rank of the data.
+a matrix containing rank of the data.
 }
 \description{
-Compute the rank function based on optimal transport
-2D semi-discrete optimal transport rank.
+Compute the rank function based on optimal transport.
 }

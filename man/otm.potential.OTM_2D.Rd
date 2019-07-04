@@ -2,7 +2,7 @@
 % Please edit documentation in R/potential.R
 \name{otm.potential.OTM_2D}
 \alias{otm.potential.OTM_2D}
-\title{2D semi-discrete optimal transport dual potential}
+\title{2D Semi-discrete Optimal Transport Dual Potential}
 \usage{
 \method{otm.potential}{OTM_2D}(object, X)
 }
@@ -15,6 +15,5 @@
 a matrix containing dual potentials of the data.
 }
 \description{
-Compute the Legendre-Fenchel dual of the Alexandrov potential
-2D semi-discrete optimal transport dual potential.
+Compute the Legendre-Fenchel dual of the Alexandrov potential.
 }
