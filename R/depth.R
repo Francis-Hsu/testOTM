@@ -23,14 +23,14 @@ otm.depth.OTM_2D = function(object, X) {
   return(otm.depth)
 }
 
-#' Multivariate Uniform Depth
+#' Multivariate Uniform Depth Function
 #' 
 #' Compute the depth associated with U[0, 1]^d.
 #' @param X a \eqn{n} by \eqn{d} numeric matrix.
 #' @return a vector containing depth of the data.
 #' @export
 depth.uniform = function(X) {
-  depth = 0.5 - apply(abs(t(t(X) - rep(1, ncol(X)) / 2)), 1, max)
+  depth = 0.5 - apply(abs(t(t(X) - rep(0.5, ncol(X)))), 1, max)
   
   return(depth)
 }

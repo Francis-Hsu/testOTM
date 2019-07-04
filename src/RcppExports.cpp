@@ -21,7 +21,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // dualPotential2D
-arma::vec dualPotential2D(const arma::mat& Y, const arma::mat& X, const arma::mat& V, const arma::vec& h, const arma::uvec accuVerts);
+List dualPotential2D(const arma::mat& Y, const arma::mat& X, const arma::mat& V, const arma::vec& h, const arma::uvec accuVerts);
 RcppExport SEXP _testOTM_dualPotential2D(SEXP YSEXP, SEXP XSEXP, SEXP VSEXP, SEXP hSEXP, SEXP accuVertsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

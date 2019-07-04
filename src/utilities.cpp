@@ -4,7 +4,6 @@ using namespace Rcpp;
 
 void initializeGeogram() {
   // use std::call_once?
-  
   // initialize the Geogram library.
   GEO::initialize();
   

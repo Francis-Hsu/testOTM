@@ -84,27 +84,50 @@ List dualGraphs2D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
   return lst;
 }
 
-// under construction
 // [[Rcpp::export]]
-arma::vec dualPotential2D(const arma::mat &Y, const arma::mat &X, const arma::mat &V, const arma::vec &h, 
+List dualPotential2D(const arma::mat &Y, const arma::mat &X, const arma::mat &V, const arma::vec &h, 
                           const arma::uvec accuVerts) {
   int m = Y.n_rows;
   int n = X.n_rows;
+  int d = 2;
   
-  arma::mat currCellVerts;
-  arma::vec cellMax(n);
-  arma::vec psi(m, arma::fill::zeros);
-  for (int i = 0; i < m; i++) {
-    for (int j = 0; j < n; j++) {
-      currCellVerts = V.rows(accuVerts(j), accuVerts(j + 1) - 1);
-      currCellVerts.each_row() -= X.row(j);
-      cellMax(j) = arma::max(currCellVerts * Y.row(i).t());
-    }
-    
-    psi(i) = arma::max(cellMax - h);
+  // seperate the vertices out for each cell
+  // then shift each by its Voronoi site
+  arma::field<arma::mat> cellVerts(n);
+  for (int i = 0; i < n; i++) {
+    cellVerts(i) = V.rows(accuVerts(i), accuVerts(i + 1) - 1);
   }
   
-  return psi;
+  // to store indices of the maximizers
+  arma::ivec cellMaxInd(n);
+  int psiInd;
+  
+  // to store the maximum values
+  arma::vec cellMax(n, arma::fill::zeros);
+  arma::vec psi(m, arma::fill::zeros);
+  
+  // to recover the optimal vertices
+  // which corresponds to ranks
+  arma::mat argmaxVert(m, d, arma::fill::zeros);
+  
+  // search through the cells to find vertices that maximizes the inner product
+  arma::vec tempProd;
+  for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+      tempProd = cellVerts(j) * trans(Y.row(i) - X.row(j));
+      cellMaxInd(j) = arma::index_max(tempProd);
+      cellMax(j) = tempProd(cellMaxInd(j));
+    }
+    psiInd = arma::index_max(cellMax - h);
+    psi(i) = cellMax(psiInd) - h(psiInd);
+    argmaxVert.row(i) = cellVerts(psiInd).row(cellMaxInd(psiInd));
+  }
+  
+  List lst;
+  lst["optimal.vertex"] = argmaxVert;
+  lst["dual.potential"] = psi;
+  
+  return lst;
 }
 
 // find the cells that a set Q of query points was transported to
@@ -188,7 +211,6 @@ arma::ivec locateRDT2D(const arma::mat &Q, const arma::mat &V) {
   
   return triID;
 }
-
 
 // [[Rcpp::export]]
 List GoF2D(const arma::mat &X, const arma::mat &Y, const arma::mat &XY, const arma::mat &U, 

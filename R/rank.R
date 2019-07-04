@@ -43,16 +43,17 @@ otm.rank.OTM_2D = function(object, X, h = 1e-7) {
     # on the dual (RDT) of RVD
     otm.ranks[i, ] = as.numeric(rvd.vert.freq[match(3, rvd.vert.freq$Freq), 1:2])
   }
-  otm.ranks[outside.id, ] = object$Centroid[locateRVD2D(X[outside.id, ], object$Data, object$Weight), ]
   
-  # compute the ranks numerically
-  # for (j in 1:d) {
-  #   Xp = X[outside.id, ]
-  #   Xn = X[outside.id, ]
-  #   Xp[, j] = Xp[, j] + h
-  #   Xn[, j] = Xn[, j] - h
-  #   otm.ranks[outside.id, j] = (otm.potential(object, Xp) - otm.potential(object, Xn)) / (2 * h)
-  # }
+  # centroid mapping
+  # otm.ranks[outside.id, ] = object$Centroid[locateRVD2D(X[outside.id, ], object$Data, object$Weight), ]
+  
+  # numerical mapping
+  if (length(outside.id)) {
+    acc.verts = c(0, cumsum(as.vector(table(object$Vertex.RVD$cell))))
+    otm.ranks[outside.id, ] = dualPotential2D(X[outside.id, , drop = F], object$Data, 
+                                              as.matrix(object$Vertex.RVD[, 2:3]), object$Height, 
+                                              acc.verts)$optimal.vertex
+  }
   
   return(otm.ranks)
 }

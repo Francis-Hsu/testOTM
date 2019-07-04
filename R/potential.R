@@ -48,7 +48,7 @@ otm.potential.OTM_2D = function(object, X) {
     acc.verts = c(0, cumsum(as.vector(table(object$Vertex.RVD$cell))))
     potential[invalid.id] = dualPotential2D(X[invalid.id, , drop = F], object$Data, 
                                             as.matrix(object$Vertex.RVD[, 2:3]), object$Height, 
-                                            acc.verts)
+                                            acc.verts)$dual.potential
   }
   
   return(potential)
