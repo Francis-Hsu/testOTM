@@ -4,15 +4,15 @@
 \alias{otm.depth.OTM_2D}
 \title{2D Semi-discrete Optimal Transport Depth}
 \usage{
-\method{otm.depth}{OTM_2D}(object, X)
+\method{otm.depth}{OTM_2D}(object, Q)
 }
 \arguments{
 \item{object}{a fitted 2D optimal transport map object.}
 
-\item{X}{a \eqn{n} by \eqn{2} numeric matrix.}
+\item{Q}{a numeric matrix where each row represents a query point.}
 }
 \value{
-a vector containing depth of the data.
+a vector containing the depths of the data.
 }
 \description{
 Compute the MK depth relative to the 2D standard uniform distribution.

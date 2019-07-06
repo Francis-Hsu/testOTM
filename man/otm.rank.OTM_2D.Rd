@@ -4,18 +4,16 @@
 \alias{otm.rank.OTM_2D}
 \title{2D Semi-discrete Optimal Transport Rank}
 \usage{
-\method{otm.rank}{OTM_2D}(object, X, h = 1e-07)
+\method{otm.rank}{OTM_2D}(object, Q)
 }
 \arguments{
 \item{object}{a fitted 2D optimal transport map object.}
 
-\item{X}{a \eqn{n} by \eqn{2} numeric matrix.}
-
-\item{h}{step size for the numerical differentiation.}
+\item{Q}{a numeric matrix where each row represents a query point.}
 }
 \value{
-a matrix containing rank of the data.
+a matrix containing the ranks of the data.
 }
 \description{
-Compute the rank function based on optimal transport.
+Compute the 2D ranks based on optimal transport.
 }

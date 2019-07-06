@@ -2,16 +2,16 @@
 % Please edit documentation in R/depth.R
 \name{depth.uniform}
 \alias{depth.uniform}
-\title{Multivariate Uniform Depth}
+\title{Multivariate Uniform Depth Function}
 \usage{
-depth.uniform(X)
+depth.uniform(Q)
 }
 \arguments{
-\item{X}{a \eqn{n} by \eqn{d} numeric matrix.}
+\item{Q}{a numeric matrix where each row represents a query point.}
 }
 \value{
-a vector containing depth of the data.
+a vector containing the depths of the data.
 }
 \description{
-Compute the depth associated with U[0, 1]^d.
+Compute the depths associated with U[0, 1]^d.
 }

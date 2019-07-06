@@ -29,8 +29,8 @@ GoF_2D = function(X, Y, mc = 1000, type = "max", epsilon = 1e-3, maxit = 100, ve
   U = sobol(mc, 2)
   XY = rbind(X, Y)
   gof_list = GoF2D(X, Y, XY, U, epsilon, maxit, verbose)
-  cell_id_x = gof_list$U_Map_X + 1
-  cell_id_y = gof_list$U_Map_Y + 1 + nrow(X)
+  cell_id_x = gof_list$U_Map_X
+  cell_id_y = gof_list$U_Map_Y + nrow(X)
   colnames(gof_list$Vert_XY) = c("vert.x", "vert.y", "cell")
   gof_verts = gof_list$Vert_XY
   gof_rank = t(sapply(split(data.frame(gof_verts)[, -1], gof_verts[, 1]), choose_vert, type = type_id))

@@ -4,19 +4,16 @@
 \alias{otm.rank}
 \title{Semi-discrete Optimal Transport Rank}
 \usage{
-otm.rank(object, X, h, ...)
+otm.rank(object, Q, ...)
 }
 \arguments{
 \item{object}{a fitted optimal transport map object.}
 
-\item{X}{a \eqn{n} by \eqn{2} numeric matrix.}
-
-\item{h}{step size for the numerical differentiation.}
+\item{Q}{a numeric matrix where each row represents a query point.}
 }
 \value{
-a matrix containing the rank of the data.
+a matrix containing the ranks of the data.
 }
 \description{
-Compute the rank function based on optimal transport
-Semi-discrete optimal transport rank.
+Compute the ranks based on optimal transport.
 }

@@ -4,15 +4,15 @@
 \alias{otm.depth}
 \title{Semi-discrete Optimal Transport Depth}
 \usage{
-otm.depth(object, X, ...)
+otm.depth(object, Q, ...)
 }
 \arguments{
 \item{object}{a fitted optimal transport map object.}
 
-\item{X}{a \eqn{n} by \eqn{2} numeric matrix.}
+\item{Q}{a numeric matrix where each row represents a query point.}
 }
 \value{
-a vector containing depth of the data.
+a vector containing the depths of the data.
 }
 \description{
 Compute the MK depth relative to the multivariate uniform distribution U[0, 1]^d.

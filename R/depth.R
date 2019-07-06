@@ -2,10 +2,10 @@
 #' 
 #' Compute the MK depth relative to the multivariate uniform distribution U[0, 1]^d.
 #' @param object a fitted optimal transport map object.
-#' @param X a \eqn{n} by \eqn{2} numeric matrix.
-#' @return a vector containing depth of the data.
+#' @param Q a numeric matrix where each row represents a query point.
+#' @return a vector containing the depths of the data.
 #' @export
-otm.depth = function(object, X, ...) {
+otm.depth = function(object, Q, ...) {
   UseMethod("otm.depth")
 }
 
@@ -13,11 +13,11 @@ otm.depth = function(object, X, ...) {
 #' 
 #' Compute the MK depth relative to the 2D standard uniform distribution.
 #' @param object a fitted 2D optimal transport map object.
-#' @param X a \eqn{n} by \eqn{2} numeric matrix.
-#' @return a vector containing depth of the data.
+#' @param Q a numeric matrix where each row represents a query point.
+#' @return a vector containing the depths of the data.
 #' @export
-otm.depth.OTM_2D = function(object, X) {
-  ranks = otm.rank.OTM_2D(object, X)
+otm.depth.OTM_2D = function(object, Q) {
+  ranks = otm.rank.OTM_2D(object, Q)
   otm.depth = depth.uniform(ranks)
   
   return(otm.depth)
@@ -25,12 +25,12 @@ otm.depth.OTM_2D = function(object, X) {
 
 #' Multivariate Uniform Depth Function
 #' 
-#' Compute the depth associated with U[0, 1]^d.
-#' @param X a \eqn{n} by \eqn{d} numeric matrix.
-#' @return a vector containing depth of the data.
+#' Compute the depths associated with U[0, 1]^d.
+#' @param Q a numeric matrix where each row represents a query point.
+#' @return a vector containing the depths of the data.
 #' @export
-depth.uniform = function(X) {
-  depth = 0.5 - apply(abs(t(t(X) - rep(0.5, ncol(X)))), 1, max)
+depth.uniform = function(Q) {
+  depth = 0.5 - apply(abs(t(t(Q) - rep(0.5, ncol(Q)))), 1, max)
   
   return(depth)
 }
