@@ -25,9 +25,17 @@ void OTM2D(GEO::OptimalTransportMap2d &OTM, const arma::mat &X, double epsilon, 
   OTM.optimize(maxit);
 }
 
+//' 2D Semi-discrete Optimal Transport Map
+//' 
+//' @param X input data matrix.
+//' @param epsilon maximum error for the optimization algorithm.
+//' @param maxit maximum number of solver iterations.
+//' @param verbose logical indicating wether to display optimization messages.
+//' @return a list describing the resulting optimal transport map.
+//' @export
 // [[Rcpp::export]]
 List dualGraphs2D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
-  int d = 2;
+  const int d = 2;
   
   // initialize the Geogram library.
   initializeGeogram();

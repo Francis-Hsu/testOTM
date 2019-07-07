@@ -1860,7 +1860,7 @@ namespace GEOGen {
             return current_connected_component_;
         }
 
-    public:
+    protected:
         /**
          * \brief Low-level API of Restricted Voronoi Diagram traversal
          *  with connected components priority.

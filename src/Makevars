@@ -1,3 +1,6 @@
+# Makevars modified from Rgeogram's makefile
+# see https://github.com/TraME-Project/Rgeogram
+
 ROOT_DIR = .
 LIB_DIR = ../inst/include
 

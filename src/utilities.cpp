@@ -1,6 +1,7 @@
 #include "utilities.h"
 using namespace Rcpp;
-//[[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::depends(RcppArmadillo)]]
+// [[Rcpp::plugins(cpp11)]]
 
 void initializeGeogram() {
   // use std::call_once?
@@ -114,7 +115,8 @@ arma::mat getVertices(GEO::Mesh &S, GEO::OptimalTransportMap &OTM) {
   
   // construct a generic RVD
   if (d == 2) {
-    GEOGen::RestrictedVoronoiDiagram<3> transMapGen(OTM.RVD()->delaunay(), &S);
+    GEOGen::RVDHelper<3> transMapGen(OTM.RVD()->delaunay(), &S);
+    
     // compute intersections
     for (unsigned int i = 0; i < n; i++) {
       cP = transMapGen.intersect_cell_facet(i, P);
@@ -128,7 +130,7 @@ arma::mat getVertices(GEO::Mesh &S, GEO::OptimalTransportMap &OTM) {
     }
   } else {
     // take care 3d case in future
-    GEOGen::RestrictedVoronoiDiagram<4> transMapGen(OTM.RVD()->delaunay(), &S);
+    // GEOGen::RestrictedVoronoiDiagram<4> transMapGen(OTM.RVD()->delaunay(), &S);
   }
   
   // get the vertices of each cell

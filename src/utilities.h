@@ -26,4 +26,12 @@ arma::mat getVertices(GEO::Mesh &M);
 arma::mat getVertices(GEO::Mesh &S, GEO::OptimalTransportMap &OTM);
 arma::mat cubeVert(int d);
 
+namespace GEOGen {
+  template <GEO::index_t DIM> class RVDHelper: public RestrictedVoronoiDiagram<DIM> {
+  public:
+    using RestrictedVoronoiDiagram<DIM>::RestrictedVoronoiDiagram;
+    using RestrictedVoronoiDiagram<DIM>::intersect_cell_facet;
+  };
+}
+
 #endif
