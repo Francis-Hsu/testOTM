@@ -8,7 +8,6 @@
 #' @param maxit maximum number of solver iterations.
 #' @param verbose logical indicating wether to display optimization messages.
 #' @return a list describing the resulting optimal transport map.
-#' @export
 dualGraphs2D <- function(X, epsilon, maxit, verbose) {
     .Call('_testOTM_dualGraphs2D', PACKAGE = 'testOTM', X, epsilon, maxit, verbose)
 }
@@ -17,6 +16,13 @@ dualPotential2D <- function(Y, X, V, h, accuVerts) {
     .Call('_testOTM_dualPotential2D', PACKAGE = 'testOTM', Y, X, V, h, accuVerts)
 }
 
+#' Locate within a 2D RVD
+#' 
+#' Find the RVD cells where a set Q of query points is transported to.
+#' @param Q input query matrix.
+#' @param X input data used to build the RVD.
+#' @param w weights of the RVD cells.
+#' @return a vector of indices indicating where the query points are transported to.
 locateRVD2D <- function(Q, X, w) {
     .Call('_testOTM_locateRVD2D', PACKAGE = 'testOTM', Q, X, w)
 }
