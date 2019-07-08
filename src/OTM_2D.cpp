@@ -157,7 +157,7 @@ arma::ivec locateRVD2D(const arma::mat &Q, const arma::mat &X, const arma::vec &
   GEO::NearestNeighborSearch* treeX = GEO::NearestNeighborSearch::create(d + 1, "BNN");
   treeX->set_points(n, wX);
   
-  double p[d + 1] = {};
+  double p[3] = {};
   arma::ivec cellID(m, arma::fill::zeros);
   for (int i = 0; i < m; i++) {
     p[0] = Q(i, 0);
