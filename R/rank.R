@@ -16,7 +16,7 @@ otm.rank = function(object, Q, ...) {
 #' @param Q a numeric matrix where each row represents a query point.
 #' @return a matrix containing the ranks of the data.
 #' @export
-otm.rank.OTM_2D = function(object, Q) {
+otm.rank.OTM.2D = function(object, Q) {
   n = nrow(Q)
   d = 2
   
@@ -37,7 +37,8 @@ otm.rank.OTM_2D = function(object, Q) {
     
     # we search for the common vertex shared by all three cells from the RVD
     # there should always be such a vertex since we located the query point
-    # on the dual (RDT) of RVD
+    # on the dual (RDT) of RVD (unless with pathological data)
+    # need to catch exceptions
     otm.ranks[i, ] = rvd.vert.freq[match(3, rvd.vert.freq[, 3]), 1:2]
   }
   

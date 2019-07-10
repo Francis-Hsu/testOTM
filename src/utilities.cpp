@@ -24,8 +24,8 @@ void setMeshPoint(GEO::Mesh &M, const arma::mat &X) {
 }
 
 void getWeightedVerts(const arma::mat &X, const arma::vec &w, double* wV) {
-  int n = X.n_rows;
-  int d = X.n_cols;
+  const int n = X.n_rows;
+  const int d = X.n_cols;
   double wMax = w.max();
   
   for (int i = 0; i < (d + 1) * n; i++) {
@@ -47,8 +47,8 @@ arma::vec getWeights(GEO::OptimalTransportMap &OTM) {
 }
 
 arma::mat getCentroids(GEO::OptimalTransportMap &OTM) {
-  unsigned int n = OTM.nb_points();
-  unsigned int d = OTM.dimension();
+  const unsigned int n = OTM.nb_points();
+  const unsigned int d = OTM.dimension();
   
   // extract the centroids
   double ct[n * d];
@@ -66,8 +66,9 @@ arma::mat getCentroids(GEO::OptimalTransportMap &OTM) {
 }
 
 arma::mat getVertices(GEO::Mesh &M) {
+  const unsigned int nFacets = M.facets.nb();
   GEO::vec3 v;
-  unsigned int nFacets = M.facets.nb();
+  
   
   int totalNbVert = 0;
   int nbVert[nFacets];
@@ -95,8 +96,8 @@ arma::mat getVertices(GEO::Mesh &M) {
 }
 
 arma::mat getVertices(GEO::Mesh &S, GEO::OptimalTransportMap &OTM) {
-  unsigned int n = OTM.nb_points();
-  unsigned int d = OTM.dimension();
+  const unsigned int n = OTM.nb_points();
+  const unsigned int d = OTM.dimension();
   
   // construct a polygon from the source mesh
   GEO::Attribute<double> vertex_weight;

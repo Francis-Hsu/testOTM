@@ -17,7 +17,7 @@ otm.potential = function(object, X, ...) {
 #' @return a matrix containing dual potentials of the data.
 #' @importFrom lpSolveAPI make.lp set.objfn add.constraint delete.constraint get.objective get.variables solve.lpExtPtr
 #' @export
-otm.potential.OTM_2D = function(object, X) {
+otm.potential.OTM.2D = function(object, X) {
   m = nrow(X)
   n = nrow(object$Data)
   d = 2

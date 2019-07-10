@@ -16,7 +16,7 @@ otm.quantile = function(object, Q, ...) {
 #' @param Q a numeric matrix where each row represents a query point.
 #' @return a list containing the quantiles of the data, and the indices of the corresponding cells.
 #' @export
-otm.quantile.OTM_2D = function(object, Q) {
+otm.quantile.OTM.2D = function(object, Q) {
   cell.id = locateRVD2D(Q, object$Data, object$Weight)
   
   return(list(quantiles = object$Data[cell.id, ], cell.id = cell.id))

@@ -11,7 +11,7 @@
 #' @param col.edge color of the edges in plotting RVD and RDT
 #' @keywords hplot
 #' @export
-plot.OTM_2D = function(object, 
+plot.OTM.2D = function(object, 
                        which = "Both", 
                        col.data = "cornflowerblue", 
                        col.center = "firebrick", 

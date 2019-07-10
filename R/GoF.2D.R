@@ -11,7 +11,7 @@
 #' @keywords multivariate, htest
 #' @importFrom randtoolbox sobol
 #' @export
-GoF_2D = function(X, Y, mc = 1000, type = "max", epsilon = 1e-3, maxit = 100, verbose = F, na.rm = F) {
+GoF.2D = function(X, Y, mc = 1000, type = "max", epsilon = 1e-3, maxit = 100, verbose = F, na.rm = F) {
   if (!is.matrix(X) || !is.matrix(Y) || ncol(X) != 2 || ncol(Y) != 2) {
     stop("Input data must be matrices with ncol = 2.")
   }

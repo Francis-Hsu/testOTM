@@ -9,7 +9,7 @@
 #' @return a list describing the resulting optimal transport map.
 #' @keywords optimize, graphs
 #' @export
-OTM_2D = function(data, epsilon = 1e-3, maxit = 100, verbose = F, na.rm = F) {
+OTM.2D = function(data, epsilon = 1e-3, maxit = 100, verbose = F, na.rm = F) {
   if (!is.matrix(data) || ncol(data) < 2) {
     stop("Data must be a matrix with ncol >= 2.")
   }
@@ -25,9 +25,12 @@ OTM_2D = function(data, epsilon = 1e-3, maxit = 100, verbose = F, na.rm = F) {
   
   object$Vertex.RDT = as.data.frame(object$Vertex.RDT)
   object$Vertex.RVD = as.data.frame(object$Vertex.RVD)
-  object$Height = -(rowSums(object$Data^2) + object$Weight) / 2 # use for computing Alexandrov's potential
   
-  class(object) = "OTM_2D"
+  # for computing Alexandrov's potential
+  # noted the signs of weights
+  object$Height = -(rowSums(object$Data^2) - object$Weight) / 2
+  
+  class(object) = "OTM.2D"
   
   return(object)
 }

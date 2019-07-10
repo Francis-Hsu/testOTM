@@ -2,8 +2,8 @@
 using namespace Rcpp;
 
 void OTM2D(GEO::OptimalTransportMap2d &OTM, const arma::mat &X, double epsilon, int maxit, bool verbose) {
-  int n = X.n_rows;
-  int d = 2;
+  const int n = X.n_rows;
+  const int d = 2;
   
   // create a mesh for data points
   GEO::Mesh dataMesh(d, false);
@@ -94,9 +94,9 @@ List dualGraphs2D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
 // [[Rcpp::export]]
 List dualPotential2D(const arma::mat &Y, const arma::mat &X, const arma::mat &V, const arma::vec &h, 
                           const arma::uvec accuVerts) {
-  int m = Y.n_rows;
-  int n = X.n_rows;
-  int d = 2;
+  const int m = Y.n_rows;
+  const int n = X.n_rows;
+  const int d = 2;
   
   // seperate the vertices out for each cell
   // then shift each by its Voronoi site
@@ -145,9 +145,9 @@ List dualPotential2D(const arma::mat &Y, const arma::mat &X, const arma::mat &V,
 //' @return a vector of indices indicating where the query points are transported to.
 // [[Rcpp::export]]
 arma::ivec locateRVD2D(const arma::mat &Q, const arma::mat &X, const arma::vec &w) {
-  int m = Q.n_rows;
-  int n = X.n_rows;
-  int d = 2;
+  const int m = Q.n_rows;
+  const int n = X.n_rows;
+  const int d = 2;
   
   // setup weighted vertices for X
   double wX[(d + 1) * n];
@@ -157,7 +157,7 @@ arma::ivec locateRVD2D(const arma::mat &Q, const arma::mat &X, const arma::vec &
   GEO::NearestNeighborSearch* treeX = GEO::NearestNeighborSearch::create(d + 1, "BNN");
   treeX->set_points(n, wX);
   
-  double p[3] = {};
+  double p[d + 1] = {};
   arma::ivec cellID(m, arma::fill::zeros);
   for (int i = 0; i < m; i++) {
     p[0] = Q(i, 0);
@@ -172,8 +172,8 @@ arma::ivec locateRVD2D(const arma::mat &Q, const arma::mat &X, const arma::vec &
 // find the triangles that contain a set Q of query points
 // [[Rcpp::export]]
 arma::ivec locateRDT2D(const arma::mat &Q, const arma::mat &V) {
-  int m = Q.n_rows; // number of query points
-  int n = V.n_rows / 3; // number of triangles
+  const int m = Q.n_rows; // number of query points
+  const int n = V.n_rows / 3; // number of triangles
   
   // vector recording the indices of triangles that contains the queries
   // 0 means q is not in any triangle, negative index means q is on the edge
@@ -227,7 +227,7 @@ arma::ivec locateRDT2D(const arma::mat &Q, const arma::mat &V) {
 // [[Rcpp::export]]
 List GoF2D(const arma::mat &X, const arma::mat &Y, const arma::mat &XY, const arma::mat &U, 
            double epsilon, int maxit, bool verbose) {
-  int d = 2;
+  const int d = 2;
   
   // initialize the Geogram library.
   initializeGeogram();
