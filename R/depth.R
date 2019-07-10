@@ -17,7 +17,7 @@ otm.depth = function(object, Q, ...) {
 #' @return a vector containing the depths of the data.
 #' @export
 otm.depth.OTM.2D = function(object, Q) {
-  ranks = otm.rank.OTM_2D(object, Q)
+  ranks = otm.rank.OTM.2D(object, Q)
   otm.depth = depth.uniform(ranks)
   
   return(otm.depth)
