@@ -21,3 +21,4 @@ a list describing the resulting optimal transport map.
 \description{
 2D Semi-discrete Optimal Transport Map
 }
+\keyword{internal}

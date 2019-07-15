@@ -3,7 +3,7 @@
 #' Plot the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of the 
 #' 2D semi-continuous optimal transport map.
 #' @param object a fitted 2D optimal transport map object.
-#' @param which specify which graph to plot. Can be "RVD", "RDT", or "Both".
+#' @param which specify which graph(s) to plot. Can be "RVD", "RDT", or "Both".
 #' @param draw.center logical indicating if the centroids should be plotted.
 #' @param draw.map logical indicating if dashed lines should be added to show mapping between the data and the Voronoi cells.
 #' @param col.data color of the data points

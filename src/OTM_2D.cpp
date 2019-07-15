@@ -32,6 +32,7 @@ void OTM2D(GEO::OptimalTransportMap2d &OTM, const arma::mat &X, double epsilon, 
 //' @param maxit maximum number of solver iterations.
 //' @param verbose logical indicating wether to display optimization messages.
 //' @return a list describing the resulting optimal transport map.
+//' @keywords internal
 // [[Rcpp::export]]
 List dualGraphs2D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
   const int d = 2;
@@ -93,7 +94,7 @@ List dualGraphs2D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
 
 // [[Rcpp::export]]
 List dualPotential2D(const arma::mat &Y, const arma::mat &X, const arma::mat &V, const arma::vec &h, 
-                          const arma::uvec accuVerts) {
+                     const arma::uvec accuVerts) {
   const int m = Y.n_rows;
   const int n = X.n_rows;
   const int d = 2;
@@ -143,6 +144,7 @@ List dualPotential2D(const arma::mat &Y, const arma::mat &X, const arma::mat &V,
 //' @param X input data used to build the RVD.
 //' @param w weights of the RVD cells.
 //' @return a vector of indices indicating where the query points are transported to.
+//' @keywords internal
 // [[Rcpp::export]]
 arma::ivec locateRVD2D(const arma::mat &Q, const arma::mat &X, const arma::vec &w) {
   const int m = Q.n_rows;

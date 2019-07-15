@@ -11,7 +11,7 @@
 \arguments{
 \item{object}{a fitted 2D optimal transport map object.}
 
-\item{which}{specify which graph to plot. Can be "RVD", "RDT", or "Both".}
+\item{which}{specify which graph(s) to plot. Can be "RVD", "RDT", or "Both".}
 
 \item{col.data}{color of the data points}
 

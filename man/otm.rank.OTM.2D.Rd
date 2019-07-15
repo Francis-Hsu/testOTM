@@ -4,12 +4,14 @@
 \alias{otm.rank.OTM.2D}
 \title{2D Semi-discrete Optimal Transport Rank}
 \usage{
-\method{otm.rank}{OTM.2D}(object, Q)
+\method{otm.rank}{OTM.2D}(object, Q, use.geo = FALSE)
 }
 \arguments{
 \item{object}{a fitted 2D optimal transport map object.}
 
 \item{Q}{a numeric matrix where each row represents a query point.}
+
+\item{use.geo}{logical indicating if the geometric method should be used to compute the ranks.}
 }
 \value{
 a matrix containing the ranks of the data.

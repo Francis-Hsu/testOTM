@@ -19,3 +19,4 @@ a vector of indices indicating where the query points are transported to.
 \description{
 Find the RVD cells where a set Q of query points is transported to.
 }
+\keyword{internal}

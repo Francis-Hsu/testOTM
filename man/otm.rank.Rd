@@ -10,9 +10,12 @@ otm.rank(object, Q, ...)
 \item{object}{a fitted optimal transport map object.}
 
 \item{Q}{a numeric matrix where each row represents a query point.}
+
+\item{use.geo}{logical indicating if the geometric method should be used to compute the ranks.}
 }
 \value{
-a matrix containing the ranks of the data.
+a list containing the ranks of the data and the corresponding convex conjugate potential values.
+Noted that if the geometric method is used for ranks then the convex conjugates will not be computed (will return NA).
 }
 \description{
 Compute the ranks based on optimal transport.
