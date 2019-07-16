@@ -14,10 +14,11 @@ otm.depth = function(object, Q, ...) {
 #' Compute the MK depth relative to the 2D standard uniform distribution.
 #' @param object a fitted 2D optimal transport map object.
 #' @param Q a numeric matrix where each row represents a query point.
+#' @param use.geo logical indicating if the geometric method should be used to compute the ranks.
 #' @return a vector containing the depths of the data.
 #' @export
-otm.depth.OTM.2D = function(object, Q) {
-  ranks = otm.rank.OTM.2D(object, Q)$Rank
+otm.depth.OTM.2D = function(object, Q, use.geo = FALSE) {
+  ranks = otm.rank.OTM.2D(object, Q, use.geo)$Rank
   otm.depth = depth.uniform(ranks)
   
   return(otm.depth)

@@ -19,5 +19,5 @@ otm.quantile = function(object, Q, ...) {
 otm.quantile.OTM.2D = function(object, Q) {
   cell.id = locateRVD2D(Q, object$Data, object$Weight)
   
-  return(list(quantiles = object$Data[cell.id, ], cell.id = cell.id))
+  return(list(Quantiles = object$Data[cell.id, ], Cell.Id = cell.id))
 }

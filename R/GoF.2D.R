@@ -11,24 +11,33 @@
 #' @keywords multivariate, htest
 #' @importFrom randtoolbox sobol
 #' @export
-GoF.2D = function(X, Y, mc = 1000, type = "max", epsilon = 1e-3, maxit = 100, verbose = F, na.rm = F) {
-  if (!is.matrix(X) || !is.matrix(Y) || ncol(X) != 2 || ncol(Y) != 2) {
+otm.gof.test = function(X, Y, mc = 1000, type = "center", epsilon = 1e-3, maxit = 100, verbose = F, na.rm = F) {
+  if (!is.matrix(X) || !is.matrix(Y) || ncol(X) < 2 || ncol(Y) < 2) {
     stop("Input data must be matrices with ncol = 2.")
   }
   
-  type_id = switch(type,
-                   max = 1,
-                   min = 2,
-                   stop("Unknown type of rank method!"))
+  if (ncol(X) !=  ncol(Y)) {
+    stop("Mismatch in dimensions of the input data.")
+  }
   
   if (na.rm) {
     X = X[complete.cases(X), ]
     Y = Y[complete.cases(Y), ]
   }
   
-  U = sobol(mc, 2)
+  d = ncol(X)
+  
+  type_id = switch(type,
+                   center = 0,
+                   max = 1,
+                   min = 2,
+                   stop("Unknown type of rank method!"))
+  
+  U = sobol(mc, d)
   XY = rbind(X, Y)
-  gof_list = GoF2D(X, Y, XY, U, epsilon, maxit, verbose)
+  if (d == 2) {
+    gof_list = GoF2D(X, Y, XY, U, epsilon, maxit, verbose)
+  }
   cell_id_x = gof_list$U_Map_X
   cell_id_y = gof_list$U_Map_Y + nrow(X)
   colnames(gof_list$Vert_XY) = c("vert.x", "vert.y", "cell")

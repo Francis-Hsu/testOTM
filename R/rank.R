@@ -17,7 +17,8 @@ otm.rank = function(object, Q, ...) {
 #' @param object a fitted 2D optimal transport map object.
 #' @param Q a numeric matrix where each row represents a query point.
 #' @param use.geo logical indicating if the geometric method should be used to compute the ranks.
-#' @return a matrix containing the ranks of the data.
+#' @return a list containing the ranks of the data and the corresponding convex conjugate potential values.
+#' Noted that if the geometric method is used for ranks then the convex conjugates will not be computed (will return NA).
 #' @export
 otm.rank.OTM.2D = function(object, Q, use.geo = FALSE) {
   n = nrow(Q)
@@ -28,8 +29,8 @@ otm.rank.OTM.2D = function(object, Q, use.geo = FALSE) {
   otm.ranks = matrix(0, n, d)
   use.num.id = !logical(n)
   
+  # compute the ranks geometrically
   if (use.geo) {
-    # compute the ranks geometrically
     location.id = locateRDT2D(Q, as.matrix(object$Vertex.RDT[, 2:3]))
     inside.id = (1:n)[location.id > 0]
     use.num.id[inside.id] = F
