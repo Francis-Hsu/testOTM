@@ -18,5 +18,5 @@ a list containing the ranks of the data and the corresponding convex conjugate p
 Noted that if the geometric method is used for ranks then the convex conjugates will not be computed (will return NA).
 }
 \description{
-Compute the ranks based on optimal transport.
+Compute the optimal transport ranks.
 }

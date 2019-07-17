@@ -2,18 +2,18 @@
 % Please edit documentation in R/potential.R
 \name{otm.potential.OTM.2D}
 \alias{otm.potential.OTM.2D}
-\title{2D Semi-discrete Optimal Transport Dual Potential}
+\title{2D Semi-discrete Optimal Transport Potential}
 \usage{
-\method{otm.potential}{OTM.2D}(object, X)
+\method{otm.potential}{OTM.2D}(object, Q)
 }
 \arguments{
 \item{object}{a fitted 2D optimal transport map object.}
 
-\item{X}{a \eqn{n} by \eqn{2} numeric matrix.}
+\item{Q}{a numeric matrix where each row represents a query point.}
 }
 \value{
-a matrix containing dual potentials of the data.
+a matrix containing the potentials of the queries.
 }
 \description{
-Compute the Legendre-Fenchel dual of the Alexandrov potential.
+Compute the 2D Alexandrov potential.
 }

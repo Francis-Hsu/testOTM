@@ -1,6 +1,6 @@
 #' Semi-discrete Optimal Transport Quantile
-#' 
-#' Compute the quantiles based on optimal transport.
+#'
+#' Compute the optimal transport quantiles.
 #' @param object a fitted optimal transport map object.
 #' @param Q a numeric matrix where each row represents a query point.
 #' @return a list containing the quantiles of the data, and the indices of the corresponding cells.
@@ -10,8 +10,8 @@ otm.quantile = function(object, Q, ...) {
 }
 
 #' 2D Semi-discrete Optimal Transport Quantile
-#' 
-#' Compute the 2D quantiles based on optimal transport.
+#'
+#' Compute the 2D optimal transport quantiles.
 #' @param object a fitted 2D optimal transport map object.
 #' @param Q a numeric matrix where each row represents a query point.
 #' @return a list containing the quantiles of the data, and the indices of the corresponding cells.

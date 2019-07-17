@@ -14,8 +14,9 @@
 \item{use.geo}{logical indicating if the geometric method should be used to compute the ranks.}
 }
 \value{
-a matrix containing the ranks of the data.
+a list containing the ranks of the data and the corresponding convex conjugate potential values.
+Noted that if the geometric method is used for ranks then the convex conjugates will not be computed (will return NA).
 }
 \description{
-Compute the 2D ranks based on optimal transport.
+Compute the 2D optimal transport ranks.
 }

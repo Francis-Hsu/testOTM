@@ -29,11 +29,30 @@ locateRVD2D <- function(Q, X, w) {
     .Call('_testOTM_locateRVD2D', PACKAGE = 'testOTM', Q, X, w)
 }
 
+#' Locate within a 2D RDT
+#' 
+#' Find the RDT triangles where a set Q of query points belongs to.
+#' @param Q input query matrix.
+#' @param V matrix of sorted triangle vertices.
+#' @return a vector of indices indicating which triangles the query points belong.
+#' @keywords internal
 locateRDT2D <- function(Q, V) {
     .Call('_testOTM_locateRDT2D', PACKAGE = 'testOTM', Q, V)
 }
 
-GoF2D <- function(X, Y, XY, U, epsilon, maxit, verbose) {
-    .Call('_testOTM_GoF2D', PACKAGE = 'testOTM', X, Y, XY, U, epsilon, maxit, verbose)
+#' Helper for computing the goodness-of-fit test statistics
+#' 
+#' Compute the quantiles of U with respect to X and Y, as well as the optimal transport map of the combined data.
+#' @param X input data matrix.
+#' @param Y input data matrix.
+#' @param U weights of the RVD cells.
+#' @param center logical indicating if the centroids should be computed.
+#' @param epsilon convergence threshold for optimization.
+#' @param maxit max number of iterations before termination.
+#' @param verbose logical indicating wether to display optimization messages.
+#' @return a list, which contains the quantile indices, and the vertices of the combined optimal transport map.
+#' @keywords internal
+GoF2D <- function(X, Y, U, center, epsilon, maxit, verbose) {
+    .Call('_testOTM_GoF2D', PACKAGE = 'testOTM', X, Y, U, center, epsilon, maxit, verbose)
 }
 

@@ -1,6 +1,6 @@
 #' Semi-discrete Optimal Transport Depth
-#' 
-#' Compute the MK depth relative to the multivariate uniform distribution U[0, 1]^d.
+#'
+#' Compute the optimal transport depth relative to the multivariate uniform distribution U[0, 1]^d.
 #' @param object a fitted optimal transport map object.
 #' @param Q a numeric matrix where each row represents a query point.
 #' @return a vector containing the depths of the data.
@@ -10,8 +10,8 @@ otm.depth = function(object, Q, ...) {
 }
 
 #' 2D Semi-discrete Optimal Transport Depth
-#' 
-#' Compute the MK depth relative to the 2D standard uniform distribution.
+#'
+#' Compute the optimal transport depth relative to the 2D standard uniform distribution.
 #' @param object a fitted 2D optimal transport map object.
 #' @param Q a numeric matrix where each row represents a query point.
 #' @param use.geo logical indicating if the geometric method should be used to compute the ranks.

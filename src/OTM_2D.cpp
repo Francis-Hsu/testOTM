@@ -137,6 +137,7 @@ List dualPotential2D(const arma::mat &Y, const arma::mat &X, const arma::mat &V,
   
   return lst;
 }
+
 //' Locate within a 2D RVD
 //' 
 //' Find the RVD cells where a set Q of query points is transported to.
@@ -171,7 +172,13 @@ arma::ivec locateRVD2D(const arma::mat &Q, const arma::mat &X, const arma::vec &
   return cellID;
 }
 
-// find the triangles that contain a set Q of query points
+//' Locate within a 2D RDT
+//' 
+//' Find the RDT triangles where a set Q of query points belongs to.
+//' @param Q input query matrix.
+//' @param V matrix of sorted triangle vertices.
+//' @return a vector of indices indicating which triangles the query points belong.
+//' @keywords internal
 // [[Rcpp::export]]
 arma::ivec locateRDT2D(const arma::mat &Q, const arma::mat &V) {
   const int m = Q.n_rows; // number of query points
@@ -226,10 +233,23 @@ arma::ivec locateRDT2D(const arma::mat &Q, const arma::mat &V) {
   return triID;
 }
 
+//' Helper for computing the goodness-of-fit test statistics
+//' 
+//' Compute the quantiles of U with respect to X and Y, as well as the optimal transport map of the combined data.
+//' @param X input data matrix.
+//' @param Y input data matrix.
+//' @param U weights of the RVD cells.
+//' @param center logical indicating if the centroids should be computed.
+//' @param epsilon convergence threshold for optimization.
+//' @param maxit max number of iterations before termination.
+//' @param verbose logical indicating wether to display optimization messages.
+//' @return a list, which contains the quantile indices, and the vertices of the combined optimal transport map.
+//' @keywords internal
 // [[Rcpp::export]]
-List GoF2D(const arma::mat &X, const arma::mat &Y, const arma::mat &XY, const arma::mat &U, 
-           double epsilon, int maxit, bool verbose) {
+List GoF2D(const arma::mat &X, const arma::mat &Y, const arma::mat &U, 
+           bool center, double epsilon, int maxit, bool verbose) {
   const int d = 2;
+  const arma::mat XY = join_cols(X, Y);
   
   // initialize the Geogram library.
   initializeGeogram();
@@ -265,7 +285,10 @@ List GoF2D(const arma::mat &X, const arma::mat &Y, const arma::mat &XY, const ar
   arma::ivec uY = locateRVD2D(U, Y, wY);
   
   // must save centroids before remesh
-  arma::mat centroidXY = getCentroids(OTMXY);
+  arma::mat centroidXY;
+  if (center) {
+    centroidXY = getCentroids(OTMXY);
+  }
   
   // create a squared uniform mesh
   unifMesh.clear();
@@ -278,7 +301,9 @@ List GoF2D(const arma::mat &X, const arma::mat &Y, const arma::mat &XY, const ar
   lst["U_Map_X"] = uX;
   lst["U_Map_Y"] = uY;
   lst["Vert_XY"] = getVertices(unifMesh, OTMXY);
-  lst["Cent_XY"] = centroidXY;
+  if (center) {
+    lst["Cent_XY"] = centroidXY;
+  }
   
   return lst;
 }

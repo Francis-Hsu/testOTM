@@ -1,5 +1,5 @@
 #' Semi-discrete Optimal Transport Potential
-#' 
+#'
 #' Compute the Alexandrov potential.
 #' @param object a fitted optimal transport map object.
 #' @param Q a numeric matrix where each row represents a query point.
@@ -10,8 +10,8 @@ otm.potential = function(object, Q, ...) {
 }
 
 #' 2D Semi-discrete Optimal Transport Potential
-#' 
-#' Compute the Alexandrov potential.
+#'
+#' Compute the 2D Alexandrov potential.
 #' @param object a fitted 2D optimal transport map object.
 #' @param Q a numeric matrix where each row represents a query point.
 #' @return a matrix containing the potentials of the queries.

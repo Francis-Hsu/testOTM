@@ -61,19 +61,19 @@ BEGIN_RCPP
 END_RCPP
 }
 // GoF2D
-List GoF2D(const arma::mat& X, const arma::mat& Y, const arma::mat& XY, const arma::mat& U, double epsilon, int maxit, bool verbose);
-RcppExport SEXP _testOTM_GoF2D(SEXP XSEXP, SEXP YSEXP, SEXP XYSEXP, SEXP USEXP, SEXP epsilonSEXP, SEXP maxitSEXP, SEXP verboseSEXP) {
+List GoF2D(const arma::mat& X, const arma::mat& Y, const arma::mat& U, bool center, double epsilon, int maxit, bool verbose);
+RcppExport SEXP _testOTM_GoF2D(SEXP XSEXP, SEXP YSEXP, SEXP USEXP, SEXP centerSEXP, SEXP epsilonSEXP, SEXP maxitSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type XY(XYSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type U(USEXP);
+    Rcpp::traits::input_parameter< bool >::type center(centerSEXP);
     Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
     Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(GoF2D(X, Y, XY, U, epsilon, maxit, verbose));
+    rcpp_result_gen = Rcpp::wrap(GoF2D(X, Y, U, center, epsilon, maxit, verbose));
     return rcpp_result_gen;
 END_RCPP
 }

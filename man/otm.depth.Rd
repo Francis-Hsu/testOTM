@@ -15,5 +15,5 @@ otm.depth(object, Q, ...)
 a vector containing the depths of the data.
 }
 \description{
-Compute the MK depth relative to the multivariate uniform distribution U[0, 1]^d.
+Compute the optimal transport depth relative to the multivariate uniform distribution U[0, 1]^d.
 }

@@ -15,5 +15,5 @@ otm.quantile(object, Q, ...)
 a list containing the quantiles of the data, and the indices of the corresponding cells.
 }
 \description{
-Compute the quantiles based on optimal transport.
+Compute the optimal transport quantiles.
 }

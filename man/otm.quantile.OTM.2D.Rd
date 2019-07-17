@@ -15,5 +15,5 @@
 a list containing the quantiles of the data, and the indices of the corresponding cells.
 }
 \description{
-Compute the 2D quantiles based on optimal transport.
+Compute the 2D optimal transport quantiles.
 }
