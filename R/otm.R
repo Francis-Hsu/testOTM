@@ -1,6 +1,6 @@
 #' Uniform Semi-discrete Optimal Transport Map
 #'
-#' Computes the semi-discrete optimal transport map from U[0, 1]^d measure to the input data set.
+#' Computes the semi-discrete optimal transport map from \eqn{U[0, 1]^d} measure to the input data set.
 #' @param data input data matrix, of size \eqn{n} by \eqn{d}.
 #' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.

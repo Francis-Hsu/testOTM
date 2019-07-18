@@ -13,5 +13,5 @@ depth.uniform(Q)
 a vector containing the depths of the data.
 }
 \description{
-Compute the depths associated with U[0, 1]^d.
+Compute the depths associated with \eqn{U[0, 1]^d}.
 }
