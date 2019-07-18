@@ -10,6 +10,8 @@ otm.potential(object, Q, ...)
 \item{object}{a fitted optimal transport map object.}
 
 \item{Q}{a numeric matrix where each row represents a query point.}
+
+\item{\dots}{additional arguments, currently without effect.}
 }
 \value{
 a matrix containing the potentials of the queries.
@@ -17,3 +19,4 @@ a matrix containing the potentials of the queries.
 \description{
 Compute the Alexandrov potential.
 }
+\keyword{multivariate}

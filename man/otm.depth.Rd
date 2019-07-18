@@ -10,6 +10,10 @@ otm.depth(object, Q, ...)
 \item{object}{a fitted optimal transport map object.}
 
 \item{Q}{a numeric matrix where each row represents a query point.}
+
+\item{\dots}{additional arguments, currently without effect.}
+
+\item{use.geo}{logical indicating if the geometric method should be used to compute the ranks.}
 }
 \value{
 a vector containing the depths of the data.
@@ -17,3 +21,4 @@ a vector containing the depths of the data.
 \description{
 Compute the optimal transport depth relative to the multivariate uniform distribution U[0, 1]^d.
 }
+\keyword{multivariate}

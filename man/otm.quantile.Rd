@@ -10,10 +10,13 @@ otm.quantile(object, Q, ...)
 \item{object}{a fitted optimal transport map object.}
 
 \item{Q}{a numeric matrix where each row represents a query point.}
+
+\item{\dots}{additional arguments, currently without effect.}
 }
 \value{
-a list containing the quantiles of the data, and the indices of the corresponding cells.
+a list containing the quantiles of the queries, as well as the indices of the corresponding cells.
 }
 \description{
 Compute the optimal transport quantiles.
 }
+\keyword{multivariate}

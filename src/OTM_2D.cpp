@@ -201,6 +201,11 @@ arma::ivec locateRDT2D(const arma::mat &Q, const arma::mat &V) {
   
   arma::vec lambda(3, arma::fill::zeros);
   for (int i = 0; i < m; i++) {
+    // check for interrupt every 1000 iterations
+    if (i % 1000 == 0) {
+      Rcpp::checkUserInterrupt();
+    }
+    
     for (int j = 0; j < n; j++) {
       // compute the barycentric coordinates of q_i
       // first coordinate

@@ -3,5 +3,5 @@
 #' @keywords internal
 #' @useDynLib testOTM
 #' @importFrom Rcpp sourceCpp
-#' @import randtoolbox lpSolveAPI plot3D
+#' @import randtoolbox plot3D
 "_PACKAGE"

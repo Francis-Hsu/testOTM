@@ -4,10 +4,12 @@
 #' @param object a fitted optimal transport map object.
 #' @param Q a numeric matrix where each row represents a query point.
 #' @param use.geo logical indicating if the geometric method should be used to compute the ranks.
+#' @param \dots additional arguments, currently without effect.
 #' @return a list containing the ranks of the data and the corresponding convex conjugate potential values.
-#' Noted that if the geometric method is used for ranks then the convex conjugates will not be computed (will return NA).
+#' If \code{use.geo = TRUE} then the convex conjugates will not be computed (\code{NA}s will be returned).
+#' @keywords multivariate
 #' @export
-otm.rank = function(object, Q, ...) {
+otm.rank = function(object, Q, use.geo = FALSE, ...) {
   UseMethod("otm.rank")
 }
 
@@ -18,9 +20,10 @@ otm.rank = function(object, Q, ...) {
 #' @param Q a numeric matrix where each row represents a query point.
 #' @param use.geo logical indicating if the geometric method should be used to compute the ranks.
 #' @return a list containing the ranks of the data and the corresponding convex conjugate potential values.
-#' Noted that if the geometric method is used for ranks then the convex conjugates will not be computed (will return NA).
+#' If \code{use.geo == TRUE} then the convex conjugates will not be computed (\code{NA}s will be returned).
+#' @keywords internal
 #' @export
-otm.rank.OTM.2D = function(object, Q, use.geo = FALSE) {
+otm.rank.otm.2d = function(object, Q, use.geo = FALSE) {
   n = nrow(Q)
   d = 2
   
@@ -47,7 +50,7 @@ otm.rank.OTM.2D = function(object, Q, use.geo = FALSE) {
       # there should always be such a vertex since we located the query point
       # on the dual (RDT) of RVD (unless with pathological data)
       # need to catch exceptions
-      otm.ranks[i,] = rvd.vert.freq[match(3, rvd.vert.freq[, 3]), 1:2]
+      otm.ranks[i, ] = rvd.vert.freq[match(3, rvd.vert.freq[, 3]), 1:2]
     }
   }
   
@@ -62,7 +65,7 @@ otm.rank.OTM.2D = function(object, Q, use.geo = FALSE) {
                                      object$Height,
                                      acc.verts)
     otm.dual.potential[use.num.id] = dual.potential$dual.potential
-    otm.ranks[use.num.id,] = dual.potential$optimal.vertex
+    otm.ranks[use.num.id, ] = dual.potential$optimal.vertex
   }
   
   return(list(Rank = otm.ranks, Dual.Potential = otm.dual.potential))

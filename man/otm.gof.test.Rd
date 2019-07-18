@@ -8,22 +8,22 @@ otm.gof.test(X, Y, mc = 1000, rank = "center", epsilon = 0.001,
   maxit = 100, verbose = F, na.rm = F)
 }
 \arguments{
-\item{X}{sample data matrix, of size \eqn{n} by \eqn{2}.}
+\item{X}{input data matrix, of size \eqn{n} by \eqn{2}.}
 
-\item{Y}{sample data matrix, of size \eqn{m} by \eqn{2}.}
+\item{Y}{input data matrix, of size \eqn{m} by \eqn{2}.}
 
 \item{mc}{number of quasi-Monte-Carlo samples used to evaluate the test statistic.}
 
-\item{rank}{choose the method for assigning ranks to the data points. Can be "max", "min", or "center".}
+\item{rank}{choose the method for assigning ranks to the data points. Can be "\code{max}", "\code{min}", or "\code{center}".}
 
 \item{maxit}{max number of iterations before termination.}
 
 \item{verbose}{logical indicating wether to display optimization messages.}
 
-\item{na.rm}{logical indicating whether NA values should be stripped before the computation proceeds.}
+\item{na.rm}{logical indicating whether \code{NA} values should be stripped before the computation proceeds.}
 }
 \description{
 Computes the 2D goodness-of-test statistic using rank defined through the semi-discrete optimal transport map.
 }
-\keyword{htest}
-\keyword{multivariate,}
+\keyword{htest,}
+\keyword{multivariate}

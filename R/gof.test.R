@@ -1,14 +1,14 @@
 #' 2D Goodness-of-test Statistic
 #' 
 #' Computes the 2D goodness-of-test statistic using rank defined through the semi-discrete optimal transport map.
-#' @param X sample data matrix, of size \eqn{n} by \eqn{2}.
-#' @param Y sample data matrix, of size \eqn{m} by \eqn{2}.
+#' @param X input data matrix, of size \eqn{n} by \eqn{2}.
+#' @param Y input data matrix, of size \eqn{m} by \eqn{2}.
 #' @param mc number of quasi-Monte-Carlo samples used to evaluate the test statistic.
-#' @param rank choose the method for assigning ranks to the data points. Can be "max", "min", or "center".
+#' @param rank choose the method for assigning ranks to the data points. Can be "\code{max}", "\code{min}", or "\code{center}".
 #' @param maxit max number of iterations before termination.
 #' @param verbose logical indicating wether to display optimization messages.
-#' @param na.rm logical indicating whether NA values should be stripped before the computation proceeds.
-#' @keywords multivariate, htest
+#' @param na.rm logical indicating whether \code{NA} values should be stripped before the computation proceeds.
+#' @keywords htest, multivariate
 #' @importFrom randtoolbox sobol
 #' @export
 otm.gof.test = function(X, Y, mc = 1000, rank = "center", epsilon = 1e-3, maxit = 100, verbose = F, na.rm = F) {
@@ -45,7 +45,7 @@ otm.gof.test = function(X, Y, mc = 1000, rank = "center", epsilon = 1e-3, maxit 
     gof_rank = gof_list$Cent_XY
   } else {
     gof_rank = split(data.frame(gof_list$Vert_XY)[, -1], gof_list$Vert_XY[, 1])
-    gof_rank = t(sapply(gof_rank, choose_vert, type = rank.id))
+    gof_rank = t(sapply(gof_rank, choose.vert, type = rank.id))
   }
   
   
@@ -56,7 +56,7 @@ otm.gof.test = function(X, Y, mc = 1000, rank = "center", epsilon = 1e-3, maxit 
 }
 
 # helper for choosing the vertex with the min/max norm.
-choose_vert = function(V, type = 1) {
+choose.vert = function(V, type = 1) {
   if (type == 1) {
     as.numeric(V[which.max(rowSums(V^2)), , drop = F])
   } else if (type == 2) {

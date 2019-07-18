@@ -3,7 +3,10 @@
 #' Compute the optimal transport depth relative to the multivariate uniform distribution U[0, 1]^d.
 #' @param object a fitted optimal transport map object.
 #' @param Q a numeric matrix where each row represents a query point.
+#' @param use.geo logical indicating if the geometric method should be used to compute the ranks.
+#' @param \dots additional arguments, currently without effect.
 #' @return a vector containing the depths of the data.
+#' @keywords multivariate
 #' @export
 otm.depth = function(object, Q, ...) {
   UseMethod("otm.depth")
@@ -16,9 +19,10 @@ otm.depth = function(object, Q, ...) {
 #' @param Q a numeric matrix where each row represents a query point.
 #' @param use.geo logical indicating if the geometric method should be used to compute the ranks.
 #' @return a vector containing the depths of the data.
+#' @keywords internal
 #' @export
-otm.depth.OTM.2D = function(object, Q, use.geo = FALSE) {
-  ranks = otm.rank.OTM.2D(object, Q, use.geo)$Rank
+otm.depth.otm.2d = function(object, Q, use.geo = FALSE) {
+  ranks = otm.rank.otm.2d(object, Q, use.geo)$Rank
   otm.depth = depth.uniform(ranks)
   
   return(otm.depth)
