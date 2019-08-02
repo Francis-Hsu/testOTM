@@ -1,9 +1,9 @@
 #' Min-max scaling
 #'
-#' Rescale the range of data to [min, max].
+#' \code{scaling.min.max} rescales the range of a data set to [min, max].
 #' @param data input data matrix, of size \eqn{n} by \eqn{d}.
-#' @param min desired minimum of transformed data.
-#' @param max desired maximum of transformed data.
+#' @param min desired minimum of the transformed data.
+#' @param max desired maximum of the transformed data.
 #' @param na.rm logical indicating whether \code{NA} values should be stripped before the computation proceeds.
 #' @return a matrix containing the scaled data.
 #' @keywords utilities

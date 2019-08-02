@@ -26,7 +26,7 @@ otm.dep.test(X, Y, mc = 1000, rank = "center", epsilon = 0.001,
 the value of the  mutual independence test statistic.
 }
 \description{
-Computes the 1D mutual independence test statistic using rank defined through the semi-discrete optimal transport map.
+\code{otm.dep.test} computes the 1D mutual independence test statistic using ranks defined through the semi-discrete optimal transport map.
 }
 \keyword{htest,}
 \keyword{multivariate}

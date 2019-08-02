@@ -9,9 +9,9 @@ scaling.min.max(data, min = 0, max = 1)
 \arguments{
 \item{data}{input data matrix, of size \eqn{n} by \eqn{d}.}
 
-\item{min}{desired minimum of transformed data.}
+\item{min}{desired minimum of the transformed data.}
 
-\item{max}{desired maximum of transformed data.}
+\item{max}{desired maximum of the transformed data.}
 
 \item{na.rm}{logical indicating whether \code{NA} values should be stripped before the computation proceeds.}
 }
@@ -19,6 +19,6 @@ scaling.min.max(data, min = 0, max = 1)
 a matrix containing the scaled data.
 }
 \description{
-Rescale the range of data to [min, max].
+\code{scaling.min.max} rescales the range of a data set to [min, max].
 }
 \keyword{utilities}

@@ -15,6 +15,6 @@
 a list containing the quantiles of the queries, as well as the indices of the corresponding cells.
 }
 \description{
-Compute the 2D optimal transport quantiles.
+The 2D implementation for \code{otm.quantile}.
 }
 \keyword{internal}

@@ -18,6 +18,6 @@ a list containing the ranks of the data and the corresponding convex conjugate p
 If \code{use.geo == TRUE} then the convex conjugates will not be computed (\code{NA}s will be returned).
 }
 \description{
-Compute the 2D optimal transport ranks.
+The 2D implementation of \code{otm.rank}.
 }
 \keyword{internal}

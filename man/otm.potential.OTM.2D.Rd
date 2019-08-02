@@ -15,6 +15,6 @@
 a matrix containing the potentials of the queries.
 }
 \description{
-Compute the 2D Alexandrov potential.
+The 2D implementation of \code{otm.potential}.
 }
 \keyword{internal}

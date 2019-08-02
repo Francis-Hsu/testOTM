@@ -24,7 +24,7 @@
 \item{draw.map}{logical indicating if dashed lines should be added to show mapping between the data and the Voronoi cells.}
 }
 \description{
-Plot the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
+Plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
 2D semi-discrete optimal transport map.
 }
 \keyword{hplot}

@@ -1,6 +1,6 @@
 #' Semi-discrete Optimal Transport Rank
 #'
-#' Compute the optimal transport ranks.
+#' \code{otm.rank} computes the optimal transport ranks.
 #' @param object a fitted optimal transport map object.
 #' @param Q a numeric matrix where each row represents a query point.
 #' @param use.geo logical indicating if the geometric method should be used to compute the ranks.
@@ -15,7 +15,7 @@ otm.rank = function(object, Q, use.geo = FALSE, ...) {
 
 #' 2D Semi-discrete Optimal Transport Rank
 #'
-#' Compute the 2D optimal transport ranks.
+#' The 2D implementation of \code{otm.rank}.
 #' @param object a fitted 2D optimal transport map object.
 #' @param Q a numeric matrix where each row represents a query point.
 #' @param use.geo logical indicating if the geometric method should be used to compute the ranks.
@@ -27,7 +27,7 @@ otm.rank.otm.2d = function(object, Q, use.geo = FALSE) {
   n = nrow(Q)
   d = 2
   
-  # container for the result
+  # containers for the result
   otm.dual.potential = rep(NA_integer_, n)
   otm.ranks = matrix(0, n, d)
   use.num.id = !logical(n)

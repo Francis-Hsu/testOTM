@@ -17,6 +17,6 @@ otm.potential(object, Q, ...)
 a matrix containing the potentials of the queries.
 }
 \description{
-Compute the Alexandrov potential.
+\code{otm.potential} computes the Alexandrov potential function.
 }
 \keyword{multivariate}

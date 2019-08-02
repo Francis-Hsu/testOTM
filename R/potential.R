@@ -1,6 +1,6 @@
 #' Semi-discrete Optimal Transport Potential
 #'
-#' Compute the Alexandrov potential.
+#' \code{otm.potential} computes the Alexandrov potential function.
 #' @param object a fitted optimal transport map object.
 #' @param Q a numeric matrix where each row represents a query point.
 #' @param \dots additional arguments, currently without effect.
@@ -13,7 +13,7 @@ otm.potential = function(object, Q, ...) {
 
 #' 2D Semi-discrete Optimal Transport Potential
 #'
-#' Compute the 2D Alexandrov potential.
+#' The 2D implementation of \code{otm.potential}.
 #' @param object a fitted 2D optimal transport map object.
 #' @param Q a numeric matrix where each row represents a query point.
 #' @return a matrix containing the potentials of the queries.

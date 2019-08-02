@@ -22,7 +22,7 @@ otm.fit(data, epsilon = 0.001, maxit = 100, verbose = F, na.rm = F)
 An object of class "\code{otm}" is a list describing the resulting optimal transport map.
 }
 \description{
-Computes the semi-discrete optimal transport map from \eqn{U[0, 1]^d} measure to the input data set.
+\code{otm.fit} computes the semi-discrete optimal transport map from the \eqn{U[0, 1]^d} measure to the input data set.
 }
 \keyword{graphs}
 \keyword{optimize,}

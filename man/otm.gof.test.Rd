@@ -26,7 +26,7 @@ otm.gof.test(X, Y, mc = 1000, rank = "center", epsilon = 0.001,
 the value of the goodness-of-fit test statistic.
 }
 \description{
-Computes the 2D goodness-of-test statistic using rank defined through the semi-discrete optimal transport map.
+\code{otm.gof.test} computes the 2D goodness-of-test statistic using ranks defined through the semi-discrete optimal transport map.
 }
 \keyword{htest,}
 \keyword{multivariate}

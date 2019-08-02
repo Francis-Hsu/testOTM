@@ -17,6 +17,6 @@
 a vector containing the depths of the data.
 }
 \description{
-Compute the optimal transport depth relative to the 2D standard uniform distribution.
+The 2D implementation of \code{otm.depth}.
 }
 \keyword{internal}

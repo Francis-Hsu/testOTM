@@ -17,6 +17,6 @@ otm.quantile(object, Q, ...)
 a list containing the quantiles of the queries, as well as the indices of the corresponding cells.
 }
 \description{
-Compute the optimal transport quantiles.
+\code{otm.quantile} computes the optimal transport quantiles.
 }
 \keyword{multivariate}

@@ -1,6 +1,6 @@
 #' Uniform Semi-discrete Optimal Transport Map
 #'
-#' Computes the semi-discrete optimal transport map from \eqn{U[0, 1]^d} measure to the input data set.
+#' \code{otm.fit} computes the semi-discrete optimal transport map from the \eqn{U[0, 1]^d} measure to the input data set.
 #' @param data input data matrix, of size \eqn{n} by \eqn{d}.
 #' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.
@@ -52,7 +52,7 @@ otm.fit = function(data,
 
 #' Plot the 2D Semi-discrete Optimal Transport Map
 #'
-#' Plot the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
+#' Plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
 #' 2D semi-discrete optimal transport map.
 #' @param object a fitted \code{otm.2d} object.
 #' @param which specify which graph(s) to plot. Can be "\code{RVD}", "\code{RDT}", or "\code{Both}".
