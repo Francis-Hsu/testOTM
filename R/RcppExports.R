@@ -45,14 +45,29 @@ locateRDT2D <- function(Q, V) {
 #' Compute the quantiles of U with respect to X and Y, as well as the optimal transport map of the combined data.
 #' @param X input data matrix.
 #' @param Y input data matrix.
-#' @param U weights of the RVD cells.
+#' @param U sequence used to evaluate the integral.
 #' @param center logical indicating if the centroids should be computed.
 #' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.
 #' @param verbose logical indicating wether to display optimization messages.
 #' @return a list, which contains the quantile indices, and the vertices of the combined optimal transport map.
 #' @keywords internal
-GoF2D <- function(X, Y, U, center, epsilon, maxit, verbose) {
-    .Call('_testOTM_GoF2D', PACKAGE = 'testOTM', X, Y, U, center, epsilon, maxit, verbose)
+gof2D <- function(X, Y, U, center, epsilon, maxit, verbose) {
+    .Call('_testOTM_gof2D', PACKAGE = 'testOTM', X, Y, U, center, epsilon, maxit, verbose)
+}
+
+#' Helper for computing the 1D test of independece 
+#' 
+#' Compute the quantiles of U with respect to (X, Y).
+#' @param XY input data matrix.
+#' @param U sequence used to evaluate the integral.
+#' @param center logical indicating if the centroids should be computed.
+#' @param epsilon convergence threshold for optimization.
+#' @param maxit max number of iterations before termination.
+#' @param verbose logical indicating wether to display optimization messages.
+#' @return a list, which contains the quantile indices, and the vertices of the combined optimal transport map.
+#' @keywords internal
+dep2D <- function(XY, U, center, epsilon, maxit, verbose) {
+    .Call('_testOTM_dep2D', PACKAGE = 'testOTM', XY, U, center, epsilon, maxit, verbose)
 }
 

@@ -60,9 +60,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// GoF2D
-List GoF2D(const arma::mat& X, const arma::mat& Y, const arma::mat& U, bool center, double epsilon, int maxit, bool verbose);
-RcppExport SEXP _testOTM_GoF2D(SEXP XSEXP, SEXP YSEXP, SEXP USEXP, SEXP centerSEXP, SEXP epsilonSEXP, SEXP maxitSEXP, SEXP verboseSEXP) {
+// gof2D
+List gof2D(const arma::mat& X, const arma::mat& Y, const arma::mat& U, bool center, double epsilon, int maxit, bool verbose);
+RcppExport SEXP _testOTM_gof2D(SEXP XSEXP, SEXP YSEXP, SEXP USEXP, SEXP centerSEXP, SEXP epsilonSEXP, SEXP maxitSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -73,7 +73,23 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
     Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(GoF2D(X, Y, U, center, epsilon, maxit, verbose));
+    rcpp_result_gen = Rcpp::wrap(gof2D(X, Y, U, center, epsilon, maxit, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dep2D
+List dep2D(const arma::mat& XY, const arma::mat& U, bool center, double epsilon, int maxit, bool verbose);
+RcppExport SEXP _testOTM_dep2D(SEXP XYSEXP, SEXP USEXP, SEXP centerSEXP, SEXP epsilonSEXP, SEXP maxitSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type XY(XYSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type U(USEXP);
+    Rcpp::traits::input_parameter< bool >::type center(centerSEXP);
+    Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(dep2D(XY, U, center, epsilon, maxit, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -83,7 +99,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_testOTM_dualPotential2D", (DL_FUNC) &_testOTM_dualPotential2D, 5},
     {"_testOTM_locateRVD2D", (DL_FUNC) &_testOTM_locateRVD2D, 3},
     {"_testOTM_locateRDT2D", (DL_FUNC) &_testOTM_locateRDT2D, 2},
-    {"_testOTM_GoF2D", (DL_FUNC) &_testOTM_GoF2D, 7},
+    {"_testOTM_gof2D", (DL_FUNC) &_testOTM_gof2D, 7},
+    {"_testOTM_dep2D", (DL_FUNC) &_testOTM_dep2D, 6},
     {NULL, NULL, 0}
 };
 

@@ -243,7 +243,7 @@ arma::ivec locateRDT2D(const arma::mat &Q, const arma::mat &V) {
 //' Compute the quantiles of U with respect to X and Y, as well as the optimal transport map of the combined data.
 //' @param X input data matrix.
 //' @param Y input data matrix.
-//' @param U weights of the RVD cells.
+//' @param U sequence used to evaluate the integral.
 //' @param center logical indicating if the centroids should be computed.
 //' @param epsilon convergence threshold for optimization.
 //' @param maxit max number of iterations before termination.
@@ -251,10 +251,10 @@ arma::ivec locateRDT2D(const arma::mat &Q, const arma::mat &V) {
 //' @return a list, which contains the quantile indices, and the vertices of the combined optimal transport map.
 //' @keywords internal
 // [[Rcpp::export]]
-List GoF2D(const arma::mat &X, const arma::mat &Y, const arma::mat &U, 
+List gof2D(const arma::mat &X, const arma::mat &Y, const arma::mat &U, 
            bool center, double epsilon, int maxit, bool verbose) {
   const int d = 2;
-  const arma::mat XY = join_cols(X, Y);
+  const arma::mat XY = arma::join_cols(X, Y);
   
   // initialize the Geogram library.
   initializeGeogram();
@@ -289,10 +289,12 @@ List GoF2D(const arma::mat &X, const arma::mat &Y, const arma::mat &U,
   arma::ivec uX = locateRVD2D(U, X, wX);
   arma::ivec uY = locateRVD2D(U, Y, wY);
   
-  // must save centroids before remesh
-  arma::mat centroidXY;
+  // get elements from corresponding cells to help computing ranks
+  arma::mat elemXY;
   if (center) {
-    centroidXY = getCentroids(OTMXY);
+    elemXY = getCentroids(OTMXY);
+  } else {
+    elemXY = getVertices(unifMesh, OTMXY);
   }
   
   // create a squared uniform mesh
@@ -305,10 +307,72 @@ List GoF2D(const arma::mat &X, const arma::mat &Y, const arma::mat &U,
   List lst;
   lst["U_Map_X"] = uX;
   lst["U_Map_Y"] = uY;
-  lst["Vert_XY"] = getVertices(unifMesh, OTMXY);
+  lst["Elem_XY"] = elemXY;
+  
+  return lst;
+}
+
+//' Helper for computing the 1D test of independece 
+//' 
+//' Compute the quantiles of U with respect to (X, Y).
+//' @param XY input data matrix.
+//' @param U sequence used to evaluate the integral.
+//' @param center logical indicating if the centroids should be computed.
+//' @param epsilon convergence threshold for optimization.
+//' @param maxit max number of iterations before termination.
+//' @param verbose logical indicating wether to display optimization messages.
+//' @return a list, which contains the quantile indices, and the vertices of the combined optimal transport map.
+//' @keywords internal
+// [[Rcpp::export]]
+List dep2D(const arma::mat &XY, const arma::mat &U, 
+           bool center, double epsilon, int maxit, bool verbose) {
+  const int d = 2;
+  
+  // initialize the Geogram library.
+  initializeGeogram();
+  
+  // create a mesh for 2D uniform measure
+  GEO::Mesh unifMesh(d, false);
+  const arma::mat cubeVertices = cubeVert(2);
+  unifMesh.vertices.create_vertices(cubeVertices.n_rows);
+  setMeshPoint(unifMesh, cubeVertices);
+  
+  // must triangulate for OTM
+  unifMesh.facets.create_triangle(0, 1, 2);
+  unifMesh.facets.create_triangle(2, 1, 3);
+  unifMesh.facets.connect();
+  
+  // embed in 3-dimension
+  unifMesh.vertices.set_dimension(d + 1);
+  
+  // compute OTMs
+  GEO::OptimalTransportMap2d OTMXY(&unifMesh);
+  OTM2D(OTMXY, XY, epsilon, maxit, verbose);
+  
+  // get weights
+  arma::vec wXY = getWeights(OTMXY);
+  
+  // get the optimal transport mapping
+  arma::ivec uXY = locateRVD2D(U, XY, wXY);
+  
+  // get elements from corresponding cells to help computing ranks
+  arma::mat elemXY;
   if (center) {
-    lst["Cent_XY"] = centroidXY;
+    elemXY = getCentroids(OTMXY);
+  } else {
+    elemXY = getVertices(unifMesh, OTMXY);
   }
+  
+  // create a squared uniform mesh
+  unifMesh.clear();
+  unifMesh.vertices.create_vertices(cubeVertices.n_rows);
+  setMeshPoint(unifMesh, cubeVertices);
+  unifMesh.facets.create_quad(0, 2, 3, 1);
+  
+  // collect objects to return
+  List lst;
+  lst["U_Map_XY"] = uXY;
+  lst["Elem_XY"] = elemXY;
   
   return lst;
 }
