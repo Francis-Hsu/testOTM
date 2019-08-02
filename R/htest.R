@@ -1,6 +1,6 @@
 #' 2D Goodness-of-fit Test
 #' 
-#' Computes the 2D goodness-of-test statistic using rank defined through the semi-discrete optimal transport map.
+#' \code{otm.gof.test} computes the 2D goodness-of-test statistic using ranks defined through the semi-discrete optimal transport map.
 #' @param X input data matrix, of size \eqn{n} by \eqn{2}.
 #' @param Y input data matrix, of size \eqn{m} by \eqn{2}.
 #' @param mc number of quasi-Monte-Carlo samples used to evaluate the test statistic.
@@ -57,7 +57,7 @@ otm.gof.test = function(X, Y, mc = 1000, rank = "center", epsilon = 1e-3, maxit 
 
 #' 1D Test of Independence
 #' 
-#' Computes the 1D mutual independence test statistic using rank defined through the semi-discrete optimal transport map.
+#' \code{otm.dep.test} computes the 1D mutual independence test statistic using ranks defined through the semi-discrete optimal transport map.
 #' @param X input data vector.
 #' @param Y input data vector.
 #' @param mc number of quasi-Monte-Carlo samples used to evaluate the test statistic.
