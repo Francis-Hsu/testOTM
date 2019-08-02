@@ -67,7 +67,7 @@ gof2D <- function(X, Y, U, center, epsilon, maxit, verbose) {
 #' @param verbose logical indicating wether to display optimization messages.
 #' @return a list, which contains the quantile indices, and the vertices of the combined optimal transport map.
 #' @keywords internal
-dep2D <- function(XY, U, center, epsilon, maxit, verbose) {
-    .Call('_testOTM_dep2D', PACKAGE = 'testOTM', XY, U, center, epsilon, maxit, verbose)
+dep1D <- function(XY, U, center, epsilon, maxit, verbose) {
+    .Call('_testOTM_dep1D', PACKAGE = 'testOTM', XY, U, center, epsilon, maxit, verbose)
 }
 

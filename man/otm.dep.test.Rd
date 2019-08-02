@@ -22,6 +22,9 @@ otm.dep.test(X, Y, mc = 1000, rank = "center", epsilon = 0.001,
 
 \item{na.rm}{logical indicating whether \code{NA} values should be stripped before the computation proceeds.}
 }
+\value{
+the value of the  mutual independence test statistic.
+}
 \description{
 Computes the 1D mutual independence test statistic using rank defined through the semi-discrete optimal transport map.
 }

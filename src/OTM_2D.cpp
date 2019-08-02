@@ -324,7 +324,7 @@ List gof2D(const arma::mat &X, const arma::mat &Y, const arma::mat &U,
 //' @return a list, which contains the quantile indices, and the vertices of the combined optimal transport map.
 //' @keywords internal
 // [[Rcpp::export]]
-List dep2D(const arma::mat &XY, const arma::mat &U, 
+List dep1D(const arma::mat &XY, const arma::mat &U, 
            bool center, double epsilon, int maxit, bool verbose) {
   const int d = 2;
   

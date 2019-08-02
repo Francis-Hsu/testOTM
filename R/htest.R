@@ -1,4 +1,4 @@
-#' 2D Goodness-of-test Statistic
+#' 2D Goodness-of-fit Test
 #' 
 #' Computes the 2D goodness-of-test statistic using rank defined through the semi-discrete optimal transport map.
 #' @param X input data matrix, of size \eqn{n} by \eqn{2}.
@@ -8,6 +8,7 @@
 #' @param maxit max number of iterations before termination.
 #' @param verbose logical indicating wether to display optimization messages.
 #' @param na.rm logical indicating whether \code{NA} values should be stripped before the computation proceeds.
+#' @return the value of the goodness-of-fit test statistic.
 #' @keywords htest, multivariate
 #' @importFrom randtoolbox sobol
 #' @export
@@ -48,7 +49,7 @@ otm.gof.test = function(X, Y, mc = 1000, rank = "center", epsilon = 1e-3, maxit 
     gof.rank = t(sapply(gof.rank, choose.vert, type = rank.id))
   }
   
-  # compute the test statistics
+  # compute the test statistic
   gof.stat = mean(rowSums((gof.rank[gof.list$U_Map_X, ] - gof.rank[gof.list$U_Map_Y + nrow(X), ])^2))
   
   return(gof.stat)
@@ -64,6 +65,7 @@ otm.gof.test = function(X, Y, mc = 1000, rank = "center", epsilon = 1e-3, maxit 
 #' @param maxit max number of iterations before termination.
 #' @param verbose logical indicating wether to display optimization messages.
 #' @param na.rm logical indicating whether \code{NA} values should be stripped before the computation proceeds.
+#' @return the value of the  mutual independence test statistic.
 #' @keywords htest, multivariate
 #' @importFrom randtoolbox sobol
 #' @export
@@ -94,7 +96,7 @@ otm.dep.test = function(X, Y, mc = 1000, rank = "center", epsilon = 1e-3, maxit 
   d = ifelse(is.vector(X) && is.vector(Y), 1, max(ncol(X), ncol(Y)))
   U = sobol(mc, d + 1)
   if (d == 1) {
-    dep.list = dep2D(XY, U, rank.id == 0, epsilon, maxit, verbose)
+    dep.list = dep1D(XY, U, rank.id == 0, epsilon, maxit, verbose)
   }
   
   # assign ranks
@@ -105,7 +107,7 @@ otm.dep.test = function(X, Y, mc = 1000, rank = "center", epsilon = 1e-3, maxit 
     dep.rank = t(sapply(dep.rank, choose.vert, type = rank.id))
   }
   
-  # compute the test statistics
+  # compute the test statistic
   dep.stat = mean(rowSums((dep.rank[dep.list$U_Map_XY, ] - cbind(ecdf(X)(XY[dep.list$U_Map_XY, 1]), 
                                                                  ecdf(Y)(XY[dep.list$U_Map_XY, 2])))^2))
   

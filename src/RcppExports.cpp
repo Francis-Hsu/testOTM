@@ -77,9 +77,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// dep2D
-List dep2D(const arma::mat& XY, const arma::mat& U, bool center, double epsilon, int maxit, bool verbose);
-RcppExport SEXP _testOTM_dep2D(SEXP XYSEXP, SEXP USEXP, SEXP centerSEXP, SEXP epsilonSEXP, SEXP maxitSEXP, SEXP verboseSEXP) {
+// dep1D
+List dep1D(const arma::mat& XY, const arma::mat& U, bool center, double epsilon, int maxit, bool verbose);
+RcppExport SEXP _testOTM_dep1D(SEXP XYSEXP, SEXP USEXP, SEXP centerSEXP, SEXP epsilonSEXP, SEXP maxitSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -89,7 +89,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
     Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(dep2D(XY, U, center, epsilon, maxit, verbose));
+    rcpp_result_gen = Rcpp::wrap(dep1D(XY, U, center, epsilon, maxit, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -100,7 +100,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_testOTM_locateRVD2D", (DL_FUNC) &_testOTM_locateRVD2D, 3},
     {"_testOTM_locateRDT2D", (DL_FUNC) &_testOTM_locateRDT2D, 2},
     {"_testOTM_gof2D", (DL_FUNC) &_testOTM_gof2D, 7},
-    {"_testOTM_dep2D", (DL_FUNC) &_testOTM_dep2D, 6},
+    {"_testOTM_dep1D", (DL_FUNC) &_testOTM_dep1D, 6},
     {NULL, NULL, 0}
 };
 

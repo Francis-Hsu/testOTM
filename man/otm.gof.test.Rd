@@ -2,7 +2,7 @@
 % Please edit documentation in R/htest.R
 \name{otm.gof.test}
 \alias{otm.gof.test}
-\title{2D Goodness-of-test Statistic}
+\title{2D Goodness-of-fit Test}
 \usage{
 otm.gof.test(X, Y, mc = 1000, rank = "center", epsilon = 0.001,
   maxit = 100, verbose = F, na.rm = F)
@@ -21,6 +21,9 @@ otm.gof.test(X, Y, mc = 1000, rank = "center", epsilon = 0.001,
 \item{verbose}{logical indicating wether to display optimization messages.}
 
 \item{na.rm}{logical indicating whether \code{NA} values should be stripped before the computation proceeds.}
+}
+\value{
+the value of the goodness-of-fit test statistic.
 }
 \description{
 Computes the 2D goodness-of-test statistic using rank defined through the semi-discrete optimal transport map.
