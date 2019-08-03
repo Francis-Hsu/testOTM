@@ -713,7 +713,7 @@ namespace GEO {
 
     }
 
-#ifdef GEO_OS_WINDOWS
+#if defined(GEO_OS_WINDOWS) && (_WIN32_WINNT >= 0x600)
 
     // Emulation of pthread mutexes using Windows API
 
@@ -753,7 +753,7 @@ namespace GEO {
 
     inline int pthread_cond_init(pthread_cond_t *c, pthread_condattr_t *a) {
         geo_argused(a);
-        // InitializeConditionVariable(c);
+        InitializeConditionVariable(c);
         return 0;
     }
 
@@ -763,12 +763,12 @@ namespace GEO {
     }
 
     inline int pthread_cond_broadcast(pthread_cond_t *c) {
-        // WakeAllConditionVariable(c);
+        WakeAllConditionVariable(c);
         return 0;
     }
 
     inline int pthread_cond_wait(pthread_cond_t *c, pthread_mutex_t *m) {
-        // SleepConditionVariableCS(c, m, INFINITE);
+        SleepConditionVariableCS(c, m, INFINITE);
         return 0;
     }
    

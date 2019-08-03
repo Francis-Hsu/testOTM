@@ -1,8 +1,8 @@
 Package: testOTM
 Type: Package
-Title: Multivariate Ranks and Quantiles using Optimal Transportation
-Version: 0.07
-Date: 2019-07-18
+Title: Multivariate Ranks and Quantiles by Optimal Transport
+Version: 0.08
+Date: 2019-08-03
 Authors@R: person(given = "Peng", family = "Xu", role = c("aut", "cre"), email = "px2132@columbia.edu")
 Author: Peng Xu <px2132@columbia.edu> [aut, cre]
 Maintainer: Peng Xu <px2132@columbia.edu>
@@ -12,8 +12,7 @@ URL: https://github.com/Francis-Hsu/testOTM
 BugReports: https://github.com/Francis-Hsu/testOTM/issues
 Imports: 
   Rcpp,
-  randtoolbox (>= 1.30.0),
-  plot3D (>= 1.1.1)
+  randtoolbox (>= 1.30.0)
 LinkingTo: 
   Rcpp,
   RcppArmadillo

@@ -251,8 +251,7 @@ arma::ivec locateRDT2D(const arma::mat &Q, const arma::mat &V) {
 //' @return a list, which contains the quantile indices, and the vertices of the combined optimal transport map.
 //' @keywords internal
 // [[Rcpp::export]]
-List gof2D(const arma::mat &X, const arma::mat &Y, const arma::mat &U, 
-           bool center, double epsilon, int maxit, bool verbose) {
+List gof2D(const arma::mat &X, const arma::mat &Y, const arma::mat &U, bool center, double epsilon, int maxit, bool verbose) {
   const int d = 2;
   const arma::mat XY = arma::join_cols(X, Y);
   
@@ -324,8 +323,7 @@ List gof2D(const arma::mat &X, const arma::mat &Y, const arma::mat &U,
 //' @return a list, which contains the quantile indices, and the vertices of the combined optimal transport map.
 //' @keywords internal
 // [[Rcpp::export]]
-List dep1D(const arma::mat &XY, const arma::mat &U, 
-           bool center, double epsilon, int maxit, bool verbose) {
+List dep1D(const arma::mat &XY, const arma::mat &U, bool center, double epsilon, int maxit, bool verbose) {
   const int d = 2;
   
   // initialize the Geogram library.
