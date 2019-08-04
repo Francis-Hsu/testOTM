@@ -41,8 +41,6 @@ otm.fit = function(data,
   } else {
     stop("Dimension higher than 3 are not supported.")
   }
-  object$Vertex.RDT = as.data.frame(object$Vertex.RDT)
-  object$Vertex.RVD = as.data.frame(object$Vertex.RVD)
   
   # for computing Alexandrov's potential
   # noted the signs of weights

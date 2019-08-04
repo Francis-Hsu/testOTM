@@ -4,7 +4,7 @@
 LIB_DIR = ../src/lib
 
 EXPORTS = -Dgeogram_EXPORTS -Dexploragram_EXPORTS
-OPTIONS = -DGEOGRAM_WITH_HLBFGS -DGEOGRAM_WITH_TETGEN -DGEOGRAM_WITH_TRIANGLE
+OPTIONS = -DGEOGRAM_WITH_HLBFGS
 
 PKG_LIBS = $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
 PKG_CXXFLAGS = -I$(LIB_DIR) $(EXPORTS) $(OPTIONS)
@@ -27,8 +27,6 @@ GEO_SOURCES_C += $(LIB_DIR)/geogram/NL/nl_arpack.c
 GEO_SOURCES_C += $(LIB_DIR)/geogram/third_party/LM7/libmeshb7.c
 
 GEO_SOURCES_C += $(LIB_DIR)/geogram/third_party/rply/rply.c
-
-GEO_SOURCES_C += $(LIB_DIR)/geogram/third_party/triangle/triangle.c
 
 GEO_SOURCES_C += $(LIB_DIR)/geogram/third_party/zlib/adler32.c
 GEO_SOURCES_C += $(LIB_DIR)/geogram/third_party/zlib/compress.c
@@ -77,8 +75,6 @@ GEO_SOURCES_CPP += $(LIB_DIR)/geogram/delaunay/delaunay.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/delaunay/delaunay_2d.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/delaunay/delaunay_3d.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/delaunay/delaunay_nn.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/delaunay/delaunay_tetgen.cpp
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/delaunay/delaunay_triangle.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/delaunay/LFS.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/delaunay/parallel_delaunay_3d.cpp
 
@@ -132,8 +128,6 @@ GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/HLBFGS/HLBFGS_BLAS.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/HLBFGS/ICFS.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/HLBFGS/LineSearch.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/HLBFGS/Lite_Sparse_Matrix.cpp
-
-GEO_SOURCES_CPP += $(LIB_DIR)/geogram/third_party/tetgen/tetgen.cpp
 
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/voronoi/CVT.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/voronoi/generic_RVD_cell.cpp

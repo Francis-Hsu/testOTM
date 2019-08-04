@@ -4,7 +4,7 @@
 LIB_DIR = ../src/lib
 
 EXPORTS = -Dgeogram_EXPORTS -Dexploragram_EXPORTS
-OPTIONS = -DGEOGRAM_WITH_HLBFGS -DGEOGRAM_WITH_TETGEN -DGEOGRAM_WITH_TRIANGLE
+OPTIONS = -DGEOGRAM_WITH_HLBFGS
 
 PKG_LIBS = $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
 PKG_CXXFLAGS = -I$(LIB_DIR) $(EXPORTS) $(OPTIONS)
@@ -25,7 +25,6 @@ $(LIB_DIR)/geogram/NL/nl_superlu.c \
 $(LIB_DIR)/geogram/NL/nl_arpack.c \
 $(LIB_DIR)/geogram/third_party/LM7/libmeshb7.c \
 $(LIB_DIR)/geogram/third_party/rply/rply.c \
-$(LIB_DIR)/geogram/third_party/triangle/triangle.c \
 $(LIB_DIR)/geogram/third_party/zlib/adler32.c \
 $(LIB_DIR)/geogram/third_party/zlib/compress.c \
 $(LIB_DIR)/geogram/third_party/zlib/crc32.c \
@@ -71,8 +70,6 @@ $(LIB_DIR)/geogram/delaunay/delaunay.cpp \
 $(LIB_DIR)/geogram/delaunay/delaunay_2d.cpp \
 $(LIB_DIR)/geogram/delaunay/delaunay_3d.cpp \
 $(LIB_DIR)/geogram/delaunay/delaunay_nn.cpp \
-$(LIB_DIR)/geogram/delaunay/delaunay_tetgen.cpp \
-$(LIB_DIR)/geogram/delaunay/delaunay_triangle.cpp \
 $(LIB_DIR)/geogram/delaunay/LFS.cpp \
 $(LIB_DIR)/geogram/delaunay/parallel_delaunay_3d.cpp \
 $(LIB_DIR)/geogram/image/colormap.cpp \
@@ -121,7 +118,6 @@ $(LIB_DIR)/geogram/third_party/HLBFGS/HLBFGS_BLAS.cpp \
 $(LIB_DIR)/geogram/third_party/HLBFGS/ICFS.cpp \
 $(LIB_DIR)/geogram/third_party/HLBFGS/LineSearch.cpp \
 $(LIB_DIR)/geogram/third_party/HLBFGS/Lite_Sparse_Matrix.cpp \
-$(LIB_DIR)/geogram/third_party/tetgen/tetgen.cpp \
 $(LIB_DIR)/geogram/voronoi/CVT.cpp \
 $(LIB_DIR)/geogram/voronoi/generic_RVD_cell.cpp \
 $(LIB_DIR)/geogram/voronoi/generic_RVD_polygon.cpp \

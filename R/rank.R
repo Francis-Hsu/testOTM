@@ -45,7 +45,7 @@ otm.rank.otm.2d = function(object, Q, use.geo = FALSE, ...) {
       # we round to the 8th digit for the vertices comparison
       round.verts = round(subset(object$Vertex.RVD, object$Vertex.RVD[, 1] %in% cell.id, select = 2:3),
                           8)
-      rvd.vert.freq = as.matrix(aggregate(row.names(round.verts) ~ ., data = round.verts, length))
+      rvd.vert.freq = as.matrix(aggregate(1:nrow(round.verts) ~ ., data = round.verts, length))
       
       # we search for the common vertex shared by all three cells from the RVD
       # there should always be such a vertex since we located the query point
@@ -58,7 +58,7 @@ otm.rank.otm.2d = function(object, Q, use.geo = FALSE, ...) {
   # numerical mapping
   if (any(use.num.id)) {
     acc.verts = c(0, cumsum(as.vector(table(
-      object$Vertex.RVD$cell
+      object$Vertex.RVD[, 1]
     ))))
     dual.potential = dualPotential2D(Q[use.num.id, , drop = F],
                                      object$Data,
