@@ -16,6 +16,8 @@ otm.gof.test(X, Y, mc = 1000, rank = "center", epsilon = 0.001,
 
 \item{rank}{choose the method for assigning ranks to the data points. Can be "\code{max}", "\code{min}", or "\code{center}".}
 
+\item{epsilon}{convergence threshold for optimization.}
+
 \item{maxit}{max number of iterations before termination.}
 
 \item{verbose}{logical indicating wether to display optimization messages.}

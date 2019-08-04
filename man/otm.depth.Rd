@@ -11,9 +11,7 @@ otm.depth(object, Q, ...)
 
 \item{Q}{a numeric matrix where each row represents a query point.}
 
-\item{\dots}{additional arguments, currently without effect.}
-
-\item{use.geo}{logical indicating if the geometric method should be used to compute the ranks.}
+\item{\dots}{additional arguments.}
 }
 \value{
 a vector containing the depths of the data.

@@ -4,7 +4,7 @@
 \alias{otm.depth.otm.2d}
 \title{2D Semi-discrete Optimal Transport Depth}
 \usage{
-\method{otm.depth}{otm.2d}(object, Q, use.geo = FALSE)
+\method{otm.depth}{otm.2d}(object, Q, use.geo = FALSE, ...)
 }
 \arguments{
 \item{object}{a fitted 2D optimal transport map object.}
@@ -12,6 +12,8 @@
 \item{Q}{a numeric matrix where each row represents a query point.}
 
 \item{use.geo}{logical indicating if the geometric method should be used to compute the ranks.}
+
+\item{\dots}{additional arguments, currently without effect.}
 }
 \value{
 a vector containing the depths of the data.

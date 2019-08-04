@@ -3,4 +3,6 @@
 \.dll$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^README\.bib$
+^README\.html$
 ^README\.Rmd$

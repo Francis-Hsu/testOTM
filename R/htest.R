@@ -5,6 +5,7 @@
 #' @param Y input data matrix, of size \eqn{m} by \eqn{2}.
 #' @param mc number of quasi-Monte-Carlo samples used to evaluate the test statistic.
 #' @param rank choose the method for assigning ranks to the data points. Can be "\code{max}", "\code{min}", or "\code{center}".
+#' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.
 #' @param verbose logical indicating wether to display optimization messages.
 #' @param na.rm logical indicating whether \code{NA} values should be stripped before the computation proceeds.
@@ -62,12 +63,14 @@ otm.gof.test = function(X, Y, mc = 1000, rank = "center", epsilon = 1e-3, maxit 
 #' @param Y input data vector.
 #' @param mc number of quasi-Monte-Carlo samples used to evaluate the test statistic.
 #' @param rank choose the method for assigning ranks to the data points. Can be "\code{max}", "\code{min}", or "\code{center}".
+#' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.
 #' @param verbose logical indicating wether to display optimization messages.
 #' @param na.rm logical indicating whether \code{NA} values should be stripped before the computation proceeds.
 #' @return the value of the  mutual independence test statistic.
 #' @keywords htest, multivariate
 #' @importFrom randtoolbox sobol
+#' @importFrom stats ecdf
 #' @export
 otm.dep.test = function(X, Y, mc = 1000, rank = "center", epsilon = 1e-3, maxit = 100, verbose = F, na.rm = F) {
   # validate inputs

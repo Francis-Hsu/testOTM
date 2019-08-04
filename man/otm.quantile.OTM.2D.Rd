@@ -4,12 +4,14 @@
 \alias{otm.quantile.otm.2d}
 \title{2D Semi-discrete Optimal Transport Quantile}
 \usage{
-\method{otm.quantile}{otm.2d}(object, Q)
+\method{otm.quantile}{otm.2d}(object, Q, ...)
 }
 \arguments{
 \item{object}{a fitted 2D optimal transport map object.}
 
 \item{Q}{a numeric matrix where each row represents a query point.}
+
+\item{\dots}{additional arguments, currently without effect.}
 }
 \value{
 a list containing the quantiles of the queries, as well as the indices of the corresponding cells.

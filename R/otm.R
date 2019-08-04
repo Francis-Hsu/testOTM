@@ -9,6 +9,7 @@
 #' @return \code{otm.fit} returns an object of class "\code{otm.2d}" or "\code{otm.3d}", depending on the dimesion of input data.
 #' An object of class "\code{otm}" is a list describing the resulting optimal transport map.
 #' @keywords optimize, graphs
+#' @importFrom stats complete.cases
 #' @export
 otm.fit = function(data,
                    epsilon = 1e-3,
@@ -54,16 +55,18 @@ otm.fit = function(data,
 #'
 #' Plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
 #' 2D semi-discrete optimal transport map.
-#' @param object a fitted \code{otm.2d} object.
+#' @param x a fitted \code{otm.2d} object.
 #' @param which specify which graph(s) to plot. Can be "\code{RVD}", "\code{RDT}", or "\code{Both}".
+#' @param col.data color of the data points.
+#' @param col.center color of the Voronoi centroids.
+#' @param col.edge color of the edges in plotting RVD and RDT.
 #' @param draw.center logical indicating if the centroids should be plotted.
 #' @param draw.map logical indicating if dashed lines should be added to show mapping between the data and the Voronoi cells.
-#' @param col.data color of the data points
-#' @param col.center color of the Voronoi centroids
-#' @param col.edge color of the edges in plotting RVD and RDT
+#' @param \dots other graphical parameters to plot.
 #' @keywords hplot
+#' @importFrom graphics plot.default segments points
 #' @export
-plot.otm.2d = function(object,
+plot.otm.2d = function(x,
                        which = "Both",
                        col.data = "cornflowerblue",
                        col.center = "firebrick",
@@ -76,9 +79,9 @@ plot.otm.2d = function(object,
   # plot the restricted Voronoi diagram
   if (which == "RVD" || which == "Both") {
     # plot data
-    plot(
-      object$Data[, 1],
-      object$Data[, 2],
+    plot.default(
+      x$Data[, 1],
+      x$Data[, 2],
       xlim = c(0, 1),
       ylim = c(0, 1),
       col = col.data,
@@ -89,13 +92,13 @@ plot.otm.2d = function(object,
     )
     
     # plot Laguerre cells
-    n.edge = nrow(object$Vertex.RVD)
+    n.edge = nrow(x$Vertex.RVD)
     rvd.edges = matrix(0, n.edge, 4)
     curr.row = 1
     
     # extract edges
-    for (i in 1:object$N.Cells) {
-      curr.cell = subset(object$Vertex.RVD, cell == i, select = c(x, y))
+    for (i in 1:x$N.Cells) {
+      curr.cell = subset(x$Vertex.RVD, x$Vertex.RVD[, 1] == i, select = 2:3)
       for (j in 1:nrow(curr.cell)) {
         p.id = j
         q.id = 1 + j %% nrow(curr.cell)
@@ -124,8 +127,8 @@ plot.otm.2d = function(object,
     # plot centroids
     if (draw.center) {
       points(
-        object$Centroid[, 1],
-        object$Centroid[, 2],
+        x$Centroid[, 1],
+        x$Centroid[, 2],
         xlim = c(0, 1),
         ylim = c(0, 1),
         pch = 20,
@@ -136,12 +139,12 @@ plot.otm.2d = function(object,
     
     # plot mappings
     if (draw.map) {
-      for (i in 1:nrow(object$Data)) {
+      for (i in 1:nrow(x$Data)) {
         segments(
-          object$Data[i, 1],
-          object$Data[i, 2],
-          object$Centroid[i, 1],
-          object$Centroid[i, 2],
+          x$Data[i, 1],
+          x$Data[i, 2],
+          x$Centroid[i, 1],
+          x$Centroid[i, 2],
           lty = 2,
           lwd = 0.5
         )
@@ -152,9 +155,9 @@ plot.otm.2d = function(object,
   # plot the restricted Delaunay triangulation
   if (which == "RDT" || which == "Both") {
     # plot data
-    plot(
-      object$Data[, 1],
-      object$Data[, 2],
+    plot.default(
+      x$Data[, 1],
+      x$Data[, 2],
       xlim = c(0, 1),
       ylim = c(0, 1),
       col = col.data,
@@ -165,13 +168,13 @@ plot.otm.2d = function(object,
     )
     
     # plot triangles
-    n.edge = nrow(object$Vertex.RDT)
+    n.edge = nrow(x$Vertex.RDT)
     rdt.edges = matrix(0, n.edge, 4)
     curr.row = 1
     
     # extract edges
-    for (i in 1:object$N.Triangles) {
-      curr.cell = subset(object$Vertex.RDT, cell == i, select = c(x, y))
+    for (i in 1:x$N.Triangles) {
+      curr.cell = subset(x$Vertex.RDT, x$Vertex.RDT[, 1] == i, select = 2:3)
       for (j in 1:nrow(curr.cell)) {
         p.id = j
         q.id = 1 + j %% nrow(curr.cell)

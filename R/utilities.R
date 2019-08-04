@@ -4,7 +4,6 @@
 #' @param data input data matrix, of size \eqn{n} by \eqn{d}.
 #' @param min desired minimum of the transformed data.
 #' @param max desired maximum of the transformed data.
-#' @param na.rm logical indicating whether \code{NA} values should be stripped before the computation proceeds.
 #' @return a matrix containing the scaled data.
 #' @keywords utilities
 #' @export

@@ -12,8 +12,6 @@ scaling.min.max(data, min = 0, max = 1)
 \item{min}{desired minimum of the transformed data.}
 
 \item{max}{desired maximum of the transformed data.}
-
-\item{na.rm}{logical indicating whether \code{NA} values should be stripped before the computation proceeds.}
 }
 \value{
 a matrix containing the scaled data.

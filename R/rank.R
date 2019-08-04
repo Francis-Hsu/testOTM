@@ -3,13 +3,12 @@
 #' \code{otm.rank} computes the optimal transport ranks.
 #' @param object a fitted optimal transport map object.
 #' @param Q a numeric matrix where each row represents a query point.
-#' @param use.geo logical indicating if the geometric method should be used to compute the ranks.
-#' @param \dots additional arguments, currently without effect.
+#' @param \dots additional arguments.
 #' @return a list containing the ranks of the data and the corresponding convex conjugate potential values.
 #' If \code{use.geo = TRUE} then the convex conjugates will not be computed (\code{NA}s will be returned).
 #' @keywords multivariate
 #' @export
-otm.rank = function(object, Q, use.geo = FALSE, ...) {
+otm.rank = function(object, Q, ...) {
   UseMethod("otm.rank")
 }
 
@@ -19,11 +18,13 @@ otm.rank = function(object, Q, use.geo = FALSE, ...) {
 #' @param object a fitted 2D optimal transport map object.
 #' @param Q a numeric matrix where each row represents a query point.
 #' @param use.geo logical indicating if the geometric method should be used to compute the ranks.
+#' @param \dots additional arguments, currently without effect.
 #' @return a list containing the ranks of the data and the corresponding convex conjugate potential values.
 #' If \code{use.geo == TRUE} then the convex conjugates will not be computed (\code{NA}s will be returned).
 #' @keywords internal
+#' @importFrom stats aggregate
 #' @export
-otm.rank.otm.2d = function(object, Q, use.geo = FALSE) {
+otm.rank.otm.2d = function(object, Q, use.geo = FALSE, ...) {
   n = nrow(Q)
   d = 2
   
@@ -39,10 +40,10 @@ otm.rank.otm.2d = function(object, Q, use.geo = FALSE) {
     use.num.id[inside.id] = F
     for (i in inside.id) {
       # get cells that are dual to the triangle we found
-      cell.id = unlist(subset(object$Vertex.RDT, cell == location.id[i], select = id))
+      cell.id = unlist(subset(object$Vertex.RDT, object$Vertex.RDT[, 1] == location.id[i], select = 4))
       
       # we round to the 8th digit for the vertices comparison
-      round.verts = round(subset(object$Vertex.RVD, cell %in% cell.id, select = c("x", "y")),
+      round.verts = round(subset(object$Vertex.RVD, object$Vertex.RVD[, 1] %in% cell.id, select = 2:3),
                           8)
       rvd.vert.freq = as.matrix(aggregate(row.names(round.verts) ~ ., data = round.verts, length))
       
