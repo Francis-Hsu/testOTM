@@ -1,15 +1,14 @@
 # Makevars modified from Rgeogram's makefile
 # see https://github.com/TraME-Project/Rgeogram
 
-ROOT_DIR = .
-LIB_DIR = ../inst/include
+LIB_DIR = ../src/lib
 
 EXPORTS = -Dgeogram_EXPORTS -Dexploragram_EXPORTS
 OPTIONS = -DGEOGRAM_WITH_HLBFGS -DGEOGRAM_WITH_TETGEN -DGEOGRAM_WITH_TRIANGLE
 
-PKG_CXXFLAGS = -I$(ROOT_DIR) -I$(LIB_DIR) $(EXPORTS) $(OPTIONS) -Wno-unknown-pragmas
 PKG_LIBS = $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
-PKG_CFLAGS = -I$(ROOT_DIR) -I$(LIB_DIR) $(EXPORTS) $(OPTIONS)
+PKG_CXXFLAGS = -I$(LIB_DIR) $(EXPORTS) $(OPTIONS) -Wno-unknown-pragmas
+PKG_CFLAGS = -I$(LIB_DIR) $(EXPORTS) $(OPTIONS)
 CXX_STD = CXX11
 
 GEO_SOURCES_C = $(LIB_DIR)/geogram/NL/nl_api.c
@@ -73,7 +72,6 @@ GEO_SOURCES_CPP += $(LIB_DIR)/geogram/basic/environment.cpp
 
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/bibliography/bibliography.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/bibliography/embedded_references.cpp
-
 
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/delaunay/delaunay.cpp
 GEO_SOURCES_CPP += $(LIB_DIR)/geogram/delaunay/delaunay_2d.cpp
