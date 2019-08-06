@@ -7,7 +7,7 @@ Authors@R: person(given = "Peng", family = "Xu", role = c("aut", "cre"), email =
 Author: Peng Xu <px2132@columbia.edu> [aut, cre]
 Maintainer: Peng Xu <px2132@columbia.edu>
 Description: This package implements the multivariate ranks and quantiles, together with their application in statistical testing, that based on the semi-discrete optimal transportation. The underlying geometric computation is performed by the Geogram library.
-License: GPL (>= 3)
+License: BSD_3_clause + file LICENSE
 URL: https://github.com/Francis-Hsu/testOTM
 BugReports: https://github.com/Francis-Hsu/testOTM/issues
 Imports: 
