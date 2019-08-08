@@ -71,6 +71,11 @@ plot.otm.2d = function(x,
                        col.edge = "black",
                        draw.center = T,
                        draw.map = F,
+                       xlim = c(0, 1),
+                       ylim = c(0, 1),
+                       xlab = expression('u'[1]),
+                       ylab = expression('u'[2]),
+                       pch = 20,
                        ...) {
   type = match.arg(which, c("RVD", "RDT", "Both"))
   
@@ -80,12 +85,12 @@ plot.otm.2d = function(x,
     plot.default(
       x$Data[, 1],
       x$Data[, 2],
-      xlim = c(0, 1),
-      ylim = c(0, 1),
       col = col.data,
-      pch = 20,
-      xlab = expression('u'[1]),
-      ylab = expression('u'[2]),
+      pch = pch,
+      xlim = xlim,
+      ylim = ylim,
+      xlab = xlab,
+      ylab = ylab,
       ...
     )
     
@@ -127,10 +132,12 @@ plot.otm.2d = function(x,
       points(
         x$Centroid[, 1],
         x$Centroid[, 2],
-        xlim = c(0, 1),
-        ylim = c(0, 1),
-        pch = 20,
         col = col.center,
+        pch = pch,
+        xlim = xlim,
+        ylim = ylim,
+        xlab = xlab,
+        ylab = ylab,
         ...
       )
     }
@@ -156,12 +163,12 @@ plot.otm.2d = function(x,
     plot.default(
       x$Data[, 1],
       x$Data[, 2],
-      xlim = c(0, 1),
-      ylim = c(0, 1),
       col = col.data,
-      pch = 20,
-      xlab = expression('u'[1]),
-      ylab = expression('u'[2]),
+      pch = pch,
+      xlim = xlim,
+      ylim = ylim,
+      xlab = xlab,
+      ylab = ylab,
       ...
     )
     
