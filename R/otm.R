@@ -58,7 +58,7 @@ otm.fit = function(data,
 #' @param col.data color of the data points.
 #' @param col.center color of the Voronoi centroids.
 #' @param col.edge color of the edges in plotting RVD and RDT.
-#' @param draw.center logical indicating if the data points should be plotted.
+#' @param draw.data logical indicating if the data points should be plotted.
 #' @param draw.center logical indicating if the centroids should be plotted.
 #' @param draw.map logical indicating if dashed lines should be added to show mapping between the data and the Voronoi cells.
 #' @param xlim the x limits of the plot.

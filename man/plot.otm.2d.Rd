@@ -21,7 +21,9 @@
 
 \item{col.edge}{color of the edges in plotting RVD and RDT.}
 
-\item{draw.center}{logical indicating if the data points should be plotted.}
+\item{draw.data}{logical indicating if the data points should be plotted.}
+
+\item{draw.center}{logical indicating if the centroids should be plotted.}
 
 \item{draw.map}{logical indicating if dashed lines should be added to show mapping between the data and the Voronoi cells.}
 
@@ -36,8 +38,6 @@
 \item{pch}{a vector of plotting characters or symbols.}
 
 \item{\dots}{other graphical parameters to plot.}
-
-\item{draw.center}{logical indicating if the centroids should be plotted.}
 }
 \description{
 Plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
