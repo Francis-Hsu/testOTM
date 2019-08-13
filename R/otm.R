@@ -58,8 +58,14 @@ otm.fit = function(data,
 #' @param col.data color of the data points.
 #' @param col.center color of the Voronoi centroids.
 #' @param col.edge color of the edges in plotting RVD and RDT.
+#' @param draw.center logical indicating if the data points should be plotted.
 #' @param draw.center logical indicating if the centroids should be plotted.
 #' @param draw.map logical indicating if dashed lines should be added to show mapping between the data and the Voronoi cells.
+#' @param xlim the x limits of the plot.
+#' @param ylim the y limits of the plot.
+#' @param xlab a label for the x axis.
+#' @param ylab a label for the y axis.
+#' @param pch a vector of plotting characters or symbols. 
 #' @param \dots other graphical parameters to plot.
 #' @keywords hplot
 #' @importFrom graphics plot.default segments points
@@ -69,6 +75,7 @@ plot.otm.2d = function(x,
                        col.data = "cornflowerblue",
                        col.center = "firebrick",
                        col.edge = "black",
+                       draw.data = T,
                        draw.center = T,
                        draw.map = F,
                        xlim = c(0, 1),
@@ -78,13 +85,13 @@ plot.otm.2d = function(x,
                        pch = 20,
                        ...) {
   type = match.arg(which, c("RVD", "RDT", "Both"))
-  
   # plot the restricted Voronoi diagram
   if (which == "RVD" || which == "Both") {
     # plot data
     plot.default(
       x$Data[, 1],
       x$Data[, 2],
+      type = ifelse(draw.data, "p", "n"),
       col = col.data,
       pch = pch,
       xlim = xlim,

@@ -293,14 +293,15 @@ List gof2D(const arma::mat &X, const arma::mat &Y, const arma::mat &U, bool cent
   if (center) {
     elemXY = getCentroids(OTMXY);
   } else {
+    // create a squared uniform mesh
+    unifMesh.clear();
+    unifMesh.vertices.create_vertices(cubeVertices.n_rows);
+    setMeshPoint(unifMesh, cubeVertices);
+    unifMesh.facets.create_quad(0, 2, 3, 1);
+    
+    // get Voronoi cells
     elemXY = getVertices(unifMesh, OTMXY);
   }
-  
-  // create a squared uniform mesh
-  unifMesh.clear();
-  unifMesh.vertices.create_vertices(cubeVertices.n_rows);
-  setMeshPoint(unifMesh, cubeVertices);
-  unifMesh.facets.create_quad(0, 2, 3, 1);
   
   // collect objects to return
   List lst;
@@ -358,14 +359,15 @@ List dep1D(const arma::mat &XY, const arma::mat &U, bool center, double epsilon,
   if (center) {
     elemXY = getCentroids(OTMXY);
   } else {
+    // create a squared uniform mesh
+    unifMesh.clear();
+    unifMesh.vertices.create_vertices(cubeVertices.n_rows);
+    setMeshPoint(unifMesh, cubeVertices);
+    unifMesh.facets.create_quad(0, 2, 3, 1);
+    
+    // get Voronoi cells
     elemXY = getVertices(unifMesh, OTMXY);
   }
-  
-  // create a squared uniform mesh
-  unifMesh.clear();
-  unifMesh.vertices.create_vertices(cubeVertices.n_rows);
-  setMeshPoint(unifMesh, cubeVertices);
-  unifMesh.facets.create_quad(0, 2, 3, 1);
   
   // collect objects to return
   List lst;

@@ -4,7 +4,8 @@
 #' @param X input data matrix, of size \eqn{n} by \eqn{2}.
 #' @param Y input data matrix, of size \eqn{m} by \eqn{2}.
 #' @param mc number of quasi-Monte-Carlo samples used to evaluate the test statistic.
-#' @param rank choose the method for assigning ranks to the data points. Can be "\code{max}", "\code{min}", or "\code{center}".
+#' @param rank choose the method for assigning ranks to the data points. 
+#' Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".
 #' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.
 #' @param verbose logical indicating wether to display optimization messages.
@@ -32,6 +33,7 @@ otm.gof.test = function(X, Y, mc = 1000, rank = "center", epsilon = 1e-3, maxit 
                    center = 0,
                    max = 1,
                    min = 2,
+                   uniform = 3,
                    stop("Unknown method of rank mapping!"))
   
   # compute quantiles
@@ -45,8 +47,11 @@ otm.gof.test = function(X, Y, mc = 1000, rank = "center", epsilon = 1e-3, maxit 
   # assign ranks
   if (rank.id == 0) {
     gof.rank = gof.list$Elem_XY
+  } else if (rank.id == 3) {
+    gof.rank = lapply(split(gof.list$Elem_XY[, -1], gof.list$Elem_XY[, 1]), matrix, ncol = 2)
+    gof.rank = uniform.rank(gof.rank)
   } else {
-    gof.rank = split(data.frame(gof.list$Elem_XY)[, -1], gof.list$Elem_XY[, 1])
+    gof.rank = lapply(split(gof.list$Elem_XY[, -1], gof.list$Elem_XY[, 1]), matrix, ncol = 2)
     gof.rank = t(sapply(gof.rank, choose.vert, type = rank.id))
   }
   
@@ -62,7 +67,8 @@ otm.gof.test = function(X, Y, mc = 1000, rank = "center", epsilon = 1e-3, maxit 
 #' @param X input data vector.
 #' @param Y input data vector.
 #' @param mc number of quasi-Monte-Carlo samples used to evaluate the test statistic.
-#' @param rank choose the method for assigning ranks to the data points. Can be "\code{max}", "\code{min}", or "\code{center}".
+#' @param rank choose the method for assigning ranks to the data points. 
+#' Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".
 #' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.
 #' @param verbose logical indicating wether to display optimization messages.
@@ -93,6 +99,7 @@ otm.dep.test = function(X, Y, mc = 1000, rank = "center", epsilon = 1e-3, maxit 
                    center = 0,
                    max = 1,
                    min = 2,
+                   uniform = 3,
                    stop("Unknown method of rank mapping!"))
   
   # compute quantiles
@@ -105,8 +112,11 @@ otm.dep.test = function(X, Y, mc = 1000, rank = "center", epsilon = 1e-3, maxit 
   # assign ranks
   if (rank.id == 0) {
     dep.rank = dep.list$Elem_XY
+  } else if (rank.id == 3) {
+    dep.rank = lapply(split(dep.list$Elem_XY[, -1], dep.list$Elem_XY[, 1]), matrix, ncol = 2)
+    dep.rank = uniform.rank(dep.rank)
   } else {
-    dep.rank = split(data.frame(dep.list$Elem_XY)[, -1], dep.list$Elem_XY[, 1])
+    dep.rank = lapply(split(dep.list$Elem_XY[, -1], dep.list$Elem_XY[, 1]), matrix, ncol = 2)
     dep.rank = t(sapply(dep.rank, choose.vert, type = rank.id))
   }
   
@@ -126,4 +136,37 @@ choose.vert = function(V, type = 1) {
   } else {
     stop("Unknown method of rank mapping!")
   }
+}
+
+# helper for uniform sampling over a convex polygon
+uniform.rank = function(V) {
+  n.cell = length(V)
+  
+  # random numbers for barycentric sampling
+  r1 = sqrt(runif(n.cell))
+  r2 = runif(n.cell)
+  
+  # sample 1 point from each cell using fan triangulation implicitly
+  unif.rank = matrix(0, n.cell, 2)
+  for (i in 1:n.cell) {
+    n.vert = nrow(V[[i]])
+    
+    # area of the fan triangles
+    tri.area = rep(0, n.vert - 2)
+    A = V[[i]][1, ]
+    for (j in 1:(n.vert - 2)) {
+      B = V[[i]][j + 1, ]
+      C = V[[i]][j + 2, ]
+      tri.area[j] = 0.5 * abs(A[1] * (B[2] - C[2]) + B[1] * (C[2] - A[2]) + C[1] * (A[2] - B[2]))
+    }
+    
+    # sample a triangle, then sample uniformly from that triangle
+    tri.id = sample(1:(n.vert - 2), 1, prob = tri.area)
+    B = V[[i]][tri.id + 1, ]
+    C = V[[i]][tri.id + 2, ]
+    unif.rank[i, 1] = (1 - r1[i]) * A[1] + r1[i] * (1 - r2[i]) * B[1] + r1[i] * r2[i] * C[1]
+    unif.rank[i, 2] = (1 - r1[i]) * A[2] + r1[i] * (1 - r2[i]) * B[2] + r1[i] * r2[i] * C[2]
+  }
+  
+  return(unif.rank)
 }

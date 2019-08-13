@@ -5,8 +5,10 @@
 \title{Plot the 2D Semi-discrete Optimal Transport Map}
 \usage{
 \method{plot}{otm.2d}(x, which = "Both", col.data = "cornflowerblue",
-  col.center = "firebrick", col.edge = "black", draw.center = T,
-  draw.map = F, ...)
+  col.center = "firebrick", col.edge = "black", draw.data = T,
+  draw.center = T, draw.map = F, xlim = c(0, 1), ylim = c(0, 1),
+  xlab = expression("u"[1]), ylab = expression("u"[2]), pch = 20,
+  ...)
 }
 \arguments{
 \item{x}{a fitted \code{otm.2d} object.}
@@ -19,11 +21,23 @@
 
 \item{col.edge}{color of the edges in plotting RVD and RDT.}
 
-\item{draw.center}{logical indicating if the centroids should be plotted.}
+\item{draw.center}{logical indicating if the data points should be plotted.}
 
 \item{draw.map}{logical indicating if dashed lines should be added to show mapping between the data and the Voronoi cells.}
 
+\item{xlim}{the x limits of the plot.}
+
+\item{ylim}{the y limits of the plot.}
+
+\item{xlab}{a label for the x axis.}
+
+\item{ylab}{a label for the y axis.}
+
+\item{pch}{a vector of plotting characters or symbols.}
+
 \item{\dots}{other graphical parameters to plot.}
+
+\item{draw.center}{logical indicating if the centroids should be plotted.}
 }
 \description{
 Plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given

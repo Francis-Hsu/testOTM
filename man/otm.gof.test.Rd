@@ -14,7 +14,8 @@ otm.gof.test(X, Y, mc = 1000, rank = "center", epsilon = 0.001,
 
 \item{mc}{number of quasi-Monte-Carlo samples used to evaluate the test statistic.}
 
-\item{rank}{choose the method for assigning ranks to the data points. Can be "\code{max}", "\code{min}", or "\code{center}".}
+\item{rank}{choose the method for assigning ranks to the data points. 
+Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".}
 
 \item{epsilon}{convergence threshold for optimization.}
 
