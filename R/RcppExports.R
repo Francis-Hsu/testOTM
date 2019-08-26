@@ -40,7 +40,7 @@ locateRDT2D <- function(Q, V) {
     .Call('_testOTM_locateRDT2D', PACKAGE = 'testOTM', Q, V)
 }
 
-#' Helper for computing the goodness-of-fit test statistics
+#' 2D Goodness-of-fit Test Helper
 #' 
 #' Compute the quantiles of U with respect to X and Y, as well as the optimal transport map of the combined data.
 #' @param X input data matrix.
@@ -56,18 +56,17 @@ gof2D <- function(X, Y, U, center, epsilon, maxit, verbose) {
     .Call('_testOTM_gof2D', PACKAGE = 'testOTM', X, Y, U, center, epsilon, maxit, verbose)
 }
 
-#' Helper for computing the 1D test of independece 
+#' 1D Test of Independece Helper
 #' 
 #' Compute the quantiles of U with respect to (X, Y).
 #' @param XY input data matrix.
-#' @param U sequence used to evaluate the integral.
 #' @param center logical indicating if the centroids should be computed.
 #' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.
 #' @param verbose logical indicating wether to display optimization messages.
-#' @return a list, which contains the quantile indices, and the vertices of the combined optimal transport map.
+#' @return a matrix, represents either the centroid or the cells of the combined optimal transport map.
 #' @keywords internal
-dep1D <- function(XY, U, center, epsilon, maxit, verbose) {
-    .Call('_testOTM_dep1D', PACKAGE = 'testOTM', XY, U, center, epsilon, maxit, verbose)
+dep1D <- function(XY, center, epsilon, maxit, verbose) {
+    .Call('_testOTM_dep1D', PACKAGE = 'testOTM', XY, center, epsilon, maxit, verbose)
 }
 

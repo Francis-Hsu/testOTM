@@ -75,10 +75,9 @@ otm.gof.test = function(X, Y, mc = 1000, rank = "center", epsilon = 1e-3, maxit 
 #' @param na.rm logical indicating whether \code{NA} values should be stripped before the computation proceeds.
 #' @return the value of the  mutual independence test statistic.
 #' @keywords htest, multivariate
-#' @importFrom randtoolbox sobol
 #' @importFrom stats ecdf
 #' @export
-otm.dep.test = function(X, Y, mc = 1000, rank = "center", epsilon = 1e-3, maxit = 100, verbose = F, na.rm = F) {
+otm.dep.test = function(X, Y, rank = "center", epsilon = 1e-3, maxit = 100, verbose = F, na.rm = F) {
   # validate inputs
   if ((!is.vector(X) && ncol(X) != 1) || (!is.vector(Y) && ncol(Y) != 1)) {
     stop("Input data must be vectors or 1D matrices.")
@@ -94,6 +93,7 @@ otm.dep.test = function(X, Y, mc = 1000, rank = "center", epsilon = 1e-3, maxit 
     Y = Y[complete.cases(XY)]
     XY = XY[complete.cases(XY),]
   }
+  N = nrow(XY)
   
   rank.id = switch(rank,
                    center = 0,
@@ -104,25 +104,29 @@ otm.dep.test = function(X, Y, mc = 1000, rank = "center", epsilon = 1e-3, maxit 
   
   # compute quantiles
   d = ifelse(is.vector(X) && is.vector(Y), 1, max(ncol(X), ncol(Y)))
-  U = sobol(mc, d + 1)
   if (d == 1) {
-    dep.list = dep1D(XY, U, rank.id == 0, epsilon, maxit, verbose)
+    dep.elem = dep1D(XY, rank.id == 0, epsilon, maxit, verbose)
   }
   
   # assign ranks
   if (rank.id == 0) {
-    dep.rank = dep.list$Elem_XY
+    dep.rank.hat = dep.elem
+    dep.rank.tilde = cbind((2 * rank(X) - 1) / (2 * N), 
+                           (2 * rank(Y) - 1) / (2 * N))
   } else if (rank.id == 3) {
-    dep.rank = lapply(split(dep.list$Elem_XY[, -1], dep.list$Elem_XY[, 1]), matrix, ncol = 2)
-    dep.rank = uniform.rank(dep.rank)
+    dep.rank.hat = lapply(split(dep.elem[, -1], dep.elem[, 1]), matrix, ncol = 2)
+    dep.rank.hat = uniform.rank(dep.rank.hat)
+    dep.rank.tilde = cbind(runif(N, min = rank(X) - 1, max = rank(X)) / N, 
+                           runif(N, min = rank(Y) - 1, max = rank(Y)) / N)
   } else {
-    dep.rank = lapply(split(dep.list$Elem_XY[, -1], dep.list$Elem_XY[, 1]), matrix, ncol = 2)
-    dep.rank = t(sapply(dep.rank, choose.vert, type = rank.id))
+    dep.rank.hat = lapply(split(dep.elem[, -1], dep.elem[, 1]), matrix, ncol = 2)
+    dep.rank.hat = t(sapply(dep.rank.hat, choose.vert, type = rank.id))
+    dep.rank.tilde = cbind((rank(X) - (rank.id == 2)) / N,
+                           (rank(Y) - (rank.id == 2)) / N)
   }
   
   # compute the test statistic
-  dep.stat = mean(rowSums((dep.rank[dep.list$U_Map_XY, ] - cbind(ecdf(X)(XY[dep.list$U_Map_XY, 1]), 
-                                                                 ecdf(Y)(XY[dep.list$U_Map_XY, 2])))^2))
+  dep.stat = mean(rowSums((dep.rank.hat - dep.rank.tilde)^2))
   
   return(dep.stat)
 }

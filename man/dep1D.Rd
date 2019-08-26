@@ -2,14 +2,12 @@
 % Please edit documentation in R/RcppExports.R
 \name{dep1D}
 \alias{dep1D}
-\title{Helper for computing the 1D test of independece}
+\title{1D Test of Independece Helper}
 \usage{
-dep1D(XY, U, center, epsilon, maxit, verbose)
+dep1D(XY, center, epsilon, maxit, verbose)
 }
 \arguments{
 \item{XY}{input data matrix.}
-
-\item{U}{sequence used to evaluate the integral.}
 
 \item{center}{logical indicating if the centroids should be computed.}
 
@@ -20,7 +18,7 @@ dep1D(XY, U, center, epsilon, maxit, verbose)
 \item{verbose}{logical indicating wether to display optimization messages.}
 }
 \value{
-a list, which contains the quantile indices, and the vertices of the combined optimal transport map.
+a matrix, represents either the centroid or the cells of the combined optimal transport map.
 }
 \description{
 Compute the quantiles of U with respect to (X, Y).

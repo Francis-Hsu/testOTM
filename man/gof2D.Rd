@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{gof2D}
 \alias{gof2D}
-\title{Helper for computing the goodness-of-fit test statistics}
+\title{2D Goodness-of-fit Test Helper}
 \usage{
 gof2D(X, Y, U, center, epsilon, maxit, verbose)
 }

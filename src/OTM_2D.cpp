@@ -238,7 +238,7 @@ arma::ivec locateRDT2D(const arma::mat &Q, const arma::mat &V) {
   return triID;
 }
 
-//' Helper for computing the goodness-of-fit test statistics
+//' 2D Goodness-of-fit Test Helper
 //' 
 //' Compute the quantiles of U with respect to X and Y, as well as the optimal transport map of the combined data.
 //' @param X input data matrix.
@@ -312,19 +312,18 @@ List gof2D(const arma::mat &X, const arma::mat &Y, const arma::mat &U, bool cent
   return lst;
 }
 
-//' Helper for computing the 1D test of independece 
+//' 1D Test of Independece Helper
 //' 
 //' Compute the quantiles of U with respect to (X, Y).
 //' @param XY input data matrix.
-//' @param U sequence used to evaluate the integral.
 //' @param center logical indicating if the centroids should be computed.
 //' @param epsilon convergence threshold for optimization.
 //' @param maxit max number of iterations before termination.
 //' @param verbose logical indicating wether to display optimization messages.
-//' @return a list, which contains the quantile indices, and the vertices of the combined optimal transport map.
+//' @return a matrix, represents either the centroid or the cells of the combined optimal transport map.
 //' @keywords internal
 // [[Rcpp::export]]
-List dep1D(const arma::mat &XY, const arma::mat &U, bool center, double epsilon, int maxit, bool verbose) {
+arma::mat dep1D(const arma::mat &XY, bool center, double epsilon, int maxit, bool verbose) {
   const int d = 2;
   
   // initialize the Geogram library.
@@ -348,12 +347,6 @@ List dep1D(const arma::mat &XY, const arma::mat &U, bool center, double epsilon,
   GEO::OptimalTransportMap2d OTMXY(&unifMesh);
   OTM2D(OTMXY, XY, epsilon, maxit, verbose);
   
-  // get weights
-  arma::vec wXY = getWeights(OTMXY);
-  
-  // get the optimal transport mapping
-  arma::ivec uXY = locateRVD2D(U, XY, wXY);
-  
   // get elements from corresponding cells to help computing ranks
   arma::mat elemXY;
   if (center) {
@@ -369,10 +362,5 @@ List dep1D(const arma::mat &XY, const arma::mat &U, bool center, double epsilon,
     elemXY = getVertices(unifMesh, OTMXY);
   }
   
-  // collect objects to return
-  List lst;
-  lst["U_Map_XY"] = uXY;
-  lst["Elem_XY"] = elemXY;
-  
-  return lst;
+  return elemXY;
 }

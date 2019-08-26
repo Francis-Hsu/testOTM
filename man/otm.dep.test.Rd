@@ -4,15 +4,13 @@
 \alias{otm.dep.test}
 \title{1D Test of Independence}
 \usage{
-otm.dep.test(X, Y, mc = 1000, rank = "center", epsilon = 0.001,
-  maxit = 100, verbose = F, na.rm = F)
+otm.dep.test(X, Y, rank = "center", epsilon = 0.001, maxit = 100,
+  verbose = F, na.rm = F)
 }
 \arguments{
 \item{X}{input data vector.}
 
 \item{Y}{input data vector.}
-
-\item{mc}{number of quasi-Monte-Carlo samples used to evaluate the test statistic.}
 
 \item{rank}{choose the method for assigning ranks to the data points. 
 Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".}
@@ -24,6 +22,8 @@ Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".}
 \item{verbose}{logical indicating wether to display optimization messages.}
 
 \item{na.rm}{logical indicating whether \code{NA} values should be stripped before the computation proceeds.}
+
+\item{mc}{number of quasi-Monte-Carlo samples used to evaluate the test statistic.}
 }
 \value{
 the value of the  mutual independence test statistic.
