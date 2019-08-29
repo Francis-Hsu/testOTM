@@ -4,10 +4,10 @@
 \alias{depth.uniform}
 \title{Multivariate Uniform Depth Function}
 \usage{
-depth.uniform(Q)
+depth.uniform(query)
 }
 \arguments{
-\item{Q}{a numeric matrix where each row represents a query point.}
+\item{query}{a numeric matrix where each row represents a query point.}
 }
 \value{
 a vector containing the depths of the data.
@@ -15,3 +15,4 @@ a vector containing the depths of the data.
 \description{
 \code{otm.depth} computes the depths associated with the \eqn{U[0, 1]^d} measure.
 }
+\keyword{internal}

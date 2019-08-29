@@ -4,12 +4,16 @@
 \alias{otm.depth}
 \title{Semi-discrete Optimal Transport Depth}
 \usage{
-otm.depth(object, Q, ...)
+otm.depth(object, query, scale = TRUE, rank.data = "uniform", ...)
 }
 \arguments{
 \item{object}{a fitted optimal transport map object.}
 
-\item{Q}{a numeric matrix where each row represents a query point.}
+\item{query}{a numeric matrix where each row represents a query point.}
+
+\item{scale}{logical indicating if the queries should be scaled.}
+
+\item{rank.data}{choose the method for assigning ranks to the data points.}
 
 \item{\dots}{additional arguments.}
 }

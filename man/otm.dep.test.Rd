@@ -4,22 +4,24 @@
 \alias{otm.dep.test}
 \title{1D Test of Independence}
 \usage{
-otm.dep.test(X, Y, rank = "center", epsilon = 0.001, maxit = 100,
-  verbose = F, na.rm = F)
+otm.dep.test(X, Y, scale = c(0, 1), rank.data = "uniform",
+  epsilon = 1e-06, maxit = 100, verbose = F, na.rm = F)
 }
 \arguments{
 \item{X}{input data vector.}
 
 \item{Y}{input data vector.}
 
-\item{rank}{choose the method for assigning ranks to the data points. 
+\item{scale}{a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.}
+
+\item{rank.data}{choose the method for assigning ranks to the data points. 
 Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".}
 
 \item{epsilon}{convergence threshold for optimization.}
 
 \item{maxit}{max number of iterations before termination.}
 
-\item{verbose}{logical indicating wether to display optimization messages.}
+\item{verbose}{logical indicating whether to display optimization messages.}
 
 \item{na.rm}{logical indicating whether \code{NA} values should be stripped before the computation proceeds.}
 

@@ -2,14 +2,16 @@
 % Please edit documentation in R/quantile.R
 \name{otm.quantile}
 \alias{otm.quantile}
-\title{Semi-discrete Optimal Transport Quantile}
+\title{Semi-discrete Optimal Transport queryuantile}
 \usage{
-otm.quantile(object, Q, ...)
+otm.quantile(object, query, scale = TRUE, ...)
 }
 \arguments{
 \item{object}{a fitted optimal transport map object.}
 
-\item{Q}{a numeric matrix where each row represents a query point.}
+\item{query}{a numeric matrix where each row represents a query point.}
+
+\item{scale}{logical indicating if the queries should be scaled.}
 
 \item{\dots}{additional arguments, currently without effect.}
 }

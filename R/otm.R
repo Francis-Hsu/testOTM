@@ -1,24 +1,41 @@
 #' Uniform Semi-discrete Optimal Transport Map
 #'
 #' \code{otm.fit} computes the semi-discrete optimal transport map from the \eqn{U[0, 1]^d} measure to the input data set.
-#' @param data input data matrix, of size \eqn{n} by \eqn{d}.
+#' @param data a numeric matrix for the input data, of size \eqn{n} by \eqn{d}.
+#' @param scale a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.
+#' @param na.rm logical indicating whether \code{NA} values should be stripped before the computation proceeds.
 #' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.
-#' @param verbose logical indicating wether to display optimization messages.
-#' @param na.rm logical indicating whether \code{NA} values should be stripped before the computation proceeds.
+#' @param verbose logical indicating whether to display optimization messages.
+#' @details Input data needs be scaled within the [0, 1] range for computation. 
+#' Supply \code{scale} to let the function handles the scaling internally.
+#' Locations and scales will be returned to help transforming the results back to their original range.
 #' @return \code{otm.fit} returns an object of class "\code{otm.2d}" or "\code{otm.3d}", depending on the dimesion of input data.
 #' An object of class "\code{otm}" is a list describing the resulting optimal transport map.
 #' @keywords optimize, graphs
 #' @importFrom stats complete.cases
 #' @export
 otm.fit = function(data,
-                   epsilon = 1e-3,
+                   scale = c(0.05, 0.95),
+                   na.rm = F,
+                   epsilon = 1e-6,
                    maxit = 100,
-                   verbose = F,
-                   na.rm = F) {
+                   verbose = F) {
   # input validation
   if (!is.matrix(data) || ncol(data) < 2) {
     stop("Data must be a matrix with ncol >= 2.")
+  }
+  
+  if (!is.null(scale)) {
+    if (scale[1] < 0 || scale[2] > 1) {
+      stop("Scaling range must be within [0, 1].")
+    }
+    
+    data = scaling.min.max(data, scale[1], scale[2])
+  }
+  
+  if (min(data, na.rm = T) < 0 || max(data, na.rm = T) > 1) {
+    stop("Data must be within the [0, 1] range.")
   }
   
   if (na.rm) {
@@ -43,8 +60,13 @@ otm.fit = function(data,
   }
   
   # for computing Alexandrov's potential
-  # noted the signs of weights
+  # note the sign of weights
   object$Height = -(rowSums(object$Data ^ 2) - object$Weight) / 2
+  
+  if (!is.null(scale)) {
+    object$Location = attr(data, "scaled:center")
+    object$Scale = c(attr(data, "scaled:scale"))
+  }
   
   return(object)
 }

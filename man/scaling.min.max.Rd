@@ -7,7 +7,7 @@
 scaling.min.max(data, min = 0, max = 1)
 }
 \arguments{
-\item{data}{input data matrix, of size \eqn{n} by \eqn{d}.}
+\item{data}{a numeric matrix for the input data.}
 
 \item{min}{desired minimum of the transformed data.}
 

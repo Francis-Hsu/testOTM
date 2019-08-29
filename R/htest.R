@@ -4,42 +4,63 @@
 #' @param X input data matrix, of size \eqn{n} by \eqn{2}.
 #' @param Y input data matrix, of size \eqn{m} by \eqn{2}.
 #' @param mc number of quasi-Monte-Carlo samples used to evaluate the test statistic.
-#' @param rank choose the method for assigning ranks to the data points. 
+#' @param scale a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.
+#' @param rank.data choose the method for assigning ranks to the data points. 
 #' Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".
 #' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.
-#' @param verbose logical indicating wether to display optimization messages.
+#' @param verbose logical indicating whether to display optimization messages.
 #' @param na.rm logical indicating whether \code{NA} values should be stripped before the computation proceeds.
 #' @return the value of the goodness-of-fit test statistic.
 #' @keywords htest, multivariate
 #' @importFrom randtoolbox sobol
 #' @export
-otm.gof.test = function(X, Y, mc = 1000, rank = "center", epsilon = 1e-3, maxit = 100, verbose = F, na.rm = F) {
+otm.gof.test = function(X,
+                        Y,
+                        mc = 10000,
+                        scale = c(0, 1),
+                        rank.data = "uniform",
+                        epsilon = 1e-6,
+                        maxit = 100,
+                        verbose = F,
+                        na.rm = F) {
   # validate inputs
   if (!is.matrix(X) || !is.matrix(Y) || ncol(X) < 2 || ncol(Y) < 2) {
     stop("Input data must be matrices with more than 2 columns.")
   }
   
-  if (ncol(X) !=  ncol(Y)) {
+  if (NCOL(X) !=  NCOL(Y)) {
     stop("Mismatch in dimensions of the input data.")
   }
   
-  if (na.rm) {
-    X = X[complete.cases(X), ]
-    Y = Y[complete.cases(Y), ]
-  }
-  
-  rank.id = switch(rank,
+  rank.id = switch(rank.data,
                    center = 0,
                    max = 1,
                    min = 2,
                    uniform = 3,
                    stop("Unknown method of rank mapping!"))
   
+  if (!is.null(scale)) {
+    if (scale[1] < 0 || scale[2] > 1) {
+      stop("Scaling range must be within [0, 1].")
+    }
+    
+    # scale X and Y together
+    tempXY = rbind(X, Y)
+    tempXY = scaling.min.max(tempXY, scale[1], scale[2])
+    X = tempXY[1:NROW(X), ]
+    Y = tempXY[1:NROW(Y) + NROW(X), ]
+  }
+  
+  if (na.rm) {
+    X = X[complete.cases(X), ]
+    Y = Y[complete.cases(Y), ]
+  }
+  XY = rbind(X, Y)
+  
   # compute quantiles
   d = ncol(X)
   U = sobol(mc, d)
-  XY = rbind(X, Y)
   if (d == 2) {
     gof.list = gof2D(X, Y, U, rank.id == 0, epsilon, maxit, verbose)
   }
@@ -67,24 +88,44 @@ otm.gof.test = function(X, Y, mc = 1000, rank = "center", epsilon = 1e-3, maxit 
 #' @param X input data vector.
 #' @param Y input data vector.
 #' @param mc number of quasi-Monte-Carlo samples used to evaluate the test statistic.
-#' @param rank choose the method for assigning ranks to the data points. 
+#' @param scale a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.
+#' @param rank.data choose the method for assigning ranks to the data points. 
 #' Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".
 #' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.
-#' @param verbose logical indicating wether to display optimization messages.
+#' @param verbose logical indicating whether to display optimization messages.
 #' @param na.rm logical indicating whether \code{NA} values should be stripped before the computation proceeds.
 #' @return the value of the  mutual independence test statistic.
 #' @keywords htest, multivariate
 #' @importFrom stats ecdf
 #' @export
-otm.dep.test = function(X, Y, rank = "center", epsilon = 1e-3, maxit = 100, verbose = F, na.rm = F) {
+otm.dep.test = function(X,
+                        Y,
+                        scale = c(0, 1),
+                        rank.data = "uniform",
+                        epsilon = 1e-6,
+                        maxit = 100,
+                        verbose = F,
+                        na.rm = F) {
   # validate inputs
-  if ((!is.vector(X) && ncol(X) != 1) || (!is.vector(Y) && ncol(Y) != 1)) {
+  if (NCOL(X) != 1 || NCOL(Y) != 1) {
     stop("Input data must be vectors or 1D matrices.")
   }
   
   if (length(X) != length(Y)) {
     stop("Mismatch in lengths of the input data.")
+  }
+  
+  if (!is.null(scale)) {
+    if (scale[1] < 0 || scale[2] > 1) {
+      stop("Scaling range must be within [0, 1].")
+    }
+    
+    # scale X and Y together
+    tempXY = cbind(X, Y)
+    tempXY = scaling.min.max(tempXY, scale[1], scale[2])
+    X = tempXY[, NCOL(X)]
+    Y = tempXY[, NCOL(Y) + NCOL(X)]
   }
   
   XY = cbind(X, Y)
@@ -95,7 +136,7 @@ otm.dep.test = function(X, Y, rank = "center", epsilon = 1e-3, maxit = 100, verb
   }
   N = nrow(XY)
   
-  rank.id = switch(rank,
+  rank.id = switch(rank.data,
                    center = 0,
                    max = 1,
                    min = 2,
@@ -129,48 +170,4 @@ otm.dep.test = function(X, Y, rank = "center", epsilon = 1e-3, maxit = 100, verb
   dep.stat = mean(rowSums((dep.rank.hat - dep.rank.tilde)^2))
   
   return(dep.stat)
-}
-
-# helper for choosing the vertex with the min/max norm.
-choose.vert = function(V, type = 1) {
-  if (type == 1) {
-    as.numeric(V[which.max(rowSums(V^2)), , drop = F])
-  } else if (type == 2) {
-    as.numeric(V[which.min(rowSums(V^2)), , drop = F])
-  } else {
-    stop("Unknown method of rank mapping!")
-  }
-}
-
-# helper for uniform sampling over a convex polygon
-uniform.rank = function(V) {
-  n.cell = length(V)
-  
-  # random numbers for barycentric sampling
-  r1 = sqrt(runif(n.cell))
-  r2 = runif(n.cell)
-  
-  # sample 1 point from each cell using fan triangulation implicitly
-  unif.rank = matrix(0, n.cell, 2)
-  for (i in 1:n.cell) {
-    n.vert = nrow(V[[i]])
-    
-    # area of the fan triangles
-    tri.area = rep(0, n.vert - 2)
-    A = V[[i]][1, ]
-    for (j in 1:(n.vert - 2)) {
-      B = V[[i]][j + 1, ]
-      C = V[[i]][j + 2, ]
-      tri.area[j] = 0.5 * abs(A[1] * (B[2] - C[2]) + B[1] * (C[2] - A[2]) + C[1] * (A[2] - B[2]))
-    }
-    
-    # sample a triangle, then sample uniformly from that triangle
-    tri.id = sample(1:(n.vert - 2), 1, prob = tri.area)
-    B = V[[i]][tri.id + 1, ]
-    C = V[[i]][tri.id + 2, ]
-    unif.rank[i, 1] = (1 - r1[i]) * A[1] + r1[i] * (1 - r2[i]) * B[1] + r1[i] * r2[i] * C[1]
-    unif.rank[i, 2] = (1 - r1[i]) * A[2] + r1[i] * (1 - r2[i]) * B[2] + r1[i] * r2[i] * C[2]
-  }
-  
-  return(unif.rank)
 }

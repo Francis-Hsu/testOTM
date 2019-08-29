@@ -4,14 +4,15 @@
 \alias{otm.depth.otm.2d}
 \title{2D Semi-discrete Optimal Transport Depth}
 \usage{
-\method{otm.depth}{otm.2d}(object, Q, use.geo = FALSE, ...)
+\method{otm.depth}{otm.2d}(object, query, scale = TRUE,
+  rank.data = "uniform", ...)
 }
 \arguments{
 \item{object}{a fitted 2D optimal transport map object.}
 
-\item{Q}{a numeric matrix where each row represents a query point.}
+\item{query}{a numeric matrix where each row represents a query point.}
 
-\item{use.geo}{logical indicating if the geometric method should be used to compute the ranks.}
+\item{rank.data}{choose the method for assigning ranks to the data points.}
 
 \item{\dots}{additional arguments, currently without effect.}
 }

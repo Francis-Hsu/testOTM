@@ -4,12 +4,14 @@
 \alias{otm.potential}
 \title{Semi-discrete Optimal Transport Potential}
 \usage{
-otm.potential(object, Q, ...)
+otm.potential(object, query, scale = TRUE, ...)
 }
 \arguments{
 \item{object}{a fitted optimal transport map object.}
 
-\item{Q}{a numeric matrix where each row represents a query point.}
+\item{query}{a numeric matrix where each row represents a query point.}
+
+\item{scale}{logical indicating if the queries should be scaled.}
 
 \item{\dots}{additional arguments, currently without effect.}
 }

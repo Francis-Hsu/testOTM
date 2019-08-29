@@ -4,20 +4,41 @@
 \alias{otm.rank}
 \title{Semi-discrete Optimal Transport Rank}
 \usage{
-otm.rank(object, Q, ...)
+otm.rank(object, query, scale = TRUE, rank.data = "uniform",
+  rank.algo = "lp", ...)
 }
 \arguments{
 \item{object}{a fitted optimal transport map object.}
 
-\item{Q}{a numeric matrix where each row represents a query point.}
+\item{query}{a numeric matrix where each row represents a query point.}
+
+\item{scale}{logical indicating if the queries should be scaled.}
+
+\item{rank.data}{choose the method for assigning ranks to the data points. 
+Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".}
+
+\item{rank.algo}{choose the algorithm for computing the ranks. Can be "\code{lp}" or "\code{geom}".}
 
 \item{\dots}{additional arguments.}
 }
 \value{
 a list containing the ranks of the data and the corresponding convex conjugate potential values.
-If \code{use.geo = TRUE} then the convex conjugates will not be computed (\code{NA}s will be returned).
+If \code{rank.algo = "geom"} or data points are presented in the queries,
+then the corresponding conjugate potentials will not be computed (\code{NA}s will be returned).
 }
 \description{
 \code{otm.rank} computes the optimal transport ranks.
+}
+\details{
+The rank of the a data points used to fit the optimal transport map is not uniquely defined. 
+In principle it can be any point within the corresponding Laguerre cell. 
+Set \code{rank.data} to \code{max} to use the vertices with the maximum l2 norm (\code{min} for minimum l2 norm),
+which is analogous to the usual ECDF rank in 1D. Option \code{center} will assign the centroid of the cell as the rank.
+Finally, option \code{uniform} will sample a point uniformly from the Laguerre cell as the rank.
+
+The rank for a non-data query point can be computed by solving a series of linear programming, 
+or by finding the intersection of Laguerre cells that corresponds to the simplex containing the query.
+Set \code{rank.algo} to \code{lp} to use the former and \code{geom} for the latter.
+Note the geometric method is slow and does not work for points lie outside the RDT, \code{lp} method will still be used if they are present.
 }
 \keyword{multivariate}

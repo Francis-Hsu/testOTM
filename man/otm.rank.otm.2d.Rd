@@ -4,20 +4,26 @@
 \alias{otm.rank.otm.2d}
 \title{2D Semi-discrete Optimal Transport Rank}
 \usage{
-\method{otm.rank}{otm.2d}(object, Q, use.geo = FALSE, ...)
+\method{otm.rank}{otm.2d}(object, query, scale = TRUE,
+  rank.data = "uniform", rank.algo = "lp", ...)
 }
 \arguments{
 \item{object}{a fitted 2D optimal transport map object.}
 
-\item{Q}{a numeric matrix where each row represents a query point.}
+\item{query}{a numeric matrix where each row represents a query point.}
 
-\item{use.geo}{logical indicating if the geometric method should be used to compute the ranks.}
+\item{scale}{logical indicating if the queries should be scaled.}
+
+\item{rank.data}{choose the method for assigning ranks to the data points. 
+Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".}
+
+\item{rank.algo}{choose the algorithm for computing the ranks. Can be "\code{lp}" or "\code{geom}".}
 
 \item{\dots}{additional arguments, currently without effect.}
 }
 \value{
 a list containing the ranks of the data and the corresponding convex conjugate potential values.
-If \code{use.geo == TRUE} then the convex conjugates will not be computed (\code{NA}s will be returned).
+If \code{rank.algo = "geom"} then the conjugate potentials will not be computed (\code{NA}s will be returned).
 }
 \description{
 The 2D implementation of \code{otm.rank}.

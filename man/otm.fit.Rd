@@ -4,18 +4,21 @@
 \alias{otm.fit}
 \title{Uniform Semi-discrete Optimal Transport Map}
 \usage{
-otm.fit(data, epsilon = 0.001, maxit = 100, verbose = F, na.rm = F)
+otm.fit(data, scale = c(0.05, 0.95), na.rm = F, epsilon = 1e-06,
+  maxit = 100, verbose = F)
 }
 \arguments{
-\item{data}{input data matrix, of size \eqn{n} by \eqn{d}.}
+\item{data}{a numeric matrix for the input data, of size \eqn{n} by \eqn{d}.}
+
+\item{scale}{a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.}
+
+\item{na.rm}{logical indicating whether \code{NA} values should be stripped before the computation proceeds.}
 
 \item{epsilon}{convergence threshold for optimization.}
 
 \item{maxit}{max number of iterations before termination.}
 
-\item{verbose}{logical indicating wether to display optimization messages.}
-
-\item{na.rm}{logical indicating whether \code{NA} values should be stripped before the computation proceeds.}
+\item{verbose}{logical indicating whether to display optimization messages.}
 }
 \value{
 \code{otm.fit} returns an object of class "\code{otm.2d}" or "\code{otm.3d}", depending on the dimesion of input data.
@@ -23,6 +26,11 @@ An object of class "\code{otm}" is a list describing the resulting optimal trans
 }
 \description{
 \code{otm.fit} computes the semi-discrete optimal transport map from the \eqn{U[0, 1]^d} measure to the input data set.
+}
+\details{
+Input data needs be scaled within the [0, 1] range for computation. 
+Supply \code{scale} to let the function handles the scaling internally.
+Locations and scales will be returned to help transforming the results back to their original range.
 }
 \keyword{graphs}
 \keyword{optimize,}

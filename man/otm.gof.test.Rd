@@ -4,8 +4,9 @@
 \alias{otm.gof.test}
 \title{2D Goodness-of-fit Test}
 \usage{
-otm.gof.test(X, Y, mc = 1000, rank = "center", epsilon = 0.001,
-  maxit = 100, verbose = F, na.rm = F)
+otm.gof.test(X, Y, mc = 10000, scale = c(0, 1),
+  rank.data = "uniform", epsilon = 1e-06, maxit = 100, verbose = F,
+  na.rm = F)
 }
 \arguments{
 \item{X}{input data matrix, of size \eqn{n} by \eqn{2}.}
@@ -14,14 +15,16 @@ otm.gof.test(X, Y, mc = 1000, rank = "center", epsilon = 0.001,
 
 \item{mc}{number of quasi-Monte-Carlo samples used to evaluate the test statistic.}
 
-\item{rank}{choose the method for assigning ranks to the data points. 
+\item{scale}{a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.}
+
+\item{rank.data}{choose the method for assigning ranks to the data points. 
 Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".}
 
 \item{epsilon}{convergence threshold for optimization.}
 
 \item{maxit}{max number of iterations before termination.}
 
-\item{verbose}{logical indicating wether to display optimization messages.}
+\item{verbose}{logical indicating whether to display optimization messages.}
 
 \item{na.rm}{logical indicating whether \code{NA} values should be stripped before the computation proceeds.}
 }
