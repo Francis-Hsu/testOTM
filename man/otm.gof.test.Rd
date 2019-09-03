@@ -34,5 +34,13 @@ the value of the goodness-of-fit test statistic.
 \description{
 \code{otm.gof.test} computes the 2D goodness-of-test statistic using ranks defined through the semi-discrete optimal transport map.
 }
+\details{
+Given samples \eqn{X_1, \dots, X_n} and \eqn{Y_1, \dots, Y_m}, we use the following statistic for goodness-of-fit testing:
+\deqn{T_{X,Y}=\int_{[0, 1]^d}\|\hat{R}_{X,Y}[\hat{Q}_{X}(u)]-\hat{R}_{X,Y}[\hat{Q}_{Y}(u)]\|^2\,d\mu(u),} 
+where \eqn{\mu\sim U[0, 1]^d}. Evaluation of this integral is done through quasi-Monte-Carlo using Sobol sequence.
+}
+\seealso{
+\code{\link{otm.rank}} for optimal transport rank.
+}
 \keyword{htest,}
 \keyword{multivariate}

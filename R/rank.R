@@ -21,6 +21,7 @@
 #' @return a list containing the ranks of the data and the corresponding convex conjugate potential values.
 #' If \code{rank.algo = "geom"} or data points are presented in the queries,
 #' then the corresponding conjugate potentials will not be computed (\code{NA}s will be returned).
+#' @seealso \code{\link{otm.gof.test}} and \code{\link{otm.dep.test}} for statistical tests using optimal transport rank.
 #' @keywords multivariate
 #' @export
 otm.rank = function(object, query, scale = TRUE, rank.data = "uniform", rank.algo = "lp", ...) {
@@ -41,6 +42,7 @@ otm.rank = function(object, query, scale = TRUE, rank.data = "uniform", rank.alg
 #' If \code{rank.algo = "geom"} then the conjugate potentials will not be computed (\code{NA}s will be returned).
 #' @keywords internal
 #' @importFrom stats aggregate na.omit
+#' @export
 otm.rank.otm.2d = function(object, query, scale = TRUE, rank.data = "uniform", rank.algo = "lp", ...) {
   n = nrow(query)
   d = 2

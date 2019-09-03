@@ -33,5 +33,12 @@ the value of the  mutual independence test statistic.
 \description{
 \code{otm.dep.test} computes the 1D mutual independence test statistic using ranks defined through the semi-discrete optimal transport map.
 }
+\details{
+Given samples \eqn{(X_1, Y_1), \dots, (X_n, Y_n)}, we use the following statistic for test of independence:
+\deqn{T_n=\sum_{i=1}^n\|\hat{R}(X_i, Y_i)-\tilde{R}(X_i, Y_i)\|^2.}
+}
+\seealso{
+\code{\link{otm.rank}} for optimal transport rank.
+}
 \keyword{htest,}
 \keyword{multivariate}

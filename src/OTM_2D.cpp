@@ -1,7 +1,8 @@
 #include "utilities.h"
 using namespace Rcpp;
 
-void OTM2D(GEO::OptimalTransportMap2d &OTM, const arma::mat &X, double epsilon, int maxit, bool verbose) {
+void OTM2D(GEO::OptimalTransportMap2d &OTM, const arma::mat &X, const arma::vec* w, 
+           double epsilon, int maxit, bool verbose) {
   const int n = X.n_rows;
   const int d = 2;
   
@@ -21,6 +22,12 @@ void OTM2D(GEO::OptimalTransportMap2d &OTM, const arma::mat &X, double epsilon, 
   OTM.set_epsilon(epsilon);
   OTM.set_regularization(0.0);
   OTM.set_Newton(true);
+  if (w) {
+    Rcout << "wow" << std::endl;
+    for (int i = 0; i < n; i++) {
+      OTM.set_initial_weight(i, (*w)(i));
+    }
+  }
   
   OTM.optimize(maxit);
 }
@@ -56,7 +63,7 @@ List dualGraphs2D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
   
   // compute OTM
   GEO::OptimalTransportMap2d OTM(&unifMesh);
-  OTM2D(OTM, X, epsilon, maxit, verbose);
+  OTM2D(OTM, X, NULL, epsilon, maxit, verbose);
   
   // must save centroids before remesh
   arma::mat Centroid = getCentroids(OTM);
@@ -276,9 +283,9 @@ List gof2D(const arma::mat &X, const arma::mat &Y, const arma::mat &U, bool cent
   GEO::OptimalTransportMap2d OTMX(&unifMesh);
   GEO::OptimalTransportMap2d OTMY(&unifMesh);
   GEO::OptimalTransportMap2d OTMXY(&unifMesh);
-  OTM2D(OTMX, X, epsilon, maxit, verbose);
-  OTM2D(OTMY, Y, epsilon, maxit, verbose);
-  OTM2D(OTMXY, XY, epsilon, maxit, verbose);
+  OTM2D(OTMX, X, NULL, epsilon, maxit, verbose);
+  OTM2D(OTMY, Y, NULL, epsilon, maxit, verbose);
+  OTM2D(OTMXY, XY, NULL, epsilon, maxit, verbose);
   
   // get weights
   arma::vec wX = getWeights(OTMX);
@@ -345,7 +352,7 @@ arma::mat dep1D(const arma::mat &XY, bool center, double epsilon, int maxit, boo
   
   // compute OTMs
   GEO::OptimalTransportMap2d OTMXY(&unifMesh);
-  OTM2D(OTMXY, XY, epsilon, maxit, verbose);
+  OTM2D(OTMXY, XY, NULL, epsilon, maxit, verbose);
   
   // get elements from corresponding cells to help computing ranks
   arma::mat elemXY;

@@ -21,6 +21,7 @@ otm.potential = function(object, query, scale = TRUE, ...) {
 #' @param \dots additional arguments, currently without effect.
 #' @return a matrix containing the potentials of the queries.
 #' @keywords internal
+#' @export
 otm.potential.otm.2d = function(object, query, scale = TRUE, ...) {
   if (scale) {
     query = scale(query, object$Location, object$Scale)

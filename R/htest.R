@@ -11,7 +11,11 @@
 #' @param maxit max number of iterations before termination.
 #' @param verbose logical indicating whether to display optimization messages.
 #' @param na.rm logical indicating whether \code{NA} values should be stripped before the computation proceeds.
+#' @details Given samples \eqn{X_1, \dots, X_n} and \eqn{Y_1, \dots, Y_m}, we use the following statistic for goodness-of-fit testing:
+#' \deqn{T_{X,Y}=\int_{[0, 1]^d}\|\hat{R}_{X,Y}[\hat{Q}_{X}(u)]-\hat{R}_{X,Y}[\hat{Q}_{Y}(u)]\|^2\,d\mu(u),} 
+#' where \eqn{\mu\sim U[0, 1]^d}. Evaluation of this integral is done through quasi-Monte-Carlo using Sobol sequence.
 #' @return the value of the goodness-of-fit test statistic.
+#' @seealso \code{\link{otm.rank}} for optimal transport rank.
 #' @keywords htest, multivariate
 #' @importFrom randtoolbox sobol
 #' @export
@@ -95,7 +99,10 @@ otm.gof.test = function(X,
 #' @param maxit max number of iterations before termination.
 #' @param verbose logical indicating whether to display optimization messages.
 #' @param na.rm logical indicating whether \code{NA} values should be stripped before the computation proceeds.
+#' @details Given samples \eqn{(X_1, Y_1), \dots, (X_n, Y_n)}, we use the following statistic for test of independence:
+#' \deqn{T_n=\sum_{i=1}^n\|\hat{R}(X_i, Y_i)-\tilde{R}(X_i, Y_i)\|^2.} 
 #' @return the value of the  mutual independence test statistic.
+#' @seealso \code{\link{otm.rank}} for optimal transport rank.
 #' @keywords htest, multivariate
 #' @importFrom stats ecdf
 #' @export

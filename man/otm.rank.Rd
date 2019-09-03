@@ -41,4 +41,7 @@ or by finding the intersection of Laguerre cells that corresponds to the simplex
 Set \code{rank.algo} to \code{lp} to use the former and \code{geom} for the latter.
 Note the geometric method is slow and does not work for points lie outside the RDT, \code{lp} method will still be used if they are present.
 }
+\seealso{
+\code{\link{otm.gof.test}} and \code{\link{otm.dep.test}} for statistical tests using optimal transport rank.
+}
 \keyword{multivariate}

@@ -22,6 +22,7 @@ otm.depth = function(object, query, scale = TRUE, rank.data = "uniform", ...) {
 #' @param \dots additional arguments, currently without effect.
 #' @return a vector containing the depths of the data.
 #' @keywords internal
+#' @export
 otm.depth.otm.2d = function(object, query, scale = TRUE, rank.data = "uniform", ...) {
   ranks = otm.rank.otm.2d(object, query, scale = scale, rank.data = rank.data, rank.algo = "lp")$Rank
   otm.depth = depth.uniform(ranks)

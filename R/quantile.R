@@ -21,6 +21,7 @@ otm.quantile = function(object, query, scale = TRUE, ...) {
 #' @param \dots additional arguments, currently without effect.
 #' @return a list containing the quantiles of the queries, as well as the indices of the corresponding cells.
 #' @keywords internal
+#' @export
 otm.quantile.otm.2d = function(object, query, scale = TRUE, ...) {
   # scale the queries
   if (scale) {
