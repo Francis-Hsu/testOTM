@@ -31,6 +31,113 @@ unscaling.min.max = function(data, center, scale) {
   return(data)
 }
 
+#' Generate \eqn{m} Distinct Permutations of \eqn{n} Elements
+#' 
+#' \code{pc.perm} generates the first \eqn{m} distinct permutations of \eqn{n} elements with the Plain Changes, 
+#' a.k.a. Steinhaus-Johnson-Trotter, algorithm.
+#' @param n number of elements to permute.
+#' @param m number of permutations to generate.
+#' @return a \eqn{m} by \eqn{n} matrix of indices where each row represents a permutation. 
+#' Rows beyond the \eqn{n!}-th one will be filled with 0s.
+#' @keywords utilities
+#' @references Donald E. Knuth. \emph{The Art of Computer Programming: Combinatorial Algorithms, Part 1}. 1st. 
+#' Vol. 4A. Art of Computer Programming. Addison-Wesley Professional, 2011. Sec. 7.2.1.2. 
+#' isbn: 978-0-201-03804-0.
+#' @export
+pc.perm = function(n, m) {
+  if (n < 1 || m < 1 || (n + m) %% 1 != 0) {
+    stop("n and m must be integers greater than or equal to 1.")
+  }
+  
+  if (m > factorial(n)) {
+    warning(paste0(m, " exceeds the number of permutations of ", n, " elements."))
+  }
+  
+  # Storage for result
+  perm.indices = matrix(0, m, n)
+  perm.indices[1, ] = 1:n
+  
+  # P1: Initialize.
+  c = rep(0, n)
+  o = rep(1, n)
+  
+  # P3: Prepare for change.
+  i = 1
+  j = n
+  s = 0
+  
+  repeat {
+    if (i >= m) {
+      break
+    }
+    i = i + 1
+    
+    # P4: Ready to change?
+    q = c[j] + o[j]
+    
+    if (q < 0) {
+      # P7: Switch direction.
+      o[j] = -o[j]
+      j = j - 1
+      i = i - 1
+      next
+    } else if (q == j) {
+      # P6: Increase s.
+      if (j == 1) {
+        break
+      } else {
+        s = s + 1
+        
+        # P7: Switch direction.
+        o[j] = -o[j]
+        j = j - 1
+        i = i - 1
+        next
+      }
+    }
+    
+    # P5: Change.
+    perm.indices[i, ] = perm.indices[i - 1, ]
+    perm.indices[i, j - q + s] = perm.indices[i - 1, j - c[j] + s]
+    perm.indices[i, j - c[j] + s] = perm.indices[i - 1, j - q + s]
+    c[j] = q
+    
+    # Repeat P3
+    j = n
+    s = 0
+  }
+  
+  return(perm.indices)
+}
+
+#' Generate \eqn{m} Distinct Permutations of \eqn{n} Elements Randomly.
+#' 
+#' @keywords internal
+rand.perm = function(n, m) {
+  if (n < 1 || m < 1 || (n + m) %% 1 != 0) {
+    stop("n and m must be integers greater than or equal to 1.")
+  }
+  
+  if (m > factorial(n)) {
+    warning(paste0(m, " exceeds the number of permutations of ", n, " elements."))
+  }
+  
+  # Storage for result
+  perm.indices = matrix(0, m, n)
+  uniqueness = 1
+  for (i in 1:m) {
+    while(uniqueness != i + 1) {
+      perm.indices[i, ] = sample(1:n)
+      uniqueness = nrow(unique(perm.indices))
+      if (uniqueness == m) {
+        break
+      }
+    }
+  }
+  
+  return(perm.indices)
+}
+
 #' Helper for choosing vertices with the min/max l2 norm.
 #' 
 #' @keywords internal

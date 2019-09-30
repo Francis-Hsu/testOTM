@@ -23,7 +23,6 @@ void OTM2D(GEO::OptimalTransportMap2d &OTM, const arma::mat &X, const arma::vec*
   OTM.set_regularization(0.0);
   OTM.set_Newton(true);
   if (w) {
-    Rcout << "wow" << std::endl;
     for (int i = 0; i < n; i++) {
       OTM.set_initial_weight(i, (*w)(i));
     }

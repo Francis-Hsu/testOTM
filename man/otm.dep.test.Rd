@@ -2,10 +2,10 @@
 % Please edit documentation in R/htest.R
 \name{otm.dep.test}
 \alias{otm.dep.test}
-\title{1D Test of Independence}
+\title{1D (Permutation) Test of Independence}
 \usage{
-otm.dep.test(X, Y, scale = c(0, 1), rank.data = "uniform",
-  epsilon = 1e-06, maxit = 100, verbose = F, na.rm = F)
+otm.dep.test(X, Y, scale = c(0, 1), n.perm = 1,
+  rank.data = "uniform", epsilon = 1e-06, maxit = 100, verbose = F)
 }
 \arguments{
 \item{X}{input data vector.}
@@ -13,6 +13,8 @@ otm.dep.test(X, Y, scale = c(0, 1), rank.data = "uniform",
 \item{Y}{input data vector.}
 
 \item{scale}{a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.}
+
+\item{n.perm}{number of permutations used for computing \eqn{p}-value.}
 
 \item{rank.data}{choose the method for assigning ranks to the data points. 
 Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".}
@@ -23,22 +25,28 @@ Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".}
 
 \item{verbose}{logical indicating whether to display optimization messages.}
 
-\item{na.rm}{logical indicating whether \code{NA} values should be stripped before the computation proceeds.}
-
 \item{mc}{number of quasi-Monte-Carlo samples used to evaluate the test statistic.}
 }
 \value{
-the value of the  mutual independence test statistic.
+a list, which contains the values of the independence test statistics,
+together with the \eqn{p}-value computed based on that sample.
 }
 \description{
-\code{otm.dep.test} computes the 1D mutual independence test statistic using ranks defined through the semi-discrete optimal transport map.
+\code{otm.dep.test} computes the 1D mutual independence test statistic using ranks defined through 
+the semi-discrete optimal transport map.
 }
 \details{
-Given samples \eqn{(X_1, Y_1), \dots, (X_n, Y_n)}, we use the following statistic for test of independence:
-\deqn{T_n=\sum_{i=1}^n\|\hat{R}(X_i, Y_i)-\tilde{R}(X_i, Y_i)\|^2.}
+\code{otm.dep.test} tests the null hypothesis that \eqn{X} and \eqn{Y} are independent. 
+The \eqn{p}-value are computed through permuatation. For very samll samlple (size less than \eqn{8}), 
+all possible permutations are generated (assuming a suitable \code{n.perm} is provided). 
+For larger sample size Monte Carlo permutation sampling is used to approximate the \eqn{p}-value.
+
+Given samples \eqn{(X_1, Y_1), \dots, (X_n, Y_n)}, the following statistic is used for test of independence:
+\deqn{T_n=\sum_{i=1}^n\|\hat{R}(X_i, Y_i)-\tilde{R}(X_i, Y_i)\|^2.} 
+This statistics will converge to \eqn{0} under the null hypothesis.
 }
 \seealso{
-\code{\link{otm.rank}} for optimal transport rank.
+\code{\link{otm.rank}} for semi-discrete optimal transport rank.
 }
 \keyword{htest,}
 \keyword{multivariate}
