@@ -2,7 +2,7 @@
 % Please edit documentation in R/utilities.R
 \name{scaling.min.max}
 \alias{scaling.min.max}
-\title{Min-max scaling}
+\title{Min-Max scaling}
 \usage{
 scaling.min.max(data, min = 0, max = 1)
 }

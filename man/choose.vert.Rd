@@ -2,11 +2,11 @@
 % Please edit documentation in R/utilities.R
 \name{choose.vert}
 \alias{choose.vert}
-\title{Helper for choosing vertices with the min/max l2 norm.}
+\title{Helper for Choosing Vertices with the Min/Max \eqn{l_2} Norm.}
 \usage{
 choose.vert(V, type = 1)
 }
 \description{
-Helper for choosing vertices with the min/max l2 norm.
+Helper for Choosing Vertices with the Min/Max \eqn{l_2} Norm.
 }
 \keyword{internal}

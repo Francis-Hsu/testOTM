@@ -1,4 +1,4 @@
-#' Min-max scaling
+#' Min-Max scaling
 #'
 #' \code{scaling.min.max} rescales the range of a data set to [min, max].
 #' @param data a numeric matrix for the input data.
@@ -138,7 +138,7 @@ rand.perm = function(n, m) {
   return(perm.indices)
 }
 
-#' Helper for choosing vertices with the min/max l2 norm.
+#' Helper for Choosing Vertices with the Min/Max \eqn{l_2} Norm.
 #' 
 #' @keywords internal
 choose.vert = function(V, type = 1) {
@@ -151,7 +151,7 @@ choose.vert = function(V, type = 1) {
   }
 }
 
-#' Helper for uniform sampling over convex polygons
+#' Helper for Uniform Sampling over Convex Polygons
 #' 
 #' @keywords internal
 uniform.rank = function(V) {
@@ -184,4 +184,47 @@ uniform.rank = function(V) {
   }
   
   return(unif.rank)
+}
+
+#' Helper for Assigning Ranks for Goodness-of-fit Test
+#' 
+#' @keywords internal
+gof.assign.rank = function(elem, rank.id) {
+  if (rank.id == 0) {
+    r = elem
+  } else if (rank.id == 3) {
+    r = lapply(split(elem[, -1], elem[, 1]), matrix, ncol = 2)
+    r = testOTM:::uniform.rank(r)
+  } else {
+    r = lapply(split(elem[, -1], elem[, 1]), matrix, ncol = 2)
+    r = t(sapply(rank, choose.vert, type = rank.id))
+  }
+  
+  return(r)
+}
+
+#' Helper for Assigning Ranks for Test of Independence
+#' 
+#' @keywords internal
+dep.assign.rank = function(XY, elem, rank.id) {
+  N = NROW(XY)
+  rank.x = rank(XY[, 1])
+  rank.y = rank(XY[, 2])
+  
+  # rh is the joint rank, rt is the usual rank
+  if (rank.id == 0) {
+    rh = elem
+    rt = cbind((2 * rank.x - 1) / (2 * N), (2 * rank.y - 1) / (2 * N))
+  } else if (rank.id == 3) {
+    rh = uniform.rank(lapply(split(elem[, -1], elem[, 1]), matrix, ncol = 2))
+    rt = cbind(runif(N, min = rank.x - 1, max = rank.x) / N, 
+               runif(N, min = rank.y - 1, max = rank.y) / N)
+  } else {
+    rh = lapply(split(elem[, -1], elem[, 1]), matrix, ncol = 2)
+    rh = t(sapply(rh, choose.vert, type = rank.id))
+    rt = cbind((rank.x - (rank.id == 2)) / N, 
+               (rank.y - (rank.id == 2)) / N)
+  }
+  
+  return(list(h = rh, t = rt))
 }

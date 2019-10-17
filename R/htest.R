@@ -22,12 +22,18 @@
 otm.gof.test = function(X,
                         Y,
                         mc = 10000,
+                        n.perm = 0,
                         scale = c(0, 1),
                         rank.data = "uniform",
                         epsilon = 1e-6,
                         maxit = 100,
                         verbose = F,
                         na.rm = F) {
+  # get number of elements
+  NX = NROW(X)
+  NY = NROW(Y)
+  N = NX + NY
+  
   # validate inputs
   if (!is.matrix(X) || !is.matrix(Y) || ncol(X) < 2 || ncol(Y) < 2) {
     stop("Input data must be matrices with more than 2 columns.")
@@ -37,6 +43,31 @@ otm.gof.test = function(X,
     stop("Mismatch in dimensions of the input data.")
   }
   
+  if (NX < 3 || NY < 3) {
+    stop("Input data should contain more than two samples.")
+  }
+  
+  if (n.perm < 0 || n.perm %% 1 != 0) {
+    stop("n.perm must be an integera greater than or equal to 0.")
+  }
+  
+  if (n.perm != 0 && n.perm < 500) {
+    warning("n.perm is relatively small. The permutation p-value may not be reliable.")
+  }
+  
+  if (!is.null(scale)) {
+    if (scale[1] < 0 || scale[2] > 1) {
+      stop("Scaling range must be within [0, 1].")
+    }
+  }
+  
+  if (na.rm) {
+    X = X[complete.cases(X), ]
+    Y = Y[complete.cases(Y), ]
+    NX = NROW(X)
+    NY = NROW(Y)
+  }
+  
   rank.id = switch(rank.data,
                    center = 0,
                    max = 1,
@@ -44,46 +75,82 @@ otm.gof.test = function(X,
                    uniform = 3,
                    stop("Unknown method of rank mapping!"))
   
-  if (!is.null(scale)) {
-    if (scale[1] < 0 || scale[2] > 1) {
-      stop("Scaling range must be within [0, 1].")
+  # scale X and Y together
+  XY = scaling.min.max(rbind(X, Y), scale[1], scale[2])
+  
+  # generate quasi-MC sequence
+  d = NCOL(XY)
+  U = sobol(mc, d)
+  
+  # for small sample size we use all possible permutations, 
+  # otherwise we generate distinct random permutations for moderate sample size
+  # for large sample size it's nigh impossible to see collision
+  if (n.perm != 0) {
+    # check if n.perm too large
+    if (n.perm > factorial(N) - 1) {
+      n.perm = factorial(N) - 1
+      warning("n.perm exceeds maximal number of permutations.")
     }
     
-    # scale X and Y together
-    tempXY = rbind(X, Y)
-    tempXY = scaling.min.max(tempXY, scale[1], scale[2])
-    X = tempXY[1:NROW(X), ]
-    Y = tempXY[1:NROW(Y) + NROW(X), ]
+    if (N < 8) {
+      perm.mat = pc.perm(N, n.perm + 1)[-1, ] # first row is the original order
+    } else if (N <= 100) {
+      perm.mat = rand.perm(N, n.perm)
+    }
   }
   
-  if (na.rm) {
-    X = X[complete.cases(X), ]
-    Y = Y[complete.cases(Y), ]
+  # storage for test statistics
+  gof.stats = rep(0, n.perm + 1)
+  
+  # compute the first joint RVD
+  gof.elem = jointRankHelper2D(XY, rank.id == 0, epsilon, maxit, verbose)
+  
+  # first test statistic (for the original samples)
+  gof.rank = gof.assign.rank(gof.elem, rank.id)
+  gof.list = gof2DHelper(XY[1:NX, ], XY[(NX + 1):(NX + NY), ], U, epsilon, maxit, verbose)
+  gof.stats[1] = mean(rowSums((gof.rank[gof.list$U_Map_X, ] - gof.rank[gof.list$U_Map_Y + NX, ])^2))
+  
+  # compute the permutation test statistics
+  if (n.perm != 0) {
+    for (i in 1:n.perm) {
+      # get permutation id
+      if (N > 100) {
+        perm.id = sample(1:N)
+      } else {
+        perm.id = perm.mat[i, ]
+      }
+      
+      # permute the input
+      tempXY = XY[perm.id, ]
+      tempX = tempXY[1:NX, ]
+      tempY = tempXY[-(1:NX), ]
+      
+      # compute permutation RVD
+      if (rank.id == 0) {
+        gof.elem.perm = gof.elem[perm.id, ]
+      } else {
+        # get the inverse permutation
+        perm.inv = perm.id
+        perm.inv[perm.inv] = seq_along(perm.inv)
+        
+        # map the RVD id to right order
+        gof.elem.perm = gof.elem
+        gof.elem.perm[, 1] = perm.inv[gof.elem[, 1]]
+      }
+      
+      # compute the quantiles of quasi-MC
+      gof.list = gof2DHelper(tempX, tempY, U, epsilon, maxit, verbose)
+      
+      # assign ranks
+      gof.rank = gof.assign.rank(gof.elem.perm, rank.id)
+      
+      # compute the test statistic
+      gof.stats[i + 1] = mean(rowSums((gof.rank[gof.list$U_Map_X, ] - gof.rank[gof.list$U_Map_Y + NX, ])^2))
+    }
   }
-  XY = rbind(X, Y)
   
-  # compute quantiles
-  d = ncol(X)
-  U = sobol(mc, d)
-  if (d == 2) {
-    gof.list = gof2D(X, Y, U, rank.id == 0, epsilon, maxit, verbose)
-  }
-  
-  # assign ranks
-  if (rank.id == 0) {
-    gof.rank = gof.list$Elem_XY
-  } else if (rank.id == 3) {
-    gof.rank = lapply(split(gof.list$Elem_XY[, -1], gof.list$Elem_XY[, 1]), matrix, ncol = 2)
-    gof.rank = uniform.rank(gof.rank)
-  } else {
-    gof.rank = lapply(split(gof.list$Elem_XY[, -1], gof.list$Elem_XY[, 1]), matrix, ncol = 2)
-    gof.rank = t(sapply(gof.rank, choose.vert, type = rank.id))
-  }
-  
-  # compute the test statistic
-  gof.stat = mean(rowSums((gof.rank[gof.list$U_Map_X, ] - gof.rank[gof.list$U_Map_Y + nrow(X), ])^2))
-  
-  return(gof.stat)
+  return(list(perm.stats = gof.stats,
+              p.value = ifelse(n.perm == 0, NA, (1 + sum(gof.stats[-1] >= gof.stats[1])) / (1 + n.perm))))
 }
 
 #' 1D (Permutation) Test of Independence
@@ -116,42 +183,42 @@ otm.gof.test = function(X,
 #' @export
 otm.dep.test = function(X,
                         Y,
+                        n.perm = 0,
                         scale = c(0, 1),
-                        n.perm = 1,
                         rank.data = "uniform",
                         epsilon = 1e-6,
                         maxit = 100,
                         verbose = F) {
+  # get number of elements
+  NX = NROW(X)
+  NY = NROW(Y)
+  
   # validate inputs
   if (NCOL(X) != 1 || NCOL(Y) != 1) {
     stop("Input data must be vectors or 1D matrices.")
   }
   
-  if (NROW(X) == 1 || NROW(Y) == 1) {
-    stop("Input data contains only one sample.")
+  if (NX < 3 || NY < 3) {
+    stop("Input data should contain more than two samples.")
   }
   
-  if (length(X) != length(Y)) {
+  if (NX != NY) {
     stop("Mismatch in lengths of the input data.")
   }
+  N = NX
   
   if (!is.null(scale)) {
     if (scale[1] < 0 || scale[2] > 1) {
       stop("Scaling range must be within [0, 1].")
     }
-    
-    # scale X and Y together
-    tempXY = cbind(X, Y)
-    tempXY = scaling.min.max(tempXY, scale[1], scale[2])
-  }
-  N = nrow(tempXY)
-  
-  if (n.perm < 1) {
-    stop("n.perm must be an integera greater than or equal to 1.")
   }
   
-  if (n.perm < 499) {
-    warning("n.perm is relatively small. The p-value given may not be reliable.")
+  if (n.perm < 0 || n.perm %% 1 != 0) {
+    stop("n.perm must be an integera greater than or equal to 0.")
+  }
+  
+  if (n.perm != 0 && n.perm < 500) {
+    warning("n.perm is relatively small. The permutation p-value may not be reliable.")
   }
   
   # switch method for rank mapping
@@ -162,60 +229,60 @@ otm.dep.test = function(X,
                    uniform = 3,
                    stop("Unknown method of rank mapping!"))
   
-  # for small sample size we use all possible permutations
-  # otherwise we generate distinct random permutations
-  if (2 * N < 8) {
-    n.perm = min(n.perm, factorial(N))
-    perm.mat = pc.perm(2 * N, n.perm)
-  } else {
-    perm.mat = rand.perm(2 * N, n.perm)
-  }
-  
-  # permute and rescale the data
-  # the first one is always the original
-  XY = vector("list", n.perm)
-  XY[[1]] = tempXY
-  if (n.perm > 1) {
-    if (is.null(scale)) {
-      scale = range(X, Y)
+  # for small sample size we use all possible permutations, 
+  # otherwise we generate distinct random permutations for moderate sample size
+  # for large sample size it's nigh impossible to see collision
+  if (n.perm != 0) {
+    # check if n.perm too large
+    if (n.perm > factorial(N) - 1) {
+      n.perm = factorial(N) - 1
+      warning("n.perm exceeds maximal number of permutations.")
     }
     
-    for (i in 2:n.perm) {
-      tempXY = matrix(c(X, Y)[perm.mat[i, ]], N)
-      tempXY = scaling.min.max(tempXY, scale[1], scale[2])
-      XY[[i]] = tempXY
+    if (2 * N < 8) {
+      perm.mat = pc.perm(2 * N, n.perm + 1)[-1, ] # first row is the original order
+    } else if (N <= 50) {
+      perm.mat = rand.perm(2 * N, n.perm)
     }
   }
   
-  # compute quantiles
-  # d = ifelse(is.vector(X) && is.vector(Y), 1, max(ncol(X), ncol(Y)))
-  dep.stat = rep(0, n.perm)
-  for (i in 1:n.perm) {
-    dep.elem = dep1D(XY[[i]], rank.id == 0, epsilon, maxit, verbose)
-    
-    # assign ranks
-    rpX = rank(XY[[i]][, 1])
-    rpY = rank(XY[[i]][, 2])
-    if (rank.id == 0) {
-      dep.rank.hat = dep.elem
-      dep.rank.tilde = cbind((2 * rpX - 1) / (2 * N), 
-                             (2 * rpY - 1) / (2 * N))
-    } else if (rank.id == 3) {
-      dep.rank.hat = lapply(split(dep.elem[, -1], dep.elem[, 1]), matrix, ncol = 2)
-      dep.rank.hat = uniform.rank(dep.rank.hat)
-      dep.rank.tilde = cbind(runif(N, min = rpX - 1, max = rpX) / N, 
-                             runif(N, min = rpY - 1, max = rpY) / N)
-    } else {
-      dep.rank.hat = lapply(split(dep.elem[, -1], dep.elem[, 1]), matrix, ncol = 2)
-      dep.rank.hat = t(sapply(dep.rank.hat, choose.vert, type = rank.id))
-      dep.rank.tilde = cbind((rpX - (rank.id == 2)) / N,
-                             (rpY - (rank.id == 2)) / N)
+  # scale X and Y
+  tempXY = matrix(scaling.min.max(c(X, Y), scale[1], scale[2]), N)
+  sX = tempXY[, 1]
+  sY = tempXY[, 2]
+  
+  # storage for test statistics
+  dep.stats = rep(0, n.perm + 1)
+  
+  # first test statistic (for the original samples)
+  dep.elem = jointRankHelper2D(tempXY, rank.id == 0, epsilon, maxit, verbose)
+  dep.rank = dep.assign.rank(tempXY, dep.elem, rank.id)
+  dep.stats[1] = mean(rowSums((dep.rank$h - dep.rank$t)^2))
+  
+  # permute the data and compute statistics
+  if (n.perm != 0) {
+    for (i in 1:n.perm) {
+      # get permutation id
+      if (N > 50) {
+        perm.id = sample(1:(2 * N))
+      } else {
+        perm.id = perm.mat[i, ]
+      }
+      
+      # permute the input
+      tempXY = matrix(c(sX, sY)[perm.id], N)
+      
+      # compute permutation RVD
+      dep.elem = jointRankHelper2D(tempXY, rank.id == 0, epsilon, maxit, verbose)
+      
+      # assign ranks
+      dep.rank = dep.assign.rank(tempXY, dep.elem, rank.id)
+      
+      # compute the test statistic
+      dep.stats[i + 1] = mean(rowSums((dep.rank$h - dep.rank$t)^2))
     }
-    
-    # compute the test statistic
-    dep.stat[i] = mean(rowSums((dep.rank.hat - dep.rank.tilde)^2))
   }
   
-  return(list(perm.stat = dep.stat,
-              p.value = (1 + sum(dep.stat[-1] >= dep.stat[1])) / (1 + n.perm)))
+  return(list(perm.stats = dep.stats,
+              p.value = ifelse(n.perm == 0, NA, (1 + sum(dep.stats[-1] >= dep.stats[1])) / (1 + n.perm))))
 }

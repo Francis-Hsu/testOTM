@@ -1,12 +1,12 @@
 Package: testOTM
 Type: Package
 Title: Multivariate Ranks and Quantiles by Optimal Transport
-Version: 0.08
-Date: 2019-08-03
+Version: 0.09
+Date: 2019-10-17
 Authors@R: person(given = "Peng", family = "Xu", role = c("aut", "cre"), email = "px2132@columbia.edu")
 Author: Peng Xu <px2132@columbia.edu> [aut, cre]
 Maintainer: Peng Xu <px2132@columbia.edu>
-Description: This package implements the multivariate ranks and quantiles, together with their application in statistical testing, that based on the semi-discrete optimal transportation. The underlying geometric computation is performed by the Geogram library.
+Description: testOTM is a package that implements the multivariate ranks and quantiles, together with their application in statistical testing, based on the semi-discrete optimal transportation. The underlying geometric computation is performed by the Geogram library.
 License: BSD_3_clause + file LICENSE
 URL: https://github.com/Francis-Hsu/testOTM
 BugReports: https://github.com/Francis-Hsu/testOTM/issues

@@ -4,7 +4,7 @@
 \alias{otm.dep.test}
 \title{1D (Permutation) Test of Independence}
 \usage{
-otm.dep.test(X, Y, scale = c(0, 1), n.perm = 1,
+otm.dep.test(X, Y, n.perm = 0, scale = c(0, 1),
   rank.data = "uniform", epsilon = 1e-06, maxit = 100, verbose = F)
 }
 \arguments{
@@ -12,9 +12,9 @@ otm.dep.test(X, Y, scale = c(0, 1), n.perm = 1,
 
 \item{Y}{input data vector.}
 
-\item{scale}{a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.}
-
 \item{n.perm}{number of permutations used for computing \eqn{p}-value.}
+
+\item{scale}{a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.}
 
 \item{rank.data}{choose the method for assigning ranks to the data points. 
 Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".}

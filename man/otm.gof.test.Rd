@@ -4,7 +4,7 @@
 \alias{otm.gof.test}
 \title{2D Goodness-of-fit Test}
 \usage{
-otm.gof.test(X, Y, mc = 10000, scale = c(0, 1),
+otm.gof.test(X, Y, mc = 10000, n.perm = 0, scale = c(0, 1),
   rank.data = "uniform", epsilon = 1e-06, maxit = 100, verbose = F,
   na.rm = F)
 }

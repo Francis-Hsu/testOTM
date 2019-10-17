@@ -246,20 +246,19 @@ arma::ivec locateRDT2D(const arma::mat &Q, const arma::mat &V) {
 
 //' 2D Goodness-of-fit Test Helper
 //' 
-//' Compute the quantiles of U with respect to X and Y, as well as the optimal transport map of the combined data.
+//' Compute the SDOT quantiles of quasi-MC sequence \eqn{U} with respect to \eqn{X} and \eqn{Y}.
 //' @param X input data matrix.
 //' @param Y input data matrix.
 //' @param U sequence used to evaluate the integral.
-//' @param center logical indicating if the centroids should be computed.
 //' @param epsilon convergence threshold for optimization.
 //' @param maxit max number of iterations before termination.
 //' @param verbose logical indicating wether to display optimization messages.
-//' @return a list, which contains the quantile indices, and the vertices of the combined optimal transport map.
+//' @return a list containing the quantile indices for \eqn{X} and \eqn{Y}.
 //' @keywords internal
 // [[Rcpp::export]]
-List gof2D(const arma::mat &X, const arma::mat &Y, const arma::mat &U, bool center, double epsilon, int maxit, bool verbose) {
+List gof2DHelper(const arma::mat &X, const arma::mat &Y, const arma::mat &U, 
+                 double epsilon, int maxit, bool verbose) {
   const int d = 2;
-  const arma::mat XY = arma::join_cols(X, Y);
   
   // initialize the Geogram library.
   initializeGeogram();
@@ -281,10 +280,8 @@ List gof2D(const arma::mat &X, const arma::mat &Y, const arma::mat &U, bool cent
   // compute OTMs
   GEO::OptimalTransportMap2d OTMX(&unifMesh);
   GEO::OptimalTransportMap2d OTMY(&unifMesh);
-  GEO::OptimalTransportMap2d OTMXY(&unifMesh);
   OTM2D(OTMX, X, NULL, epsilon, maxit, verbose);
   OTM2D(OTMY, Y, NULL, epsilon, maxit, verbose);
-  OTM2D(OTMXY, XY, NULL, epsilon, maxit, verbose);
   
   // get weights
   arma::vec wX = getWeights(OTMX);
@@ -294,42 +291,26 @@ List gof2D(const arma::mat &X, const arma::mat &Y, const arma::mat &U, bool cent
   arma::ivec uX = locateRVD2D(U, X, wX);
   arma::ivec uY = locateRVD2D(U, Y, wY);
   
-  // get elements from corresponding cells to help computing ranks
-  arma::mat elemXY;
-  if (center) {
-    elemXY = getCentroids(OTMXY);
-  } else {
-    // create a squared uniform mesh
-    unifMesh.clear();
-    unifMesh.vertices.create_vertices(cubeVertices.n_rows);
-    setMeshPoint(unifMesh, cubeVertices);
-    unifMesh.facets.create_quad(0, 2, 3, 1);
-    
-    // get Voronoi cells
-    elemXY = getVertices(unifMesh, OTMXY);
-  }
-  
   // collect objects to return
   List lst;
   lst["U_Map_X"] = uX;
   lst["U_Map_Y"] = uY;
-  lst["Elem_XY"] = elemXY;
   
   return lst;
 }
 
-//' 1D Test of Independece Helper
+//' 2D Joint Samples Rank Helper
 //' 
-//' Compute the quantiles of U with respect to (X, Y).
-//' @param XY input data matrix.
+//' Helps computing the Empirical Rank for 2D Joint Samples \eqn{(X, Y)}.
+//' @param XY 2D input data matrix.
 //' @param center logical indicating if the centroids should be computed.
 //' @param epsilon convergence threshold for optimization.
 //' @param maxit max number of iterations before termination.
 //' @param verbose logical indicating wether to display optimization messages.
-//' @return a matrix, represents either the centroid or the cells of the combined optimal transport map.
+//' @return a matrix, represents either the centroids/cells of the RVD of joint samples.
 //' @keywords internal
 // [[Rcpp::export]]
-arma::mat dep1D(const arma::mat &XY, bool center, double epsilon, int maxit, bool verbose) {
+arma::mat jointRankHelper2D(const arma::mat &XY, bool center, double epsilon, int maxit, bool verbose) {
   const int d = 2;
   
   // initialize the Geogram library.

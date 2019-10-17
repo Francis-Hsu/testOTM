@@ -7,7 +7,7 @@
 \alias{testOTM-package}
 \title{testOTM: Multivariate Ranks and Quantiles by Optimal Transport}
 \description{
-This package implements the multivariate ranks and quantiles, together with their application in statistical testing, that based on the semi-discrete optimal transportation. The underlying geometric computation is performed by the Geogram library.
+testOTM is a package that implements the multivariate ranks and quantiles, together with their application in statistical testing, based on the semi-discrete optimal transportation. The underlying geometric computation is performed by the Geogram library.
 }
 \references{
 \itemize{

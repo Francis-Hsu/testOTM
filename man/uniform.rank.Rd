@@ -2,11 +2,11 @@
 % Please edit documentation in R/utilities.R
 \name{uniform.rank}
 \alias{uniform.rank}
-\title{Helper for uniform sampling over convex polygons}
+\title{Helper for Uniform Sampling over Convex Polygons}
 \usage{
 uniform.rank(V)
 }
 \description{
-Helper for uniform sampling over convex polygons
+Helper for Uniform Sampling over Convex Polygons
 }
 \keyword{internal}

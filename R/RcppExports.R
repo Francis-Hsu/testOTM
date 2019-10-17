@@ -42,31 +42,30 @@ locateRDT2D <- function(Q, V) {
 
 #' 2D Goodness-of-fit Test Helper
 #' 
-#' Compute the quantiles of U with respect to X and Y, as well as the optimal transport map of the combined data.
+#' Compute the SDOT quantiles of quasi-MC sequence \eqn{U} with respect to \eqn{X} and \eqn{Y}.
 #' @param X input data matrix.
 #' @param Y input data matrix.
 #' @param U sequence used to evaluate the integral.
-#' @param center logical indicating if the centroids should be computed.
 #' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.
 #' @param verbose logical indicating wether to display optimization messages.
-#' @return a list, which contains the quantile indices, and the vertices of the combined optimal transport map.
+#' @return a list containing the quantile indices for \eqn{X} and \eqn{Y}.
 #' @keywords internal
-gof2D <- function(X, Y, U, center, epsilon, maxit, verbose) {
-    .Call('_testOTM_gof2D', PACKAGE = 'testOTM', X, Y, U, center, epsilon, maxit, verbose)
+gof2DHelper <- function(X, Y, U, epsilon, maxit, verbose) {
+    .Call('_testOTM_gof2DHelper', PACKAGE = 'testOTM', X, Y, U, epsilon, maxit, verbose)
 }
 
-#' 1D Test of Independece Helper
+#' 2D Joint Samples Rank Helper
 #' 
-#' Compute the quantiles of U with respect to (X, Y).
-#' @param XY input data matrix.
+#' Helps computing the Empirical Rank for 2D Joint Samples \eqn{(X, Y)}.
+#' @param XY 2D input data matrix.
 #' @param center logical indicating if the centroids should be computed.
 #' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.
 #' @param verbose logical indicating wether to display optimization messages.
-#' @return a matrix, represents either the centroid or the cells of the combined optimal transport map.
+#' @return a matrix, represents either the centroids/cells of the RVD of joint samples.
 #' @keywords internal
-dep1D <- function(XY, center, epsilon, maxit, verbose) {
-    .Call('_testOTM_dep1D', PACKAGE = 'testOTM', XY, center, epsilon, maxit, verbose)
+jointRankHelper2D <- function(XY, center, epsilon, maxit, verbose) {
+    .Call('_testOTM_jointRankHelper2D', PACKAGE = 'testOTM', XY, center, epsilon, maxit, verbose)
 }
 

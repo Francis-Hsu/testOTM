@@ -29,7 +29,7 @@ You can install the development version from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("Francis-Hsu/testOTM")
+# devtools::install_github("Francis-Hsu/testOTM")
 ```
 
 ## Example
