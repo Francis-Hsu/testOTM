@@ -1,6 +1,6 @@
 #' Uniform Semi-discrete Optimal Transport Map
 #'
-#' \code{otm.fit} computes the semi-discrete optimal transport map from the \eqn{U[0, 1]^d} measure to the input data set.
+#' \code{tos.fit} computes the semi-discrete optimal transport map from the \eqn{U[0, 1]^d} measure to the input data set.
 #' @param data a numeric matrix for the input data, of size \eqn{n} by \eqn{d}.
 #' @param scale a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.
 #' @param na.rm logical indicating whether \code{NA} values should be stripped before the computation proceeds.
@@ -10,12 +10,12 @@
 #' @details Input data needs be scaled within the [0, 1] range for computation. 
 #' Supply \code{scale} to let the function handles the scaling internally.
 #' Locations and scales will be returned to help transforming the results back to their original range.
-#' @return \code{otm.fit} returns an object of class "\code{otm.2d}" or "\code{otm.3d}", depending on the dimesion of input data.
-#' An object of class "\code{otm}" is a list describing the resulting optimal transport map.
+#' @return \code{tos.fit} returns an object of class "\code{tos.2d}" or "\code{tos.3d}", depending on the dimesion of input data.
+#' An object of class "\code{tos}" is a list describing the resulting optimal transport map.
 #' @keywords optimize, graphs
 #' @importFrom stats complete.cases
 #' @export
-otm.fit = function(data,
+tos.fit = function(data,
                    scale = c(0.05, 0.95),
                    na.rm = F,
                    epsilon = 1e-6,
@@ -49,7 +49,7 @@ otm.fit = function(data,
   d = ncol(data)
   if (d == 2) {
     object = dualGraphs2D(data, epsilon, maxit, verbose)
-    class(object) = "otm.2d"
+    class(object) = "tos.2d"
     colnames(object$Centroid) = c("x", "y")
     colnames(object$Vertex.RDT) = c("cell", "x", "y", "id")
     colnames(object$Vertex.RVD) = c("cell", "x", "y")
@@ -75,7 +75,7 @@ otm.fit = function(data,
 #'
 #' Plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
 #' 2D semi-discrete optimal transport map.
-#' @param x a fitted \code{otm.2d} object.
+#' @param x a fitted \code{tos.2d} object.
 #' @param which specify which graph(s) to plot. Can be "\code{RVD}", "\code{RDT}", or "\code{Both}".
 #' @param col.data color of the data points.
 #' @param col.center color of the Voronoi centroids.
@@ -92,7 +92,7 @@ otm.fit = function(data,
 #' @keywords hplot
 #' @importFrom graphics plot.default segments points
 #' @export
-plot.otm.2d = function(x,
+plot.tos.2d = function(x,
                        which = "Both",
                        col.data = "cornflowerblue",
                        col.center = "firebrick",

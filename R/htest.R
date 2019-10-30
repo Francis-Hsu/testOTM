@@ -1,6 +1,6 @@
 #' 2D Goodness-of-fit Test
 #' 
-#' \code{otm.gof.test} computes the 2D goodness-of-test statistic using ranks defined through the semi-discrete optimal transport map.
+#' \code{tos.gof.test} computes the 2D goodness-of-test statistic using ranks defined through the semi-discrete optimal transport map.
 #' @param X input data matrix, of size \eqn{n} by \eqn{2}.
 #' @param Y input data matrix, of size \eqn{m} by \eqn{2}.
 #' @param mc number of quasi-Monte-Carlo samples used to evaluate the test statistic.
@@ -15,11 +15,11 @@
 #' \deqn{T_{X,Y}=\int_{[0, 1]^d}\|\hat{R}_{X,Y}[\hat{Q}_{X}(u)]-\hat{R}_{X,Y}[\hat{Q}_{Y}(u)]\|^2\,d\mu(u),} 
 #' where \eqn{\mu\sim U[0, 1]^d}. Evaluation of this integral is done through quasi-Monte-Carlo using Sobol sequence.
 #' @return the value of the goodness-of-fit test statistic.
-#' @seealso \code{\link{otm.rank}} for optimal transport rank.
+#' @seealso \code{\link{tos.rank}} for optimal transport rank.
 #' @keywords htest, multivariate
 #' @importFrom randtoolbox sobol
 #' @export
-otm.gof.test = function(X,
+tos.gof.test = function(X,
                         Y,
                         mc = 10000,
                         n.perm = 0,
@@ -133,7 +133,8 @@ otm.gof.test = function(X,
         perm.inv = perm.id
         perm.inv[perm.inv] = seq_along(perm.inv)
         
-        # map the RVD id to right order
+        # the index column of the RVD needs to be mapped to the post-permutation order
+        # which can be achieved by expanding the inverse permutation indices
         gof.elem.perm = gof.elem
         gof.elem.perm[, 1] = perm.inv[gof.elem[, 1]]
       }
@@ -155,7 +156,7 @@ otm.gof.test = function(X,
 
 #' 1D (Permutation) Test of Independence
 #' 
-#' \code{otm.dep.test} computes the 1D mutual independence test statistic using ranks defined through 
+#' \code{tos.dep.test} computes the 1D mutual independence test statistic using ranks defined through 
 #' the semi-discrete optimal transport map.
 #' @param X input data vector.
 #' @param Y input data vector.
@@ -167,21 +168,21 @@ otm.gof.test = function(X,
 #' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.
 #' @param verbose logical indicating whether to display optimization messages.
-#' @details \code{otm.dep.test} tests the null hypothesis that \eqn{X} and \eqn{Y} are independent. 
-#' The \eqn{p}-value are computed through permuatation. For very samll samlple (size less than \eqn{8}), 
+#' @details \code{tos.dep.test} tests the null hypothesis that \eqn{X} and \eqn{Y} are independent. 
+#' The \eqn{p}-value is computed through permuatation. For a very samll samlple (size less than \eqn{8}), 
 #' all possible permutations are generated (assuming a suitable \code{n.perm} is provided). 
-#' For larger sample size Monte Carlo permutation sampling is used to approximate the \eqn{p}-value.
+#' For larger sample size Monte Carlo permutation sampling is used to approximate the permuatation \eqn{p}-value.
 #' 
 #' Given samples \eqn{(X_1, Y_1), \dots, (X_n, Y_n)}, the following statistic is used for test of independence:
 #' \deqn{T_n=\sum_{i=1}^n\|\hat{R}(X_i, Y_i)-\tilde{R}(X_i, Y_i)\|^2.} 
-#' This statistics will converge to \eqn{0} under the null hypothesis.
+#' This statistics will converge to \eqn{0} under the null hypothesis. We thus reject the null if \eqn{T_n} is too large.
 #' @return a list, which contains the values of the independence test statistics,
 #' together with the \eqn{p}-value computed based on that sample.
-#' @seealso \code{\link{otm.rank}} for semi-discrete optimal transport rank.
+#' @seealso \code{\link{tos.rank}} for semi-discrete optimal transport rank.
 #' @keywords htest, multivariate
 #' @importFrom stats ecdf
 #' @export
-otm.dep.test = function(X,
+tos.dep.test = function(X,
                         Y,
                         n.perm = 0,
                         scale = c(0, 1),

@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{locateRDT2D}
 \alias{locateRDT2D}
-\title{Locate within a 2D RDT}
+\title{Locate Points within a 2D RDT}
 \usage{
 locateRDT2D(Q, V)
 }

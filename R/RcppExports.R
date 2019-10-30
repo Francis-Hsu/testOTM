@@ -29,7 +29,7 @@ locateRVD2D <- function(Q, X, w) {
     .Call('_testOTM_locateRVD2D', PACKAGE = 'testOTM', Q, X, w)
 }
 
-#' Locate within a 2D RDT
+#' Locate Points within a 2D RDT
 #' 
 #' Find the RDT triangles where a set Q of query points belongs to.
 #' @param Q input query matrix.

@@ -1,6 +1,6 @@
 #' Semi-discrete Optimal Transport queryuantile
 #'
-#' \code{otm.quantile} computes the optimal transport quantiles.
+#' \code{tos.quantile} computes the optimal transport quantiles.
 #' @param object a fitted optimal transport map object.
 #' @param query a numeric matrix where each row represents a query point.
 #' @param scale logical indicating if the queries should be scaled.
@@ -8,13 +8,13 @@
 #' @return a list containing the quantiles of the queries, as well as the indices of the corresponding cells.
 #' @keywords multivariate
 #' @export
-otm.quantile = function(object, query, scale = TRUE, ...) {
-  UseMethod("otm.quantile")
+tos.quantile = function(object, query, scale = TRUE, ...) {
+  UseMethod("tos.quantile")
 }
 
 #' 2D Semi-discrete Optimal Transport queryuantile
 #'
-#' The 2D implementation for \code{otm.quantile}.
+#' The 2D implementation for \code{tos.quantile}.
 #' @param object a fitted 2D optimal transport map object.
 #' @param query a numeric matrix where each row represents a query point.
 #' @param scale logical indicating if the queries should be scaled.
@@ -22,7 +22,7 @@ otm.quantile = function(object, query, scale = TRUE, ...) {
 #' @return a list containing the quantiles of the queries, as well as the indices of the corresponding cells.
 #' @keywords internal
 #' @export
-otm.quantile.otm.2d = function(object, query, scale = TRUE, ...) {
+tos.quantile.tos.2d = function(object, query, scale = TRUE, ...) {
   # scale the queries
   if (scale) {
     query = scale(query, object$Location, object$Scale)

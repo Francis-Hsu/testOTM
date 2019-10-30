@@ -20,11 +20,12 @@
 void initializeGeogram();
 void setMeshPoint(GEO::Mesh &M, const arma::mat &X);
 void getWeightedVerts(const arma::mat &X, const arma::vec &w, double* wV);
+void setSqUniMesh(GEO::Mesh &M, unsigned int d, bool tri);
 arma::vec getWeights(GEO::OptimalTransportMap &OTM);
 arma::mat getCentroids(GEO::OptimalTransportMap &OTM);
 arma::mat getVertices(GEO::Mesh &M);
 arma::mat getVertices(GEO::Mesh &S, GEO::OptimalTransportMap &OTM);
-arma::mat cubeVert(int d);
+arma::mat cubeVert(unsigned int d);
 
 namespace GEOGen {
   template <GEO::index_t DIM> class RVDHelper: public RestrictedVoronoiDiagram<DIM> {

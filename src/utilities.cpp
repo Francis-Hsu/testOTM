@@ -37,6 +37,25 @@ void getWeightedVerts(const arma::mat &X, const arma::vec &w, double* wV) {
   }
 }
 
+void setSqUniMesh(GEO::Mesh &M, unsigned int d, bool tri) {
+  const arma::mat cubeVertices = cubeVert(d);
+  M.clear();
+  M.vertices.create_vertices(cubeVertices.n_rows);
+  setMeshPoint(M, cubeVertices);
+  
+  // embed in 3-dimension
+  if (d == 2) {
+    M.vertices.set_dimension(d + 1);
+    if (tri) {
+      M.facets.create_triangle(0, 1, 2);
+      M.facets.create_triangle(2, 1, 3);
+      M.facets.connect();
+    } else {
+      M.facets.create_quad(0, 2, 3, 1);
+    }
+  }
+}
+
 arma::vec getWeights(GEO::OptimalTransportMap &OTM) {
   arma::vec w(OTM.nb_points());
   for (unsigned int i = 0; i < OTM.nb_points(); i++) {
@@ -68,7 +87,6 @@ arma::mat getCentroids(GEO::OptimalTransportMap &OTM) {
 arma::mat getVertices(GEO::Mesh &M) {
   const unsigned int nFacets = M.facets.nb();
   GEO::vec3 v;
-  
   
   int totalNbVert = 0;
   int nbVert[nFacets];
@@ -130,7 +148,7 @@ arma::mat getVertices(GEO::Mesh &S, GEO::OptimalTransportMap &OTM) {
       }
     }
   } else {
-    // take care 3d case in future
+    // TODO: take care 3d case
     // GEOGen::RestrictedVoronoiDiagram<4> transMapGen(OTM.RVD()->delaunay(), &S);
   }
   
@@ -152,7 +170,7 @@ arma::mat getVertices(GEO::Mesh &S, GEO::OptimalTransportMap &OTM) {
 
 // compute the vertices of a unit hypercube using binary expansion
 // this will generate a matrix with 2^d rows
-arma::mat cubeVert(int d) {
+arma::mat cubeVert(unsigned int d) {
   if (d > 20) {
     stop("Dimesion is too high!");
   }
@@ -161,7 +179,7 @@ arma::mat cubeVert(int d) {
   arma::mat verts(std::pow(2, d), d);
   for (unsigned int i = 0; i < verts.n_rows; i++) {
     x = i;
-    for (int j = 0; j < d; j++) {
+    for (unsigned int j = 0; j < d; j++) {
       verts(i, d - j - 1) = x % 2;
       x /= 2;
     }

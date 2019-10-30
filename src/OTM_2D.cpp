@@ -48,17 +48,7 @@ List dualGraphs2D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
   
   // create a mesh for 2D uniform measure
   GEO::Mesh unifMesh(d, false);
-  const arma::mat cubeVertices = cubeVert(2);
-  unifMesh.vertices.create_vertices(cubeVertices.n_rows);
-  setMeshPoint(unifMesh, cubeVertices);
-  
-  // must triangulate for OTM
-  unifMesh.facets.create_triangle(0, 1, 2);
-  unifMesh.facets.create_triangle(2, 1, 3);
-  unifMesh.facets.connect();
-  
-  // embed in 3-dimension
-  unifMesh.vertices.set_dimension(d + 1);
+  setSqUniMesh(unifMesh, d, true);
   
   // compute OTM
   GEO::OptimalTransportMap2d OTM(&unifMesh);
@@ -71,10 +61,7 @@ List dualGraphs2D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
   arma::vec W = getWeights(OTM);
   
   // create a squared uniform mesh
-  unifMesh.clear();
-  unifMesh.vertices.create_vertices(cubeVertices.n_rows);
-  setMeshPoint(unifMesh, cubeVertices);
-  unifMesh.facets.create_quad(0, 2, 3, 1);
+  setSqUniMesh(unifMesh, d, false);
   
   // this will not return the correct cell order
   // GEO::Mesh otmRVD;
@@ -178,7 +165,7 @@ arma::ivec locateRVD2D(const arma::mat &Q, const arma::mat &X, const arma::vec &
   return cellID;
 }
 
-//' Locate within a 2D RDT
+//' Locate Points within a 2D RDT
 //' 
 //' Find the RDT triangles where a set Q of query points belongs to.
 //' @param Q input query matrix.
@@ -207,7 +194,7 @@ arma::ivec locateRDT2D(const arma::mat &Q, const arma::mat &V) {
   
   arma::vec lambda(3, arma::fill::zeros);
   for (int i = 0; i < m; i++) {
-    // check for interrupt every 1000 iterations
+    // check for interruption every 1000 iterations
     if (i % 1000 == 0) {
       Rcpp::checkUserInterrupt();
     }
@@ -265,17 +252,7 @@ List gof2DHelper(const arma::mat &X, const arma::mat &Y, const arma::mat &U,
   
   // create a mesh for 2D uniform measure
   GEO::Mesh unifMesh(d, false);
-  const arma::mat cubeVertices = cubeVert(2);
-  unifMesh.vertices.create_vertices(cubeVertices.n_rows);
-  setMeshPoint(unifMesh, cubeVertices);
-  
-  // must triangulate for OTM
-  unifMesh.facets.create_triangle(0, 1, 2);
-  unifMesh.facets.create_triangle(2, 1, 3);
-  unifMesh.facets.connect();
-  
-  // embed in 3-dimension
-  unifMesh.vertices.set_dimension(d + 1);
+  setSqUniMesh(unifMesh, d, true);
   
   // compute OTMs
   GEO::OptimalTransportMap2d OTMX(&unifMesh);
@@ -318,14 +295,7 @@ arma::mat jointRankHelper2D(const arma::mat &XY, bool center, double epsilon, in
   
   // create a mesh for 2D uniform measure
   GEO::Mesh unifMesh(d, false);
-  const arma::mat cubeVertices = cubeVert(2);
-  unifMesh.vertices.create_vertices(cubeVertices.n_rows);
-  setMeshPoint(unifMesh, cubeVertices);
-  
-  // must triangulate for OTM
-  unifMesh.facets.create_triangle(0, 1, 2);
-  unifMesh.facets.create_triangle(2, 1, 3);
-  unifMesh.facets.connect();
+  setSqUniMesh(unifMesh, d, true);
   
   // embed in 3-dimension
   unifMesh.vertices.set_dimension(d + 1);
@@ -340,10 +310,7 @@ arma::mat jointRankHelper2D(const arma::mat &XY, bool center, double epsilon, in
     elemXY = getCentroids(OTMXY);
   } else {
     // create a squared uniform mesh
-    unifMesh.clear();
-    unifMesh.vertices.create_vertices(cubeVertices.n_rows);
-    setMeshPoint(unifMesh, cubeVertices);
-    unifMesh.facets.create_quad(0, 2, 3, 1);
+    setSqUniMesh(unifMesh, d, false);
     
     // get Voronoi cells
     elemXY = getVertices(unifMesh, OTMXY);

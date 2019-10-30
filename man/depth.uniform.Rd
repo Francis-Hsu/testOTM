@@ -13,6 +13,6 @@ depth.uniform(query)
 a vector containing the depths of the data.
 }
 \description{
-\code{otm.depth} computes the depths associated with the \eqn{U[0, 1]^d} measure.
+\code{tos.depth} computes the depths associated with the \eqn{U[0, 1]^d} measure.
 }
 \keyword{internal}

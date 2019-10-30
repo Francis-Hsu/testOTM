@@ -1,6 +1,6 @@
 #' Semi-discrete Optimal Transport Rank
 #'
-#' \code{otm.rank} computes the optimal transport ranks.
+#' \code{tos.rank} computes the optimal transport ranks.
 #' @param object a fitted optimal transport map object.
 #' @param query a numeric matrix where each row represents a query point.
 #' @param scale logical indicating if the queries should be scaled.
@@ -21,16 +21,16 @@
 #' @return a list containing the ranks of the data and the corresponding convex conjugate potential values.
 #' If \code{rank.algo = "geom"} or data points are presented in the queries,
 #' then the corresponding conjugate potentials will not be computed (\code{NA}s will be returned).
-#' @seealso \code{\link{otm.gof.test}} and \code{\link{otm.dep.test}} for statistical tests using optimal transport rank.
+#' @seealso \code{\link{tos.gof.test}} and \code{\link{tos.dep.test}} for statistical tests using optimal transport rank.
 #' @keywords multivariate
 #' @export
-otm.rank = function(object, query, scale = TRUE, rank.data = "uniform", rank.algo = "lp", ...) {
-  UseMethod("otm.rank")
+tos.rank = function(object, query, scale = TRUE, rank.data = "uniform", rank.algo = "lp", ...) {
+  UseMethod("tos.rank")
 }
 
 #' 2D Semi-discrete Optimal Transport Rank
 #'
-#' The 2D implementation of \code{otm.rank}.
+#' The 2D implementation of \code{tos.rank}.
 #' @param object a fitted 2D optimal transport map object.
 #' @param query a numeric matrix where each row represents a query point.
 #' @param scale logical indicating if the queries should be scaled.
@@ -43,7 +43,7 @@ otm.rank = function(object, query, scale = TRUE, rank.data = "uniform", rank.alg
 #' @keywords internal
 #' @importFrom stats aggregate na.omit
 #' @export
-otm.rank.otm.2d = function(object, query, scale = TRUE, rank.data = "uniform", rank.algo = "lp", ...) {
+tos.rank.tos.2d = function(object, query, scale = TRUE, rank.data = "uniform", rank.algo = "lp", ...) {
   n = nrow(query)
   d = 2
   
@@ -60,8 +60,8 @@ otm.rank.otm.2d = function(object, query, scale = TRUE, rank.data = "uniform", r
                    stop("Unknown rank algorithm!"))
   
   # containers for the result
-  otm.dual.potential = rep(NA_integer_, n)
-  otm.ranks = matrix(0, n, d)
+  tos.dual.potential = rep(NA_integer_, n)
+  tos.ranks = matrix(0, n, d)
   lp.id = !logical(n)
   
   # scale the queries
@@ -79,13 +79,13 @@ otm.rank.otm.2d = function(object, query, scale = TRUE, rank.data = "uniform", r
     
     # assign ranks to data points
     if (rank.id == 0) {
-      otm.ranks[query.data.id, ] = object$Centroid[data.id, ]
+      tos.ranks[query.data.id, ] = object$Centroid[data.id, ]
     } else if (rank.id == 3) {
       data.rank = lapply(split(object$Vertex.RVD[, -1], object$Vertex.RVD[, 1]), matrix, ncol = 2)[data.id]
-      otm.ranks[query.data.id, ] = uniform.rank(data.rank)
+      tos.ranks[query.data.id, ] = uniform.rank(data.rank)
     } else {
       data.rank = lapply(split(object$Vertex.RVD[, -1], object$Vertex.RVD[, 1]), matrix, ncol = 2)[data.id]
-      otm.ranks[query.data.id, ] = t(sapply(data.rank, choose.vert, type = rank.id))
+      tos.ranks[query.data.id, ] = t(sapply(data.rank, choose.vert, type = rank.id))
     }
     
     lp.id[query.data.id] = F
@@ -109,7 +109,7 @@ otm.rank.otm.2d = function(object, query, scale = TRUE, rank.data = "uniform", r
       # there should always be such a vertex since we located the query point
       # on the dual (RDT) of RVD (unless with pathological data)
       # need to catch exceptions
-      otm.ranks[i, ] = rvd.vert.freq[match(3, rvd.vert.freq[, 3]), 1:2]
+      tos.ranks[i, ] = rvd.vert.freq[match(3, rvd.vert.freq[, 3]), 1:2]
     }
   }
   
@@ -123,9 +123,9 @@ otm.rank.otm.2d = function(object, query, scale = TRUE, rank.data = "uniform", r
                                      as.matrix(object$Vertex.RVD[, 2:3]),
                                      object$Height,
                                      acc.verts)
-    otm.dual.potential[lp.id] = dual.potential$dual.potential
-    otm.ranks[lp.id, ] = dual.potential$optimal.vertex
+    tos.dual.potential[lp.id] = dual.potential$dual.potential
+    tos.ranks[lp.id, ] = dual.potential$optimal.vertex
   }
   
-  return(list(Rank = otm.ranks, Dual.Potential = otm.dual.potential))
+  return(list(Rank = tos.ranks, Dual.Potential = tos.dual.potential))
 }

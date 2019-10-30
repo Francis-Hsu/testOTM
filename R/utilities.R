@@ -194,7 +194,7 @@ gof.assign.rank = function(elem, rank.id) {
     r = elem
   } else if (rank.id == 3) {
     r = lapply(split(elem[, -1], elem[, 1]), matrix, ncol = 2)
-    r = testOTM:::uniform.rank(r)
+    r = uniform.rank(r)
   } else {
     r = lapply(split(elem[, -1], elem[, 1]), matrix, ncol = 2)
     r = t(sapply(rank, choose.vert, type = rank.id))
