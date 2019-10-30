@@ -1,6 +1,8 @@
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
+#include <RcppArmadillo.h>
+
 #include "geogram.h"
 
 #ifdef Realloc
@@ -14,8 +16,6 @@
 #ifdef ERROR
 #undef ERROR
 #endif
-
-#include <RcppArmadillo.h>
 
 void initializeGeogram();
 void setMeshPoint(GEO::Mesh &M, const arma::mat &X);

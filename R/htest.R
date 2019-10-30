@@ -4,6 +4,7 @@
 #' @param X input data matrix, of size \eqn{n} by \eqn{2}.
 #' @param Y input data matrix, of size \eqn{m} by \eqn{2}.
 #' @param mc number of quasi-Monte-Carlo samples used to evaluate the test statistic.
+#' @param n.perm number of permutations used for computing \eqn{p}-value.
 #' @param scale a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.
 #' @param rank.data choose the method for assigning ranks to the data points. 
 #' Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".
@@ -160,9 +161,8 @@ tos.gof.test = function(X,
 #' the semi-discrete optimal transport map.
 #' @param X input data vector.
 #' @param Y input data vector.
-#' @param mc number of quasi-Monte-Carlo samples used to evaluate the test statistic.
-#' @param scale a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.
 #' @param n.perm number of permutations used for computing \eqn{p}-value.
+#' @param scale a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.
 #' @param rank.data choose the method for assigning ranks to the data points. 
 #' Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".
 #' @param epsilon convergence threshold for optimization.
@@ -180,7 +180,6 @@ tos.gof.test = function(X,
 #' together with the \eqn{p}-value computed based on that sample.
 #' @seealso \code{\link{tos.rank}} for semi-discrete optimal transport rank.
 #' @keywords htest, multivariate
-#' @importFrom stats ecdf
 #' @export
 tos.dep.test = function(X,
                         Y,

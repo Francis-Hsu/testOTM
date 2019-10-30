@@ -153,6 +153,7 @@ choose.vert = function(V, type = 1) {
 
 #' Helper for Uniform Sampling over Convex Polygons
 #' 
+#' @importFrom stats runif
 #' @keywords internal
 uniform.rank = function(V) {
   n.cell = length(V)
@@ -205,6 +206,7 @@ gof.assign.rank = function(elem, rank.id) {
 
 #' Helper for Assigning Ranks for Test of Independence
 #' 
+#' @importFrom stats runif
 #' @keywords internal
 dep.assign.rank = function(XY, elem, rank.id) {
   N = NROW(XY)

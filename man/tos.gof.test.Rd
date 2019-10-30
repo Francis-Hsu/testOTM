@@ -15,6 +15,8 @@ tos.gof.test(X, Y, mc = 10000, n.perm = 0, scale = c(0, 1),
 
 \item{mc}{number of quasi-Monte-Carlo samples used to evaluate the test statistic.}
 
+\item{n.perm}{number of permutations used for computing \eqn{p}-value.}
+
 \item{scale}{a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.}
 
 \item{rank.data}{choose the method for assigning ranks to the data points. 

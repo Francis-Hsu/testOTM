@@ -114,7 +114,7 @@ namespace GEO {
 
         if(assert_mode_ == ASSERT_THROW) {
 	    if(Logger::instance()->is_quiet()) {
-		std::cerr << os.str()
+		Rcpp::Rcerr << os.str()
 			  << std::endl;
 	    }
 	    throw std::runtime_error(os.str());
@@ -139,7 +139,7 @@ namespace GEO {
 
         if(assert_mode_ == ASSERT_THROW) {
             if(Logger::instance()->is_quiet()) {
-                std::cerr << os.str()
+                Rcpp::Rcerr << os.str()
                           << std::endl;
             }
             throw std::runtime_error(os.str());
@@ -159,7 +159,7 @@ namespace GEO {
 
         if(assert_mode_ == ASSERT_THROW) {
             if(Logger::instance()->is_quiet()) {
-                std::cerr << os.str()
+                Rcpp::Rcerr << os.str()
                           << std::endl;
             }
             throw std::runtime_error(os.str());

@@ -46,6 +46,7 @@
 #ifndef GEOGRAM_BASIC_COMMON
 #define GEOGRAM_BASIC_COMMON
 
+#include <Rcpp.h>
 #include <geogram/api/defs.h>
 
 // iostream should be included before anything else,

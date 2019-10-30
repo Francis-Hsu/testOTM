@@ -24,8 +24,6 @@ Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".}
 \item{maxit}{max number of iterations before termination.}
 
 \item{verbose}{logical indicating whether to display optimization messages.}
-
-\item{mc}{number of quasi-Monte-Carlo samples used to evaluate the test statistic.}
 }
 \value{
 a list, which contains the values of the independence test statistics,
