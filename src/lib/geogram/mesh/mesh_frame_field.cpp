@@ -57,9 +57,9 @@
 // note: NormalCycle will be exported sometime, so for now
 // we deactivate the warning.
 
-#ifdef __clang__
-#pragma GCC diagnostic ignored "-Wunused-member-function"
-#endif
+// #ifdef __clang__
+// #pragma GCC diagnostic ignored "-Wunused-member-function"
+// #endif
 
 #ifdef __ICC
 #pragma warning disable 177

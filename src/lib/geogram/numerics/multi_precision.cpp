@@ -78,7 +78,7 @@ namespace {
          */
         ~ExpansionStatsDisplay() {
             for(index_t i = 0; i < expansion_length_histo_.size(); ++i) {
-                std::cerr << "expansion len " << i
+                Rcpp::Rcerr << "expansion len " << i
                     << " : " << expansion_length_histo_[i] << std::endl;
             }
         }

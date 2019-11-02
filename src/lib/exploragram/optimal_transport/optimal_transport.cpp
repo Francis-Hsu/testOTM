@@ -230,7 +230,7 @@ namespace GEO {
 	
         for(index_t k=0; k<max_iterations; ++k) {
 	    if(verbose_) {
-		std::cerr << "======= k = " << k << std::endl;
+		Rcpp::Rcerr << "======= k = " << k << std::endl;
 	    }
             xk=weights_;
 
@@ -257,14 +257,14 @@ namespace GEO {
 	    }
 
 	    if(nbZ_ != 0) {
-		std::cerr << "There were empty cells !!!!!!" << std::endl;
-		std::cerr << "FATAL error, exiting Newton" << std::endl;
+		Rcpp::Rcerr << "There were empty cells !!!!!!" << std::endl;
+		Rcpp::Rcerr << "FATAL error, exiting Newton" << std::endl;
 		return;
 	    }
             solve_linear_system();
 
 	    if(verbose_) {
-		std::cerr << "Line search ..." << std::endl;
+		Rcpp::Rcerr << "Line search ..." << std::endl;
 	    }
 
             w_did_not_change_ = false;
@@ -280,7 +280,7 @@ namespace GEO {
 		inner_iter < linesearch_maxiter_; ++inner_iter
 	    ) {
 		if(verbose_) {
-		    std::cerr << "      inner iter = "
+		    Rcpp::Rcerr << "      inner iter = "
 			      << inner_iter << std::endl;
 		}
 
@@ -301,10 +301,10 @@ namespace GEO {
 		}
 
 		if(verbose_) {
-		    std::cerr << "cell measure :"
+		    Rcpp::Rcerr << "cell measure :"
 			      << measure_of_smallest_cell_
 			      << "(>=?)" << epsilon0 << std::endl;
-		    std::cerr << "gradient norm:"
+		    Rcpp::Rcerr << "gradient norm:"
 			      << g_norm_ << "(<=?)"
 			      << (1.0 - 0.5*alphak) * gknorm << std::endl;
 		}
@@ -361,8 +361,8 @@ namespace GEO {
 		total_nu += nu(i);
 	    }
 	    if(verbose_) {
-		std::cerr << "total nu=" << total_nu << std::endl;
-		std::cerr << "total mass=" << total_mass_ << std::endl;
+		Rcpp::Rcerr << "total nu=" << total_nu << std::endl;
+		Rcpp::Rcerr << "total mass=" << total_mass_ << std::endl;
 	    }
 	    if(::fabs(total_nu - total_mass_)/total_mass_ > 0.01) {
 		Logger::warn("OTM")
@@ -562,10 +562,10 @@ namespace GEO {
     }
 
     void OptimalTransportMap::newiteration() {
-        //xxx std::cerr << "newiteration" << std::endl;
+        //xxx Rcpp::Rcerr << "newiteration" << std::endl;
         if(save_RVD_iter_) {
 	    if(verbose_) {
-		std::cerr << "  save iter" << std::endl;
+		Rcpp::Rcerr << "  save iter" << std::endl;
 	    }
             save_RVD(current_iter_);
         }
@@ -895,7 +895,7 @@ namespace GEO {
             nlGetDoublev(NL_ELAPSED_TIME, &elapsed_time);
             nlGetDoublev(NL_GFLOPS, &gflops);
             nlGetDoublev(NL_ERROR, &error);
-	    std::cerr << "   "
+	    Rcpp::Rcerr << "   "
 		      << used_iters << " iters in "
 		      << elapsed_time << " seconds "
 		      << gflops << " GFlop/s"

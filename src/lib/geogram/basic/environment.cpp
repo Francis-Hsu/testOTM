@@ -149,7 +149,7 @@ namespace GEO {
         if(instance_ == nullptr) {
             static bool created = false;
             if(created) {
-                std::cerr
+                Rcpp::Rcerr
                     << "CRITICAL: Environment::instance() "
                     << "called after the instance was deleted"
                     << std::endl;

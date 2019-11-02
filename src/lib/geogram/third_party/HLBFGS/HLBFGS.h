@@ -27,6 +27,19 @@
 // [Bruno Levy] added HLBFGS_API declarations to have linkage.
 #include <geogram/api/defs.h>
 #define HLBFGS_API GEOGRAM_API
+    
+#include <Rcpp.h>
+#ifdef Realloc
+#undef Realloc
+#endif
+
+#ifdef Free
+#undef Free
+#endif
+
+#ifdef ERROR
+#undef ERROR
+#endif
 
 //////////////////////////////////////////////////////////////////////////
 

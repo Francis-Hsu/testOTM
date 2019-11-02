@@ -45,27 +45,27 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 
 // [Bruno] I got too many complaints in STB so I "close my eyes" :-)
-#ifdef __GNUC__
-#ifndef __ICC
-#pragma GCC diagnostic ignored "-Wpragmas"
-#pragma GCC diagnostic ignored "-Wconversion"
-#pragma GCC diagnostic ignored "-Wfloat-conversion"
-#pragma GCC diagnostic ignored "-Wsign-conversion"
-#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
-#pragma GCC diagnostic ignored "-Wdouble-promotion"
-#endif
-
-#ifdef __clang__
-#pragma GCC diagnostic ignored "-Wdisabled-macro-expansion"
-#pragma GCC diagnostic ignored "-Wcast-align"
-#pragma GCC diagnostic ignored "-Wmissing-prototypes"
-#pragma GCC diagnostic ignored "-Wunknown-pragmas"
-#pragma GCC diagnostic ignored "-Wreserved-id-macro"
-#pragma GCC diagnostic ignored "-Wcomma"
-#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
-#pragma GCC diagnostic ignored "-Wcast-qual"
-#endif
-#endif
+// #ifdef __GNUC__
+// #ifndef __ICC
+// #pragma GCC diagnostic ignored "-Wpragmas"
+// #pragma GCC diagnostic ignored "-Wconversion"
+// #pragma GCC diagnostic ignored "-Wfloat-conversion"
+// #pragma GCC diagnostic ignored "-Wsign-conversion"
+// #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+// #pragma GCC diagnostic ignored "-Wdouble-promotion"
+// #endif
+// 
+// #ifdef __clang__
+// #pragma GCC diagnostic ignored "-Wdisabled-macro-expansion"
+// #pragma GCC diagnostic ignored "-Wcast-align"
+// #pragma GCC diagnostic ignored "-Wmissing-prototypes"
+// #pragma GCC diagnostic ignored "-Wunknown-pragmas"
+// #pragma GCC diagnostic ignored "-Wreserved-id-macro"
+// #pragma GCC diagnostic ignored "-Wcomma"
+// #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
+// #pragma GCC diagnostic ignored "-Wcast-qual"
+// #endif
+// #endif
 
 #include <geogram/third_party/stb_image/stb_image.h>
 #include <geogram/third_party/stb_image/stb_image_write.h>

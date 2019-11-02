@@ -50,10 +50,11 @@
  double* when calling BLAS functions that do not
  have the const qualifier in their prototypes.
 */
-#ifdef __clang__
-#pragma GCC diagnostic ignored "-Wcast-qual"
-#pragma GCC diagnostic ignored "-Wcomma"
-#endif
+/* #ifdef __clang__
+ * #pragma GCC diagnostic ignored "-Wcast-qual"
+ * #pragma GCC diagnostic ignored "-Wcomma"
+ * #endif
+ */
 
 #ifndef NL_FORTRAN_WRAP
 #define NL_FORTRAN_WRAP(x) x##_

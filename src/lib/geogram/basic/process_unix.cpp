@@ -78,10 +78,10 @@
 #define GEO_USE_PTHREAD_MANAGER
 
 // Suppresses a warning with CLANG when sigaction is used.
-#if defined(__clang__)
-#pragma clang diagnostic ignored "-Wunknown-pragmas"
-#pragma clang diagnostic ignored "-Wdisabled-macro-expansion"
-#endif
+// #if defined(__clang__)
+// #pragma clang diagnostic ignored "-Wunknown-pragmas"
+// #pragma clang diagnostic ignored "-Wdisabled-macro-expansion"
+// #endif
 
 namespace {
 
@@ -258,7 +258,7 @@ namespace {
     void abnormal_program_termination(const char* message) {
         if(message != nullptr) {
             // Do not use Logger here!
-            std::cout
+            Rcpp::Rcout
                 << "Abnormal program termination: "
                 << message << std::endl;
         }

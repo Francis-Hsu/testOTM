@@ -481,7 +481,7 @@ namespace {
 		    OptimalTransportMap2d* OTM = static_cast<OptimalTransportMap2d*>(OTM_);
 		    double R = OTM_->weight(v);
 		    if(R < 0.0) {
-			std::cerr << '-' << std::flush;
+			Rcpp::Rcerr << '-' << std::flush;
 		    }
 		    R = R > 0.0 ? ::sqrt(R) : 0.0;
 		    vec2 center(OTM_->point_ptr(v));

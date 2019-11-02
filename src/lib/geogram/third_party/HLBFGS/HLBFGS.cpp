@@ -63,23 +63,23 @@ void HLBFGS_MESSAGE(bool print, int id, const double PARAMETERS[])
         switch (id)
         {
         case 0:
-                std::cout << "Please check your input parameters !\n";
+                Rcpp::Rcout << "Please check your input parameters !\n";
                 break;
         case 1:
-                std::cout << "Linesearch has failed !\n";
+                Rcpp::Rcout << "Linesearch has failed !\n";
                 break;
         case 2:
-                std::cout << "Convergence : ||g||/max(1,||x||) <= " << PARAMETERS[5]
+                Rcpp::Rcout << "Convergence : ||g||/max(1,||x||) <= " << PARAMETERS[5]
                 << std::endl;
                 break;
         case 3:
-                std::cout << "Convergence : ||g|| <=  " << PARAMETERS[6] << std::endl;
+                Rcpp::Rcout << "Convergence : ||g|| <=  " << PARAMETERS[6] << std::endl;
                 break;
         case 4:
-                std::cout << "Convergence: linesearch cannot improve anymore \n";
+                Rcpp::Rcout << "Convergence: linesearch cannot improve anymore \n";
                 break;
         case 5:
-                std::cout << "Used all iterations \n";
+                Rcpp::Rcout << "Used all iterations \n";
                 break;
         default:
                 break;

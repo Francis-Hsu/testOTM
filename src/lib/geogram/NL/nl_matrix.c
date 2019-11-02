@@ -53,10 +53,10 @@
  Some warnings about const cast in callback for
  qsort() function.
  */
-
-#ifdef __clang__
-#pragma GCC diagnostic ignored "-Wcast-qual"
-#endif
+/* #ifdef __clang__
+ * #pragma GCC diagnostic ignored "-Wcast-qual"
+ * #endif
+ */
 
 
 /************************************************************************/

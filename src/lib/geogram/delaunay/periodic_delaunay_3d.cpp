@@ -61,9 +61,9 @@
 // no out-of-line virtual functions. It is not a
 // problem since they are only visible from this translation
 // unit, but clang will complain.
-#ifdef __clang__
-#pragma GCC diagnostic ignored "-Wweak-vtables"
-#endif
+// #ifdef __clang__
+// #pragma GCC diagnostic ignored "-Wweak-vtables"
+// #endif
 
 // TODO:
 //  - insert additional vertices in parallel ?

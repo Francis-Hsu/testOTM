@@ -58,9 +58,9 @@
    As LoggerStreamBuf only stores the pointer for later use, so we can
    ignore the fact that 'this' is not completely formed yet.
  */
-#ifdef GEO_OS_WINDOWS
-#pragma warning(disable:4355)
-#endif
+// #ifdef GEO_OS_WINDOWS
+// #pragma warning(disable:4355)
+// #endif
 
 namespace GEO {
 
@@ -365,7 +365,7 @@ namespace GEO {
         // call the Logger to print the assertion failure, thus ending in a
         // infinite loop.
         if(instance_ == nullptr) {
-            std::cerr
+            Rcpp::Rcerr
                 << "CRITICAL: Accessing uninitialized Logger instance"
                 << std::endl;
             geo_abort();
@@ -377,7 +377,7 @@ namespace GEO {
 	std::ostream& result = 
    	    (is_initialized() && !Process::is_running_threads()) ?
             instance()->div_stream(title) :
-            (std::cerr << "=====" << title << std::endl);
+            (Rcpp::Rcerr << "=====" << title << std::endl);
 	return result;
     }
 
@@ -385,7 +385,7 @@ namespace GEO {
 	std::ostream& result =
 	    (is_initialized() && !Process::is_running_threads()) ?
             instance()->out_stream(feature) :
-            (std::cerr << "    [" << feature << "] ");
+            (Rcpp::Rcerr << "    [" << feature << "] ");
 	return result;
     }
 
@@ -393,7 +393,7 @@ namespace GEO {
 	std::ostream& result = 
 	    (is_initialized() && !Process::is_running_threads()) ?	    
             instance()->err_stream(feature) :
-            (std::cerr << "(E)-[" << feature << "] ");
+            (Rcpp::Rcerr << "(E)-[" << feature << "] ");
 	return result;
     }
 
@@ -401,7 +401,7 @@ namespace GEO {
 	std::ostream& result = 
 	    (is_initialized() && !Process::is_running_threads()) ?	    	    
             instance()->warn_stream(feature) :
-            (std::cerr << "(W)-[" << feature << "] ");
+            (Rcpp::Rcerr << "(W)-[" << feature << "] ");
 	return result;
     }
 
@@ -409,7 +409,7 @@ namespace GEO {
 	std::ostream& result =	
 	    (is_initialized() && !Process::is_running_threads()) ?	    	    	
             instance()->status_stream() :
-            (std::cerr << "[status] ");
+            (Rcpp::Rcerr << "[status] ");
 	return result;
     }
 
@@ -492,7 +492,7 @@ namespace GEO {
             + msg;
 
 	if(notifying_error_) {
-	    std::cerr << "Error while displaying error (!):"
+	    Rcpp::Rcerr << "Error while displaying error (!):"
 		      << feat_msg << std::endl;
 	} else {
 	    notifying_error_ = true;

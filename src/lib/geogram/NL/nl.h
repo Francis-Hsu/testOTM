@@ -46,6 +46,19 @@
 #ifndef OPENNL_H
 #define OPENNL_H
 
+#include <R.h>
+#ifdef Realloc
+#undef Realloc
+#endif
+
+#ifdef Free
+#undef Free
+#endif
+
+#ifdef Memcpy
+#undef Memcpy
+#endif
+
 #include "nl_linkage.h"
 #include <stdio.h>
 
@@ -63,12 +76,12 @@ extern "C" {
  * some doxygen commands that we use (retval, copydoc) and
  * generates many warnings for them...
  */
-
-#if defined(__clang__)
-#pragma clang diagnostic ignored "-Wunknown-pragmas"
-#pragma clang diagnostic ignored "-Wdocumentation"        
-#pragma clang diagnostic ignored "-Wdocumentation-unknown-command"
-#endif
+/* #if defined(__clang__)
+ * #pragma clang diagnostic ignored "-Wunknown-pragmas"
+ * #pragma clang diagnostic ignored "-Wdocumentation"        
+ * #pragma clang diagnostic ignored "-Wdocumentation-unknown-command"
+ * #endif
+ */
     
 /**
  * \file geogram/NL/nl.h

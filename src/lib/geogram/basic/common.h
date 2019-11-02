@@ -47,6 +47,18 @@
 #define GEOGRAM_BASIC_COMMON
 
 #include <Rcpp.h>
+#ifdef Realloc
+#undef Realloc
+#endif
+
+#ifdef Free
+#undef Free
+#endif
+
+#ifdef ERROR
+#undef ERROR
+#endif
+
 #include <geogram/api/defs.h>
 
 // iostream should be included before anything else,

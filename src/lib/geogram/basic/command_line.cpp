@@ -613,7 +613,7 @@ namespace GEO {
                     exit(0);
                 }
                 if(arg == "--version" || arg == "--v") {
-                    std::cout << FileSystem::base_name(argv[0])
+                    Rcpp::Rcout << FileSystem::base_name(argv[0])
                      << " "
                      << Environment::instance()->get_value("version")
                      << " (built "
@@ -913,7 +913,7 @@ namespace {
      * \return a reference to a std::ostream
      */
     inline std::ostream& ui_out() {
-        return std::cout;
+        return Rcpp::Rcout;
     }
 
     /**
@@ -923,7 +923,7 @@ namespace {
      */
     inline void ui_pad(char c, size_t nb) {
         for(index_t i = 0; i < nb; i++) {
-            std::cout << c;
+            Rcpp::Rcout << c;
         }
     }
 

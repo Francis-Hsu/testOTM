@@ -965,7 +965,7 @@ namespace GEO {
     /************************************************************************/
 
     void Delaunay2d::show_triangle(index_t t) const {
-        std::cerr << "tri"
+        Rcpp::Rcerr << "tri"
             << (triangle_is_in_list(t) ? '*' : ' ')
             << t
             << ", v=["
@@ -978,43 +978,43 @@ namespace GEO {
         show_triangle_adjacent(t, 0);
         show_triangle_adjacent(t, 1);
         show_triangle_adjacent(t, 2);
-        std::cerr << "] ";
+        Rcpp::Rcerr << "] ";
 
         for(index_t e = 0; e < 3; ++e) {
-            std::cerr << 'e' << e << ':';
+            Rcpp::Rcerr << 'e' << e << ':';
             for(index_t v = 0; v < 2; ++v) {
-                std::cerr << triangle_vertex(t, triangle_edge_vertex(e,v))
+                Rcpp::Rcerr << triangle_vertex(t, triangle_edge_vertex(e,v))
 			  << ',';
             }
-            std::cerr << ' ';
+            Rcpp::Rcerr << ' ';
         }
-        std::cerr << std::endl;
+        Rcpp::Rcerr << std::endl;
     }
 
     void Delaunay2d::show_triangle_adjacent(index_t t, index_t le) const {
         signed_index_t adj = triangle_adjacent(t, le);
         if(adj != -1) {
-            std::cerr << (triangle_is_in_list(index_t(adj)) ? '*' : ' ');
+            Rcpp::Rcerr << (triangle_is_in_list(index_t(adj)) ? '*' : ' ');
         }
-        std::cerr << adj;
-        std::cerr << ' ';
+        Rcpp::Rcerr << adj;
+        Rcpp::Rcerr << ' ';
     }
 
     void Delaunay2d::show_list(
         index_t first, const std::string& list_name
     ) const {
         index_t t = first;
-        std::cerr << "tri list: " << list_name << std::endl;
+        Rcpp::Rcerr << "tri list: " << list_name << std::endl;
         while(t != END_OF_LIST) {
             show_triangle(t);
             t = triangle_next(t);
         }
-        std::cerr << "-------------" << std::endl;
+        Rcpp::Rcerr << "-------------" << std::endl;
     }
 
     void Delaunay2d::check_combinatorics(bool verbose) const {
         if(verbose) {
-            std::cerr << std::endl;
+            Rcpp::Rcerr << std::endl;
         }
         bool ok = true;
         std::vector<bool> v_has_triangle(nb_vertices(), false);
@@ -1022,24 +1022,24 @@ namespace GEO {
             if(triangle_is_free(t)) {
 /*
                 if(verbose) {
-                    std::cerr << "-Deleted tri: ";
+                    Rcpp::Rcerr << "-Deleted tri: ";
                     show_tri(t);
                 }
 */
             } else {
 /*
                 if(verbose) {
-                    std::cerr << "Checking tri: ";
+                    Rcpp::Rcerr << "Checking tri: ";
                     show_tet(t);
                 }
 */
                 for(index_t le = 0; le < 3; ++le) {
                     if(triangle_adjacent(t, le) == -1) {
-                        std::cerr << le << ":Missing adjacent tri"
+                        Rcpp::Rcerr << le << ":Missing adjacent tri"
                             << std::endl;
                         ok = false;
                     } else if(triangle_adjacent(t, le) == signed_index_t(t)) {
-                        std::cerr << le << ":Tri is adjacent to itself"
+                        Rcpp::Rcerr << le << ":Tri is adjacent to itself"
                             << std::endl;
                         ok = false;
                     } else {
@@ -1051,7 +1051,7 @@ namespace GEO {
                             }
                         }
                         if(!found) {
-                            std::cerr
+                            Rcpp::Rcerr
                                 << le << ":Adjacent link is not bidirectional"
                                 << std::endl;
                             ok = false;
@@ -1066,7 +1066,7 @@ namespace GEO {
                 }
                 if(nb_infinite > 1) {
                     ok = false;
-                    std::cerr << "More than one infinite vertex"
+                    Rcpp::Rcerr << "More than one infinite vertex"
                         << std::endl;
                 }
             }
@@ -1080,16 +1080,16 @@ namespace GEO {
         for(index_t v = 0; v < nb_vertices(); ++v) {
             if(!v_has_triangle[v]) {
                 if(verbose) {
-                    std::cerr << "Vertex " << v
+                    Rcpp::Rcerr << "Vertex " << v
                         << " is isolated (duplicated ?)" << std::endl;
                 }
             }
         }
         geo_assert(ok);
         if(verbose) {
-            std::cerr << std::endl;
+            Rcpp::Rcerr << std::endl;
         }
-        std::cerr << std::endl << "Delaunay Combi OK" << std::endl;
+        Rcpp::Rcerr << std::endl << "Delaunay Combi OK" << std::endl;
     }
 
     void Delaunay2d::check_geometry(bool verbose) const {
@@ -1107,11 +1107,11 @@ namespace GEO {
                     if(triangle_is_conflict(t, vertex_ptr(v))) {
                         ok = false;
                         if(verbose) {
-                            std::cerr << "Tri " << t <<
+                            Rcpp::Rcerr << "Tri " << t <<
                                 " is in conflict with vertex " << v
                                     << std::endl;
 
-                            std::cerr << "  offending tri: ";
+                            Rcpp::Rcerr << "  offending tri: ";
                             show_triangle(t);
                         }
                     }
@@ -1119,7 +1119,7 @@ namespace GEO {
             }
         }
         geo_assert(ok);
-        std::cerr << std::endl << "Delaunay Geo OK" << std::endl;
+        Rcpp::Rcerr << std::endl << "Delaunay Geo OK" << std::endl;
     }
 
     /************************************************************************/

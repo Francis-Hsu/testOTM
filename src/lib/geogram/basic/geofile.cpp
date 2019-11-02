@@ -313,7 +313,7 @@ namespace GEO {
 
     size_t GeoFile::read_size() {
         if(ascii_) {
-            int64_t x = 0;
+            long int x = 0;
             if(fscanf(ascii_file_, INT64_T_FMT "\n", &x) == 0) {
                 throw GeoFileException("Could not write size to file");                
             }
@@ -334,7 +334,7 @@ namespace GEO {
     void GeoFile::write_size(size_t x_in) {
         Numeric::uint64 x = Numeric::uint64(x_in);
         if(ascii_) {
-            if(fprintf(ascii_file_, INT64_T_FMT "\n", int64_t(x_in)) == 0) {
+            if(fprintf(ascii_file_, INT64_T_FMT "\n", (long int) x_in) == 0) {
                 throw GeoFileException("Could not write size to file");                
             }
             return;

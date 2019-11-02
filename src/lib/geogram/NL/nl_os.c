@@ -246,16 +246,16 @@ NLprintfFunc nl_printf = printf;
 NLfprintfFunc nl_fprintf = fprintf;
 
 void nlError(const char* function, const char* message) {
-    nl_fprintf(stderr, "OpenNL error in %s(): %s\n", function, message) ; 
+    // nl_fprintf(stderr, "OpenNL error in %s(): %s\n", function, message) ; 
 }
 
 void nlWarning(const char* function, const char* message) {
-    nl_fprintf(stderr, "OpenNL warning in %s(): %s\n", function, message) ; 
+    // nl_fprintf(stderr, "OpenNL warning in %s(): %s\n", function, message) ; 
 }
 
 void nlPrintfFuncs(NLprintfFunc f1, NLfprintfFunc f2) {
-    nl_printf = f1;
-    nl_fprintf = f2;
+    // nl_printf = f1;
+    // nl_fprintf = f2;
 }
 
 /************************************************************************************/

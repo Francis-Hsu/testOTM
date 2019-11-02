@@ -1048,7 +1048,7 @@ namespace GEO {
     /************************************************************************/
 
     void Delaunay3d::show_tet(index_t t) const {
-        std::cerr << "tet"
+        Rcpp::Rcerr << "tet"
             << (tet_is_in_list(t) ? '*' : ' ')
             << t
             << ", v=["
@@ -1064,43 +1064,43 @@ namespace GEO {
         show_tet_adjacent(t, 1);
         show_tet_adjacent(t, 2);
         show_tet_adjacent(t, 3);
-        std::cerr << "] ";
+        Rcpp::Rcerr << "] ";
 
         for(index_t f = 0; f < 4; ++f) {
-            std::cerr << 'f' << f << ':';
+            Rcpp::Rcerr << 'f' << f << ':';
             for(index_t v = 0; v < 3; ++v) {
-                std::cerr << tet_vertex(t, tet_facet_vertex(f,v))
+                Rcpp::Rcerr << tet_vertex(t, tet_facet_vertex(f,v))
                     << ',';
             }
-            std::cerr << ' ';
+            Rcpp::Rcerr << ' ';
         }
-        std::cerr << std::endl;
+        Rcpp::Rcerr << std::endl;
     }
 
     void Delaunay3d::show_tet_adjacent(index_t t, index_t lf) const {
         signed_index_t adj = tet_adjacent(t, lf);
         if(adj != -1) {
-            std::cerr << (tet_is_in_list(index_t(adj)) ? '*' : ' ');
+            Rcpp::Rcerr << (tet_is_in_list(index_t(adj)) ? '*' : ' ');
         }
-        std::cerr << adj;
-        std::cerr << ' ';
+        Rcpp::Rcerr << adj;
+        Rcpp::Rcerr << ' ';
     }
 
     void Delaunay3d::show_list(
         index_t first, const std::string& list_name
     ) const {
         index_t t = first;
-        std::cerr << "tet list: " << list_name << std::endl;
+        Rcpp::Rcerr << "tet list: " << list_name << std::endl;
         while(t != END_OF_LIST) {
             show_tet(t);
             t = tet_next(t);
         }
-        std::cerr << "-------------" << std::endl;
+        Rcpp::Rcerr << "-------------" << std::endl;
     }
 
     void Delaunay3d::check_combinatorics(bool verbose) const {
         if(verbose) {
-            std::cerr << std::endl;
+            Rcpp::Rcerr << std::endl;
         }
         bool ok = true;
         std::vector<bool> v_has_tet(nb_vertices(), false);
@@ -1108,24 +1108,24 @@ namespace GEO {
             if(tet_is_free(t)) {
 /*
                 if(verbose) {
-                    std::cerr << "-Deleted tet: ";
+                    Rcpp::Rcerr << "-Deleted tet: ";
                     show_tet(t);
                 }
 */
             } else {
 /*
                 if(verbose) {
-                    std::cerr << "Checking tet: ";
+                    Rcpp::Rcerr << "Checking tet: ";
                     show_tet(t);
                 }
 */
                 for(index_t lf = 0; lf < 4; ++lf) {
                     if(tet_adjacent(t, lf) == -1) {
-                        std::cerr << lf << ":Missing adjacent tet"
+                        Rcpp::Rcerr << lf << ":Missing adjacent tet"
                             << std::endl;
                         ok = false;
                     } else if(tet_adjacent(t, lf) == signed_index_t(t)) {
-                        std::cerr << lf << ":Tet is adjacent to itself"
+                        Rcpp::Rcerr << lf << ":Tet is adjacent to itself"
                             << std::endl;
                         ok = false;
                     } else {
@@ -1137,7 +1137,7 @@ namespace GEO {
                             }
                         }
                         if(!found) {
-                            std::cerr
+                            Rcpp::Rcerr
                                 << lf << ":Adjacent link is not bidirectional"
                                 << std::endl;
                             ok = false;
@@ -1152,7 +1152,7 @@ namespace GEO {
                 }
                 if(nb_infinite > 1) {
                     ok = false;
-                    std::cerr << "More than one infinite vertex"
+                    Rcpp::Rcerr << "More than one infinite vertex"
                         << std::endl;
                 }
             }
@@ -1166,16 +1166,16 @@ namespace GEO {
         for(index_t v = 0; v < nb_vertices(); ++v) {
             if(!v_has_tet[v]) {
                 if(verbose) {
-                    std::cerr << "Vertex " << v
+                    Rcpp::Rcerr << "Vertex " << v
                         << " is isolated (duplicated ?)" << std::endl;
                 }
             }
         }
         geo_assert(ok);
         if(verbose) {
-            std::cerr << std::endl;
+            Rcpp::Rcerr << std::endl;
         }
-        std::cerr << std::endl << "Delaunay Combi OK" << std::endl;
+        Rcpp::Rcerr << std::endl << "Delaunay Combi OK" << std::endl;
     }
 
     void Delaunay3d::check_geometry(bool verbose) const {
@@ -1194,11 +1194,11 @@ namespace GEO {
                     if(tet_is_conflict(t, vertex_ptr(v))) {
                         ok = false;
                         if(verbose) {
-                            std::cerr << "Tet " << t <<
+                            Rcpp::Rcerr << "Tet " << t <<
                                 " is in conflict with vertex " << v
                                     << std::endl;
 
-                            std::cerr << "  offending tet: ";
+                            Rcpp::Rcerr << "  offending tet: ";
                             show_tet(t);
                         }
                     }
@@ -1206,7 +1206,7 @@ namespace GEO {
             }
         }
         geo_assert(ok);
-        std::cerr << std::endl << "Delaunay Geo OK" << std::endl;
+        Rcpp::Rcerr << std::endl << "Delaunay Geo OK" << std::endl;
     }
 
     /************************************************************************/

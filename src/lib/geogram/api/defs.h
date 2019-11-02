@@ -57,10 +57,11 @@
  * some doxygen commands that we use (retval, copydoc) and
  * generates many warnings for them...
  */
-#if defined(__clang__)
-#pragma clang diagnostic ignored "-Wunknown-pragmas"
-#pragma clang diagnostic ignored "-Wdocumentation-unknown-command" 
-#endif
+
+// #if defined(__clang__)
+// #pragma clang diagnostic ignored "-Wunknown-pragmas"
+// #pragma clang diagnostic ignored "-Wdocumentation-unknown-command" 
+// #endif
 
 /**
  * \brief Linkage declaration for geogram symbols.
