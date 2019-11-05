@@ -153,9 +153,9 @@ void nlInitialize(int argc, char** argv) {
 	    strncpy(extension, argv[i]+3, (size_t)(ptr-argv[i]-3));
 	    extension[(size_t)(ptr-argv[i]-3)] = '\0';
 	    if(nlInitExtension(extension)) {
-		nl_fprintf(stdout,"OpenNL %s: initialized\n", extension);
+		// nl_fprintf(stdout,"OpenNL %s: initialized\n", extension);
 	    } else {
-		nl_fprintf(stderr,"OpenNL %s: could not initialize\n", extension);		
+		// nl_fprintf(stderr,"OpenNL %s: could not initialize\n", extension);		
 	    }
 	}
     }

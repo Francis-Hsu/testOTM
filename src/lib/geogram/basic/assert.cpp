@@ -92,7 +92,8 @@ namespace GEO {
             Process::brute_force_kill();
         }
         aborting = true;
-        abort();
+        // abort();
+        Rcpp::stop("Abort");
     }
 
     void geo_breakpoint() {

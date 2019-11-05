@@ -99,7 +99,7 @@
 
 #ifdef PRINTF_INT64_MODIFIER
 /* define INT64_T_FMT "%" PRINTF_INT64_MODIFIER "d" */
-# define INT64_T_FMT "%lld"
+# define INT64_T_FMT "%ld"
 #else
 #   ifdef GMF_WINDOWS
 #     define INT64_T_FMT "%Id"

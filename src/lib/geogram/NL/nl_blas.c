@@ -62,9 +62,10 @@
 
 #ifdef NL_USE_ATLAS
 int NL_FORTRAN_WRAP(xerbla)(char *srname, int *info) {
-    nl_printf(stderr, "** On entry to %6s, parameter number %2d had an illegal value\n",
-              srname, *info
-    );
+    /* nl_printf(stderr, "** On entry to %6s, parameter number %2d had an illegal value\n",
+    *            srname, *info
+    * );
+    */
     return 0;
 } 
 #ifndef NL_USE_BLAS
@@ -226,8 +227,9 @@ static int NL_FORTRAN_WRAP(lsame)(const char *ca, const char *cb)
    ===================================================================== 
 */
 
-    nl_fprintf(stderr, "** On entry to %6s, parameter number %2d had an illegal value\n",
-                srname, *info);
+    /* nl_fprintf(stderr, "** On entry to %6s, parameter number %2d had an illegal value\n",
+     *            srname, *info);
+     */            
 
 /*     End of XERBLA */
 

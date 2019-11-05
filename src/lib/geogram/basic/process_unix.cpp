@@ -262,7 +262,7 @@ namespace {
                 << "Abnormal program termination: "
                 << message << std::endl;
         }
-        exit(1);
+        Rcpp::stop("Exit 1");
     }
 
     /**
@@ -338,7 +338,7 @@ namespace {
         if(Progress::current_task() != nullptr) {
             Progress::cancel();
         } else {
-            exit(1);
+            Rcpp::stop("Exit 1");
         }
     }
 

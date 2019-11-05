@@ -63,7 +63,8 @@ namespace {
         Logger::err("Image") 
             << "XPM Image reader: hex digit to integer: invalid digit: \'" 
             << digit << "\'" << std::endl;
-        abort();
+        // abort();
+        Rcpp::stop("Abort");
     }
 
     /**

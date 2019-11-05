@@ -642,22 +642,22 @@ extern "C" {
         // first one.
         for(GEO::index_t i=0; i<lines.size(); ++i) {
             if(i == 0) {
-                if(out == stdout) {
-                    GEO::Logger::out("") << last_string << lines[i] << std::endl;
-                } else if(out == stderr) {
-                    GEO::Logger::err("") << last_string << lines[i] << std::endl;                    
-                } else {
-                    fprintf(out, "%s%s", last_string.c_str(), lines[i]);                    
-                }
+                // if(out == stdout) {
+                //     GEO::Logger::out("") << last_string << lines[i] << std::endl;
+                // } else if(out == stderr) {
+                //     GEO::Logger::err("") << last_string << lines[i] << std::endl;                    
+                // } else {
+                //     fprintf(out, "%s%s", last_string.c_str(), lines[i]);                    
+                // }
                 last_string.clear();
             } else {
-                if(out == stdout) {
-                    GEO::Logger::out("") << lines[i] << std::endl;
-                } else if(out == stderr) {
-                    GEO::Logger::err("") << lines[i] << std::endl;                    
-                } else {
-                    fprintf(out, "%s", lines[i]);                    
-                }
+                // if(out == stdout) {
+                //     GEO::Logger::out("") << lines[i] << std::endl;
+                // } else if(out == stderr) {
+                //     GEO::Logger::err("") << lines[i] << std::endl;                    
+                // } else {
+                //     fprintf(out, "%s", lines[i]);                    
+                // }
             }
         }
 	

@@ -1435,7 +1435,7 @@ NLAPI void NLAPIENTRY nlMatrixMode(NLenum matrix);
     /**
      * \brief Function pointer type for user printf function.
      */
-    typedef int (*NLprintfFunc)(const char* format, ...);
+    typedef void (*NLprintfFunc)(const char* format, ...);
 
     /**
      * \brief Function pointer type for user fprintf function.

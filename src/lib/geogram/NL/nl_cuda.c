@@ -738,7 +738,7 @@ NLboolean nlInitExtension_CUDA(void) {
     CUDA()->devID = getBestDeviceID(); 
 
     if(CUDA()->cudaGetDeviceProperties(&deviceProp, CUDA()->devID)) {
-	nl_fprintf(stderr,"OpenNL CUDA: could not find a CUDA device\n");
+	// nl_fprintf(stderr,"OpenNL CUDA: could not find a CUDA device\n");
 	return NL_FALSE;
     }
     
@@ -770,7 +770,7 @@ NLboolean nlInitExtension_CUDA(void) {
     );
     
     if ((deviceProp.major * 0x10 + deviceProp.minor) < 0x11) {
-        nl_fprintf(stderr, "OpenNL CUDA requires a minimum CUDA compute 1.1 capability\n");
+        // nl_fprintf(stderr, "OpenNL CUDA requires a minimum CUDA compute 1.1 capability\n");
         CUDA()->cudaDeviceReset();
 	return NL_FALSE;
     }
@@ -836,9 +836,10 @@ NLboolean nlInitExtension_CUDA(void) {
 
 static void nlCUDACheckImpl(int status, int line) {
     if(status != 0) {
-	nl_fprintf(stderr,"nl_cuda.c:%d fatal error %d\n",line, status);
+	// nl_fprintf(stderr,"nl_cuda.c:%d fatal error %d\n",line, status);
 	CUDA()->cudaDeviceReset();    	
-	exit(-1);
+	// exit(-1);
+	Rf_error("Exit");
     }
 }
 

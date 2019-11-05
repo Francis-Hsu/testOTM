@@ -437,13 +437,13 @@ void nlEigenSolve_ARPACK(void) {
 
     if(info < 0) {
 	if(symmetric) {
-	    nl_fprintf(stderr, "\nError with dsaupd(): %d\n", info);	    
+	    // nl_fprintf(stderr, "\nError with dsaupd(): %d\n", info);	    
 	} else {
-	    nl_fprintf(stderr, "\nError with dnaupd(): %d\n", info);
+	    // nl_fprintf(stderr, "\nError with dnaupd(): %d\n", info);
 	}
     } else {
 	if(nlCurrentContext->verbose) {
-	    fprintf(stderr, "\nconverged\n");
+	    // fprintf(stderr, "\nconverged\n");
 	}
 	
 	select = NL_NEW_ARRAY(ARlogical, ncv);
@@ -482,9 +482,9 @@ void nlEigenSolve_ARPACK(void) {
 	if(nlCurrentContext->verbose) {
 	    if(ierr != 0) {		
 		if(symmetric) {
-		    nl_fprintf(stderr, "Error with dseupd(): %d\n", ierr);		
+		    // nl_fprintf(stderr, "Error with dseupd(): %d\n", ierr);		
 		} else {
-		    nl_fprintf(stderr, "Error with dneupd(): %d\n", ierr);
+		    // nl_fprintf(stderr, "Error with dneupd(): %d\n", ierr);
 		}
 	    } else {
 		if(symmetric) {

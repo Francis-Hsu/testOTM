@@ -71,11 +71,12 @@ namespace GEO {
         }
 
         void random_reset() {
-            std::srand(1);
+            // std::srand(1);
+            GetRNGstate();
         }
 
         int32 random_int32() {
-            return int32(std::rand() % std::numeric_limits<int32>::max());
+            return int32(R::unif_rand() * std::numeric_limits<int32>::max());
         }
 
         float32 random_float32() {

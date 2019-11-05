@@ -604,13 +604,13 @@ namespace GEO {
                     arg == "/?"
                 ) {
                     show_usage(additional_arg_specs, true);
-                    exit(0);
+                    Rcpp::stop("Exit 0");
                 }
                 if(arg == "--help") {
                     CmdLine::set_arg("log:pretty",false);
                     man_mode = true;
                     show_usage(additional_arg_specs, true);
-                    exit(0);
+                    Rcpp::stop("Exit 0");
                 }
                 if(arg == "--version" || arg == "--v") {
                     Rcpp::Rcout << FileSystem::base_name(argv[0])
@@ -635,7 +635,7 @@ namespace GEO {
                      << std::endl
                      << "   <https://gforge.inria.fr/mail/?group_id=5833>"
                      << std::endl;
-                    exit(0);
+                    Rcpp::stop("Exit 0");
                 }
             }
 
@@ -669,7 +669,7 @@ namespace GEO {
             }
 
 #ifndef GEOGRAM_PSM
-	    nlPrintfFuncs(geogram_printf, geogram_fprintf);	    
+	    // nlPrintfFuncs(geogram_printf, geogram_fprintf);	    
 	    nlInitialize(argc, argv);
 #endif
 	    if(
