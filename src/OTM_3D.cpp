@@ -44,15 +44,14 @@ List dualGraphs3D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
   arma::vec W = getWeights(OTM);
   
   // create a squared uniform mesh
-  setUniMesh(unifMesh, d, false);
+  // setUniMesh(unifMesh, d, false);
   
-  // this will not return the correct cell order
-  // GEO::Mesh otmRVD;
-  // OTM.get_RVD(otmRVD);
+  GEO::Mesh otmRVD;
+  OTM.get_RVD(otmRVD);
   
   // get the RDT
   GEO::Mesh otmRDT;
-  // OTM.RVD()->set_volumetric(false);
+  // OTM.RVD()->set_volumetric(true);
   OTM.RVD()->compute_RDT(otmRDT);
   
   // collect objects to return
@@ -60,8 +59,9 @@ List dualGraphs3D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
   lst["Data"] = X;
   lst["Centroid"] = Centroid;
   lst["Weight"] = W;
-  // lst["Vertex.RDT"] = getVertices(otmRDT);
-  // lst["Vertex.RVD"] = getVertices(unifMesh, OTM);
+  lst["Vertex.RDT"] = getVertices3D(otmRDT);
+  lst["Vertex.RVD"] = getVertices3D(otmRVD);
+  // lst["Vertex.RVD"] = getVerticesGen3D(unifMesh, OTM);
   // lst["N.Triangles"] = otmRDT.facets.nb();
   // lst["N.Cells"] = OTM.nb_points();
   

@@ -127,28 +127,29 @@ arma::mat getVertices2D(GEO::Mesh &M) {
 }
 
 arma::mat getVertices3D(GEO::Mesh &M) {
-  const unsigned int nFacets = M.facets.nb();
+  const unsigned int nCells = M.cells.nb();
   GEO::vec3 v;
   
   int totalNbVert = 0;
-  int nbVert[nFacets];
-  int accuVert[nFacets];
-  for (unsigned int i = 0; i < nFacets; i++) {
-    nbVert[i] = M.facets.nb_vertices(i);
+  int nbVert[nCells];
+  int accuVert[nCells];
+  for (unsigned int i = 0; i < nCells; i++) {
+    nbVert[i] = M.cells.nb_vertices(i);
     accuVert[i] = totalNbVert;
     totalNbVert += nbVert[i];
   }
   
   unsigned int id;
-  arma::mat Vert(totalNbVert, 4);
-  for (unsigned int i = 0; i < nFacets; i++) {
+  arma::mat Vert(totalNbVert, 5);
+  for (unsigned int i = 0; i < nCells; i++) {
     for (int j = 0; j < nbVert[i]; j++) {
-      id = M.facets.vertex(i, j);
+      id = M.cells.vertex(i, j);
       v = M.vertices.point(id);
       Vert(accuVert[i] + j, 0) = i + 1;
       Vert(accuVert[i] + j, 1) = v.x;
       Vert(accuVert[i] + j, 2) = v.y;
-      Vert(accuVert[i] + j, 3) = id + 1;
+      Vert(accuVert[i] + j, 3) = v.z;
+      Vert(accuVert[i] + j, 4) = id + 1;
     }
   }
   
@@ -214,34 +215,29 @@ arma::mat getVerticesGen3D(GEO::Mesh &S, GEO::OptimalTransportMap &OTM) {
   vertex_weight.bind_if_is_defined(
     S.vertices.attributes(), "weight"
   );
-  GEOGen::Polygon P;
-  P.initialize_from_mesh_facet(&S, 0, false, vertex_weight);
-  
+  GEOGen::ConvexCell P(3);
+  P.initialize_from_mesh_tetrahedron(&S, 0, false, vertex_weight);
+
   // some containers
-  GEOGen::Polygon* cP; // polygon that stores the intersection
+  // GEOGen::ConvexCell* cP; // polygon that stores the intersection
   std::vector<double> RVDVerts; 
   int totalNbVert = 0;
   int nbVert[n];
   int accuVert[n];
   
   // construct a generic RVD
-  if (d == 2) {
-    GEOGen::RVDHelper<3> transMapGen(OTM.RVD()->delaunay(), &S);
-    
-    // compute intersections
-    for (unsigned int i = 0; i < n; i++) {
-      cP = transMapGen.intersect_cell_facet(i, P);
-      nbVert[i] = cP->nb_vertices();
-      accuVert[i] = totalNbVert;
-      totalNbVert += nbVert[i];
-      for (unsigned int j = 0; j < cP->nb_vertices(); j++) {
-        RVDVerts.push_back(cP->vertex(j).point()[0]); 
-        RVDVerts.push_back(cP->vertex(j).point()[1]);
-      }
+  GEOGen::RVDHelper<3> transMapGen(OTM.RVD()->delaunay(), &S);
+  
+  // compute intersections
+  for (unsigned int i = 0; i < n; i++) {
+    transMapGen.intersect_cell_cell(i, P);
+    nbVert[i] = P.max_t();
+    accuVert[i] = totalNbVert;
+    totalNbVert += nbVert[i];
+    for (unsigned int j = 0; j < P.max_t(); j++) {
+      RVDVerts.push_back(P.triangle_dual(j).point()[0]); 
+      RVDVerts.push_back(P.triangle_dual(j).point()[1]);
     }
-  } else {
-    // TODO: take care 3d case
-    // GEOGen::RestrictedVoronoiDiagram<4> transMapGen(OTM.RVD()->delaunay(), &S);
   }
   
   // get the vertices of each cell
