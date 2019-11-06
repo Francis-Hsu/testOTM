@@ -48,7 +48,7 @@ List dualGraphs2D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
   
   // create a mesh for 2D uniform measure
   GEO::Mesh unifMesh(d, false);
-  setSqUniMesh(unifMesh, d, true);
+  setUniMesh(unifMesh, d, true);
   
   // compute OTM
   GEO::OptimalTransportMap2d OTM(&unifMesh);
@@ -61,7 +61,7 @@ List dualGraphs2D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
   arma::vec W = getWeights(OTM);
   
   // create a squared uniform mesh
-  setSqUniMesh(unifMesh, d, false);
+  setUniMesh(unifMesh, d, false);
   
   // this will not return the correct cell order
   // GEO::Mesh otmRVD;
@@ -77,8 +77,8 @@ List dualGraphs2D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
   lst["Data"] = X;
   lst["Centroid"] = Centroid;
   lst["Weight"] = W;
-  lst["Vertex.RDT"] = getVertices(otmRDT);
-  lst["Vertex.RVD"] = getVertices(unifMesh, OTM);
+  lst["Vertex.RDT"] = getVertices2D(otmRDT);
+  lst["Vertex.RVD"] = getVerticesGen2D(unifMesh, OTM);
   lst["N.Triangles"] = otmRDT.facets.nb();
   lst["N.Cells"] = OTM.nb_points();
   
@@ -252,7 +252,7 @@ List gof2DHelper(const arma::mat &X, const arma::mat &Y, const arma::mat &U,
   
   // create a mesh for 2D uniform measure
   GEO::Mesh unifMesh(d, false);
-  setSqUniMesh(unifMesh, d, true);
+  setUniMesh(unifMesh, d, true);
   
   // compute OTMs
   GEO::OptimalTransportMap2d OTMX(&unifMesh);
@@ -295,7 +295,7 @@ arma::mat jointRankHelper2D(const arma::mat &XY, bool center, double epsilon, in
   
   // create a mesh for 2D uniform measure
   GEO::Mesh unifMesh(d, false);
-  setSqUniMesh(unifMesh, d, true);
+  setUniMesh(unifMesh, d, true);
   
   // embed in 3-dimension
   unifMesh.vertices.set_dimension(d + 1);
@@ -310,10 +310,10 @@ arma::mat jointRankHelper2D(const arma::mat &XY, bool center, double epsilon, in
     elemXY = getCentroids(OTMXY);
   } else {
     // create a squared uniform mesh
-    setSqUniMesh(unifMesh, d, false);
+    setUniMesh(unifMesh, d, false);
     
     // get Voronoi cells
-    elemXY = getVertices(unifMesh, OTMXY);
+    elemXY = getVerticesGen2D(unifMesh, OTMXY);
   }
   
   return elemXY;

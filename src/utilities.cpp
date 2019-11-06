@@ -37,21 +37,34 @@ void getWeightedVerts(const arma::mat &X, const arma::vec &w, double* wV) {
   }
 }
 
-void setSqUniMesh(GEO::Mesh &M, unsigned int d, bool tri) {
+void setUniMesh(GEO::Mesh &M, unsigned int d, bool tri) {
   const arma::mat cubeVertices = cubeVert(d);
   M.clear();
   M.vertices.create_vertices(cubeVertices.n_rows);
   setMeshPoint(M, cubeVertices);
   
-  // embed in 3-dimension
+  // embed in (d + 1)-dimension
+  M.vertices.set_dimension(d + 1);
+  
   if (d == 2) {
-    M.vertices.set_dimension(d + 1);
     if (tri) {
       M.facets.create_triangle(0, 1, 2);
       M.facets.create_triangle(2, 1, 3);
       M.facets.connect();
     } else {
       M.facets.create_quad(0, 2, 3, 1);
+    }
+  } else if (d == 3) {
+    if (tri) {
+      // divided the cube into 5 tetrahedra
+      M.cells.create_tet(0, 2, 1, 4);
+      M.cells.create_tet(3, 7, 1, 2);
+      M.cells.create_tet(6, 4, 2, 7);
+      M.cells.create_tet(5, 1, 7, 4);
+      M.cells.create_tet(1, 2, 4, 7);
+      M.cells.connect();
+    } else {
+      M.cells.create_hex(0, 2, 6, 4, 5, 1, 3, 7);
     }
   }
 }
@@ -84,7 +97,7 @@ arma::mat getCentroids(GEO::OptimalTransportMap &OTM) {
   return Centroid;
 }
 
-arma::mat getVertices(GEO::Mesh &M) {
+arma::mat getVertices2D(GEO::Mesh &M) {
   const unsigned int nFacets = M.facets.nb();
   GEO::vec3 v;
   
@@ -113,7 +126,86 @@ arma::mat getVertices(GEO::Mesh &M) {
   return Vert;
 }
 
-arma::mat getVertices(GEO::Mesh &S, GEO::OptimalTransportMap &OTM) {
+arma::mat getVertices3D(GEO::Mesh &M) {
+  const unsigned int nFacets = M.facets.nb();
+  GEO::vec3 v;
+  
+  int totalNbVert = 0;
+  int nbVert[nFacets];
+  int accuVert[nFacets];
+  for (unsigned int i = 0; i < nFacets; i++) {
+    nbVert[i] = M.facets.nb_vertices(i);
+    accuVert[i] = totalNbVert;
+    totalNbVert += nbVert[i];
+  }
+  
+  unsigned int id;
+  arma::mat Vert(totalNbVert, 4);
+  for (unsigned int i = 0; i < nFacets; i++) {
+    for (int j = 0; j < nbVert[i]; j++) {
+      id = M.facets.vertex(i, j);
+      v = M.vertices.point(id);
+      Vert(accuVert[i] + j, 0) = i + 1;
+      Vert(accuVert[i] + j, 1) = v.x;
+      Vert(accuVert[i] + j, 2) = v.y;
+      Vert(accuVert[i] + j, 3) = id + 1;
+    }
+  }
+  
+  return Vert;
+}
+
+arma::mat getVerticesGen2D(GEO::Mesh &S, GEO::OptimalTransportMap &OTM) {
+  const unsigned int n = OTM.nb_points();
+  const unsigned int d = 2;
+  
+  // construct a polygon from the source mesh
+  GEO::Attribute<double> vertex_weight;
+  vertex_weight.bind_if_is_defined(
+    S.vertices.attributes(), "weight"
+  );
+  GEOGen::Polygon P;
+  P.initialize_from_mesh_facet(&S, 0, false, vertex_weight);
+  
+  // some containers
+  GEOGen::Polygon* cP; // polygon that stores the intersection
+  std::vector<double> RVDVerts; 
+  int totalNbVert = 0;
+  int nbVert[n];
+  int accuVert[n];
+  
+  // construct a generic RVD
+  GEOGen::RVDHelper<3> transMapGen(OTM.RVD()->delaunay(), &S);
+  
+  // compute intersections
+  for (unsigned int i = 0; i < n; i++) {
+    cP = transMapGen.intersect_cell_facet(i, P);
+    nbVert[i] = cP->nb_vertices();
+    accuVert[i] = totalNbVert;
+    totalNbVert += nbVert[i];
+    for (unsigned int j = 0; j < cP->nb_vertices(); j++) {
+      RVDVerts.push_back(cP->vertex(j).point()[0]); 
+      RVDVerts.push_back(cP->vertex(j).point()[1]);
+    }
+  }
+  
+  // get the vertices of each cell
+  // should be in ccw orientation
+  int currID;
+  arma::mat Vert(totalNbVert, d + 1);
+  for (unsigned int i = 0; i < n; i++) {
+    for (int j = 0; j < nbVert[i]; j++) {
+      currID = accuVert[i] + j;
+      Vert(currID, 0) = i + 1;
+      Vert(currID, 1) = RVDVerts[2 * currID];
+      Vert(currID, 2) = RVDVerts[2 * currID + 1];
+    }
+  }
+  
+  return Vert;
+}
+
+arma::mat getVerticesGen3D(GEO::Mesh &S, GEO::OptimalTransportMap &OTM) {
   const unsigned int n = OTM.nb_points();
   const unsigned int d = OTM.dimension();
   

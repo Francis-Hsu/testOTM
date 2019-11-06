@@ -20,11 +20,13 @@
 void initializeGeogram();
 void setMeshPoint(GEO::Mesh &M, const arma::mat &X);
 void getWeightedVerts(const arma::mat &X, const arma::vec &w, double* wV);
-void setSqUniMesh(GEO::Mesh &M, unsigned int d, bool tri);
+void setUniMesh(GEO::Mesh &M, unsigned int d, bool tri);
 arma::vec getWeights(GEO::OptimalTransportMap &OTM);
 arma::mat getCentroids(GEO::OptimalTransportMap &OTM);
-arma::mat getVertices(GEO::Mesh &M);
-arma::mat getVertices(GEO::Mesh &S, GEO::OptimalTransportMap &OTM);
+arma::mat getVertices2D(GEO::Mesh &M);
+arma::mat getVertices3D(GEO::Mesh &M);
+arma::mat getVerticesGen2D(GEO::Mesh &S, GEO::OptimalTransportMap &OTM);
+arma::mat getVerticesGen3D(GEO::Mesh &S, GEO::OptimalTransportMap &OTM);
 arma::mat cubeVert(unsigned int d);
 
 namespace GEOGen {
@@ -32,6 +34,7 @@ namespace GEOGen {
   public:
     using RestrictedVoronoiDiagram<DIM>::RestrictedVoronoiDiagram;
     using RestrictedVoronoiDiagram<DIM>::intersect_cell_facet;
+    using RestrictedVoronoiDiagram<DIM>::intersect_cell_cell;
   };
 }
 

@@ -148,7 +148,7 @@ GEO_SOURCES_CPP += $(LIB_DIR)/exploragram/optimal_transport/VSDM.cpp
 GEO_OBJECTS_C = $(GEO_SOURCES_C:.c=.o)
 GEO_OBJECTS_CPP = $(GEO_SOURCES_CPP:.cpp=.o)
 
-R_SOURCES = OTM_2D.cpp utilities.cpp RcppExports.cpp
+R_SOURCES = OTM_3D.cpp OTM_2D.cpp utilities.cpp RcppExports.cpp
 R_OBJECTS = $(R_SOURCES:.cpp=.o)
 
 OBJECTS = $(GEO_OBJECTS_C) $(GEO_OBJECTS_CPP) $(R_OBJECTS)

@@ -91,6 +91,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// dualGraphs3D
+List dualGraphs3D(const arma::mat& X, double epsilon, int maxit, bool verbose);
+RcppExport SEXP _testOTM_dualGraphs3D(SEXP XSEXP, SEXP epsilonSEXP, SEXP maxitSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< double >::type epsilon(epsilonSEXP);
+    Rcpp::traits::input_parameter< int >::type maxit(maxitSEXP);
+    Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(dualGraphs3D(X, epsilon, maxit, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_testOTM_dualGraphs2D", (DL_FUNC) &_testOTM_dualGraphs2D, 4},
@@ -99,6 +113,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_testOTM_locateRDT2D", (DL_FUNC) &_testOTM_locateRDT2D, 2},
     {"_testOTM_gof2DHelper", (DL_FUNC) &_testOTM_gof2DHelper, 6},
     {"_testOTM_jointRankHelper2D", (DL_FUNC) &_testOTM_jointRankHelper2D, 5},
+    {"_testOTM_dualGraphs3D", (DL_FUNC) &_testOTM_dualGraphs3D, 4},
     {NULL, NULL, 0}
 };
 

@@ -69,3 +69,7 @@ jointRankHelper2D <- function(XY, center, epsilon, maxit, verbose) {
     .Call('_testOTM_jointRankHelper2D', PACKAGE = 'testOTM', XY, center, epsilon, maxit, verbose)
 }
 
+dualGraphs3D <- function(X, epsilon, maxit, verbose) {
+    .Call('_testOTM_dualGraphs3D', PACKAGE = 'testOTM', X, epsilon, maxit, verbose)
+}
+
