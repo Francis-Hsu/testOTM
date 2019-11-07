@@ -43,16 +43,16 @@ List dualGraphs3D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
   // store weights
   arma::vec W = getWeights(OTM);
   
-  //GEO::Mesh otmRVD;
-  //OTM.get_RVD(otmRVD);
+  
   
   // get the RDT
   GEO::Mesh otmRDT;
-  // OTM.RVD()->set_volumetric(true);
   OTM.RVD()->compute_RDT(otmRDT);
   
   // create a squared uniform mesh
-  // setUniMesh(unifMesh, d, false);
+  setUniMesh(unifMesh, d, false);
+  // GEO::Mesh otmRVD;
+  // OTM.get_RVD(otmRVD);
   
   // collect objects to return
   List lst;
@@ -60,10 +60,10 @@ List dualGraphs3D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
   lst["Centroid"] = Centroid;
   lst["Weight"] = W;
   lst["Vertex.RDT"] = getVertices3D(otmRDT);
-  // lst["Vertex.RVD"] = getVerticesGen3D(unifMesh, OTM);
-  // lst["Vertex.RVD"] = getVerticesGen3D(unifMesh, OTM);
+  // lst["Vertex.RVD"] = getVertices3D(otmRVD);
+  lst["Vertex.RVD"] = getVerticesGen3D(unifMesh, OTM);
   lst["N.Triangles"] = otmRDT.cells.nb();
-  // lst["N.Cells"] = OTM.nb_points();
+  // lst["N.Cells"] = otmRVD.cells.nb();
   
   return lst;
 }

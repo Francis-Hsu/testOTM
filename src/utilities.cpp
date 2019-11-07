@@ -64,7 +64,7 @@ void setUniMesh(GEO::Mesh &M, unsigned int d, bool tri) {
       M.cells.create_tet(1, 2, 4, 7);
       M.cells.connect();
     } else {
-      M.cells.create_hex(0, 2, 6, 4, 5, 1, 3, 7);
+      M.cells.create_hex(0, 1, 3, 2, 6, 4, 5, 7);
     }
   }
 }
@@ -231,13 +231,18 @@ arma::mat getVerticesGen3D(GEO::Mesh &S, GEO::OptimalTransportMap &OTM) {
   // compute intersections
   for (unsigned int i = 0; i < n; i++) {
     transMapGen.intersect_cell_cell(i, P);
+    Rcout << P.max_t() << std::endl;
     nbVert[i] = P.max_t();
     accuVert[i] = totalNbVert;
     totalNbVert += nbVert[i];
     for (unsigned int j = 0; j < P.max_t(); j++) {
-      RVDVerts.push_back(P.triangle_dual(j).point()[0]); 
-      RVDVerts.push_back(P.triangle_dual(j).point()[1]);
+      if(P.triangle_is_valid(j)) {
+        RVDVerts.push_back(P.triangle_dual(j).point()[0]); 
+        RVDVerts.push_back(P.triangle_dual(j).point()[1]);
+        RVDVerts.push_back(P.triangle_dual(j).point()[2]);
+      }
     }
+    P.initialize_from_mesh_tetrahedron(&S, 0, false, vertex_weight);
   }
   
   // get the vertices of each cell
@@ -250,6 +255,7 @@ arma::mat getVerticesGen3D(GEO::Mesh &S, GEO::OptimalTransportMap &OTM) {
       Vert(currID, 0) = i + 1;
       Vert(currID, 1) = RVDVerts[2 * currID];
       Vert(currID, 2) = RVDVerts[2 * currID + 1];
+      Vert(currID, 3) = RVDVerts[2 * currID + 2];
     }
   }
   
