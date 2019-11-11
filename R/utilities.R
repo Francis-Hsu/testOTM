@@ -230,3 +230,34 @@ dep.assign.rank = function(XY, elem, rank.id) {
   
   return(list(h = rh, t = rt))
 }
+
+#' Helper for extracting line segments for visualization
+#' 
+#' @keywords internal
+extract.segment = function(V, id_col, vert_col) {
+  n.edge = NROW(V)
+  v.edges = matrix(0, n.edge, 2 * length(vert_col))
+  curr.row = 1
+  
+  # extract edges
+  for (i in unique(V[, id_col])) {
+    curr.cell = subset(V, V[, id_col] == i, select = vert_col)
+    curr.cell.sum = rowSums(curr.cell)
+    for (j in 1:NROW(curr.cell)) {
+      p.id = j
+      q.id = 1 + j %% NROW(curr.cell)
+      # sort by l1 norm, everything positive!
+      if (curr.cell.sum[p.id] <= curr.cell.sum[q.id]) {
+        v.edges[curr.row, ] = c(curr.cell[p.id, ], curr.cell[q.id, ])
+      } else {
+        v.edges[curr.row, ] = c(curr.cell[q.id, ], curr.cell[p.id, ])
+      }
+      curr.row = curr.row + 1
+    }
+  }
+  
+  # remove duplicated edges
+  v.edges = unique(round(v.edges, 8))
+  
+  return(v.edges)
+}

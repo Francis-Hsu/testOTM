@@ -105,6 +105,34 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// dualPotential3D
+List dualPotential3D(const arma::mat& Y, const arma::mat& X, const arma::mat& V, const arma::vec& h, const arma::uvec accuVerts);
+RcppExport SEXP _testOTM_dualPotential3D(SEXP YSEXP, SEXP XSEXP, SEXP VSEXP, SEXP hSEXP, SEXP accuVertsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type V(VSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type h(hSEXP);
+    Rcpp::traits::input_parameter< const arma::uvec >::type accuVerts(accuVertsSEXP);
+    rcpp_result_gen = Rcpp::wrap(dualPotential3D(Y, X, V, h, accuVerts));
+    return rcpp_result_gen;
+END_RCPP
+}
+// locateRVD3D
+arma::ivec locateRVD3D(const arma::mat& Q, const arma::mat& X, const arma::vec& w);
+RcppExport SEXP _testOTM_locateRVD3D(SEXP QSEXP, SEXP XSEXP, SEXP wSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type Q(QSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type w(wSEXP);
+    rcpp_result_gen = Rcpp::wrap(locateRVD3D(Q, X, w));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_testOTM_dualGraphs2D", (DL_FUNC) &_testOTM_dualGraphs2D, 4},
@@ -114,6 +142,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_testOTM_gof2DHelper", (DL_FUNC) &_testOTM_gof2DHelper, 6},
     {"_testOTM_jointRankHelper2D", (DL_FUNC) &_testOTM_jointRankHelper2D, 5},
     {"_testOTM_dualGraphs3D", (DL_FUNC) &_testOTM_dualGraphs3D, 4},
+    {"_testOTM_dualPotential3D", (DL_FUNC) &_testOTM_dualPotential3D, 5},
+    {"_testOTM_locateRVD3D", (DL_FUNC) &_testOTM_locateRVD3D, 3},
     {NULL, NULL, 0}
 };
 

@@ -69,7 +69,31 @@ jointRankHelper2D <- function(XY, center, epsilon, maxit, verbose) {
     .Call('_testOTM_jointRankHelper2D', PACKAGE = 'testOTM', XY, center, epsilon, maxit, verbose)
 }
 
+#' 3D Semi-discrete Optimal Transport Map
+#' 
+#' @param X input data matrix.
+#' @param epsilon maximum error for the optimization algorithm.
+#' @param maxit maximum number of solver iterations.
+#' @param verbose logical indicating wether to display optimization messages.
+#' @return a list describing the resulting optimal transport map.
+#' @keywords internal
 dualGraphs3D <- function(X, epsilon, maxit, verbose) {
     .Call('_testOTM_dualGraphs3D', PACKAGE = 'testOTM', X, epsilon, maxit, verbose)
+}
+
+dualPotential3D <- function(Y, X, V, h, accuVerts) {
+    .Call('_testOTM_dualPotential3D', PACKAGE = 'testOTM', Y, X, V, h, accuVerts)
+}
+
+#' Locate within a 3D RVD
+#' 
+#' Find the RVD cells where a set Q of query points is transported to.
+#' @param Q input query matrix.
+#' @param X input data used to build the RVD.
+#' @param w weights of the RVD cells.
+#' @return a vector of indices indicating where the query points are transported to.
+#' @keywords internal
+locateRVD3D <- function(Q, X, w) {
+    .Call('_testOTM_locateRVD3D', PACKAGE = 'testOTM', Q, X, w)
 }
 

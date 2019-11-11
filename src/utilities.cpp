@@ -37,6 +37,7 @@ void getWeightedVerts(const arma::mat &X, const arma::vec &w, double* wV) {
   }
 }
 
+// setup a standard uniform mesh in 2D or 3D
 void setUniMesh(GEO::Mesh &M, unsigned int d, bool tri) {
   const arma::mat cubeVertices = cubeVert(d);
   M.clear();
@@ -64,7 +65,14 @@ void setUniMesh(GEO::Mesh &M, unsigned int d, bool tri) {
       M.cells.create_tet(1, 2, 4, 7);
       M.cells.connect();
     } else {
-      M.cells.create_hex(0, 1, 3, 2, 6, 4, 5, 7);
+      // took from initialize_mesh_with_box()
+      M.facets.create_quad(7, 6, 2, 3);
+      M.facets.create_quad(1, 3, 2, 0);
+      M.facets.create_quad(5, 7, 3, 1);
+      M.facets.create_quad(4, 6, 7, 5);
+      M.facets.create_quad(4, 5, 1, 0);
+      M.facets.create_quad(6, 4, 0, 2);
+      M.facets.connect();
     }
   }
 }
@@ -97,6 +105,7 @@ arma::mat getCentroids(GEO::OptimalTransportMap &OTM) {
   return Centroid;
 }
 
+// extract vertices from a 2D mesh (embedded in 3D)
 arma::mat getVertices2D(GEO::Mesh &M) {
   const unsigned int nFacets = M.facets.nb();
   GEO::vec3 v;
@@ -126,36 +135,83 @@ arma::mat getVertices2D(GEO::Mesh &M) {
   return Vert;
 }
 
-arma::mat getVertices3D(GEO::Mesh &M) {
-  const unsigned int nCells = M.cells.nb();
-  GEO::vec3 v;
-  
-  int totalNbVert = 0;
-  int nbVert[nCells];
-  int accuVert[nCells];
-  for (unsigned int i = 0; i < nCells; i++) {
-    nbVert[i] = M.cells.nb_vertices(i);
-    accuVert[i] = totalNbVert;
-    totalNbVert += nbVert[i];
+// extract vertices from a 3D mesh
+arma::mat getVertices3D(GEO::Mesh &M, bool volumetric) {
+  // count total number of elements to traverse
+  unsigned int nElems;
+  if (volumetric) {
+    // in volumetric the elements are the facets of cells
+    nElems = 0;
+    for (unsigned int i = 0; i < M.cells.nb(); i++) {
+      nElems += M.cells.nb_facets(i);
+    }
+  } else {
+    // in surfacic mode the elements are just facets
+    nElems = M.facets.nb();
   }
   
-  unsigned int id;
-  arma::mat Vert(totalNbVert, 5);
-  for (unsigned int i = 0; i < nCells; i++) {
-    for (int j = 0; j < nbVert[i]; j++) {
-      id = M.cells.vertex(i, j);
-      v = M.vertices.point(id);
-      Vert(accuVert[i] + j, 0) = i + 1;
-      Vert(accuVert[i] + j, 1) = v.x;
-      Vert(accuVert[i] + j, 2) = v.y;
-      Vert(accuVert[i] + j, 3) = v.z;
-      Vert(accuVert[i] + j, 4) = id + 1;
+  // count total number of (repeated) vertices to store
+  unsigned int accuFacets = 0;
+  int totalNbVert = 0;
+  int nbVert[nElems];
+  int accuVert[nElems];
+  if (volumetric) {
+    for (unsigned int i = 0; i < M.cells.nb(); i++) {
+      for (unsigned int j = 0; j < M.cells.nb_facets(i); j++) {
+        nbVert[accuFacets] = M.cells.facet_nb_vertices(i, j);
+        accuVert[accuFacets] = totalNbVert;
+        totalNbVert += nbVert[accuFacets];
+        accuFacets++;
+      }
+    }
+  } else {
+    for (unsigned int i = 0; i < nElems; i++) {
+      nbVert[i] = M.facets.nb_vertices(i);
+      accuVert[i] = totalNbVert;
+      totalNbVert += nbVert[i];
     }
   }
   
+  
+  GEO::vec3 v;
+  arma::mat Vert(totalNbVert, 5 + volumetric);
+  unsigned int id;
+  if (volumetric) {
+    // we iterate through facets of each cell and save the vertices in order
+    accuFacets = 0;
+    for (unsigned int i = 0; i < M.cells.nb(); i++) {
+      for (unsigned int j = 0; j < M.cells.nb_facets(i); j++) {
+        for (unsigned int k = 0; k < M.cells.facet_nb_vertices(i, j); k++) {
+          id = M.cells.facet_vertex(i, j, k);
+          v = M.vertices.point(id);
+          Vert(accuVert[accuFacets] + k, 0) = i + 1;
+          Vert(accuVert[accuFacets] + k, 1) = j + 1;
+          Vert(accuVert[accuFacets] + k, 2) = v.x;
+          Vert(accuVert[accuFacets] + k, 3) = v.y;
+          Vert(accuVert[accuFacets] + k, 4) = v.z;
+          Vert(accuVert[accuFacets] + k, 5) = id + 1;
+        }
+        accuFacets++;
+      }
+    }
+  } else {
+    for (unsigned int i = 0; i < nElems; i++) {
+      for (int j = 0; j < nbVert[i]; j++) {
+        id = M.facets.vertex(i, j);
+        v = M.vertices.point(id);
+        Vert(accuVert[i] + j, 0) = i + 1;
+        Vert(accuVert[i] + j, 1) = v.x;
+        Vert(accuVert[i] + j, 2) = v.y;
+        Vert(accuVert[i] + j, 3) = v.z;
+        Vert(accuVert[i] + j, 4) = id + 1;
+      }
+    }
+  }
+
   return Vert;
 }
 
+// use the generic RVD class to extract vertices from a RVD
 arma::mat getVerticesGen2D(GEO::Mesh &S, GEO::OptimalTransportMap &OTM) {
   const unsigned int n = OTM.nb_points();
   const unsigned int d = 2;
@@ -206,67 +262,11 @@ arma::mat getVerticesGen2D(GEO::Mesh &S, GEO::OptimalTransportMap &OTM) {
   return Vert;
 }
 
-arma::mat getVerticesGen3D(GEO::Mesh &S, GEO::OptimalTransportMap &OTM) {
-  const unsigned int n = OTM.nb_points();
-  const unsigned int d = OTM.dimension();
-  
-  // construct a polygon from the source mesh
-  GEO::Attribute<double> vertex_weight;
-  vertex_weight.bind_if_is_defined(
-    S.vertices.attributes(), "weight"
-  );
-  GEOGen::ConvexCell P(3);
-  P.initialize_from_mesh_tetrahedron(&S, 0, false, vertex_weight);
-
-  // some containers
-  // GEOGen::ConvexCell* cP; // polygon that stores the intersection
-  std::vector<double> RVDVerts; 
-  int totalNbVert = 0;
-  int nbVert[n];
-  int accuVert[n];
-  
-  // construct a generic RVD
-  GEOGen::RVDHelper<3> transMapGen(OTM.RVD()->delaunay(), &S);
-  
-  // compute intersections
-  for (unsigned int i = 0; i < n; i++) {
-    transMapGen.intersect_cell_cell(i, P);
-    Rcout << P.max_t() << std::endl;
-    nbVert[i] = P.max_t();
-    accuVert[i] = totalNbVert;
-    totalNbVert += nbVert[i];
-    for (unsigned int j = 0; j < P.max_t(); j++) {
-      if(P.triangle_is_valid(j)) {
-        RVDVerts.push_back(P.triangle_dual(j).point()[0]); 
-        RVDVerts.push_back(P.triangle_dual(j).point()[1]);
-        RVDVerts.push_back(P.triangle_dual(j).point()[2]);
-      }
-    }
-    P.initialize_from_mesh_tetrahedron(&S, 0, false, vertex_weight);
-  }
-  
-  // get the vertices of each cell
-  // should be in ccw orientation
-  int currID;
-  arma::mat Vert(totalNbVert, d + 1);
-  for (unsigned int i = 0; i < n; i++) {
-    for (int j = 0; j < nbVert[i]; j++) {
-      currID = accuVert[i] + j;
-      Vert(currID, 0) = i + 1;
-      Vert(currID, 1) = RVDVerts[2 * currID];
-      Vert(currID, 2) = RVDVerts[2 * currID + 1];
-      Vert(currID, 3) = RVDVerts[2 * currID + 2];
-    }
-  }
-  
-  return Vert;
-}
-
 // compute the vertices of a unit hypercube using binary expansion
 // this will generate a matrix with 2^d rows
 arma::mat cubeVert(unsigned int d) {
   if (d > 20) {
-    stop("Dimesion is too high!");
+    stop("Input dimesion is too high!");
   }
   
   int x = 0;

@@ -30,6 +30,23 @@ tos.depth.tos.2d = function(object, query, scale = TRUE, rank.data = "uniform", 
   return(tos.depth)
 }
 
+#' 3D Semi-discrete Optimal Transport Depth
+#'
+#' The 3D implementation of \code{tos.depth}.
+#' @param object a fitted 3D optimal transport map object.
+#' @param query a numeric matrix where each row represents a query point.
+#' @param rank.data choose the method for assigning ranks to the data points. 
+#' @param \dots additional arguments, currently without effect.
+#' @return a vector containing the depths of the data.
+#' @keywords internal
+#' @export
+tos.depth.tos.3d = function(object, query, scale = TRUE, rank.data = "center", ...) {
+  ranks = tos.rank.tos.3d(object, query, scale = scale, rank.data = rank.data)$Rank
+  tos.depth = depth.uniform(ranks)
+  
+  return(tos.depth)
+}
+
 #' Multivariate Uniform Depth Function
 #' 
 #' \code{tos.depth} computes the depths associated with the \eqn{U[0, 1]^d} measure.

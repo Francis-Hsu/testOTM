@@ -15,9 +15,9 @@
 \item{scale}{logical indicating if the queries should be scaled.}
 
 \item{rank.data}{choose the method for assigning ranks to the data points. 
-Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".}
+Can be \code{max}, \code{min}, \code{center}, or \code{uniform}.}
 
-\item{rank.algo}{choose the algorithm for computing the ranks. Can be "\code{lp}" or "\code{geom}".}
+\item{rank.algo}{choose the algorithm for computing the ranks. Can be \code{lp} or \code{geom}.}
 
 \item{\dots}{additional arguments, currently without effect.}
 }

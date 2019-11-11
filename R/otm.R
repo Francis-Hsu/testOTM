@@ -22,8 +22,8 @@ tos.fit = function(data,
                    maxit = 100,
                    verbose = F) {
   # input validation
-  if (!is.matrix(data) || ncol(data) < 2) {
-    stop("Data must be a matrix with ncol >= 2.")
+  if (!is.matrix(data) || NCOL(data) < 2) {
+    stop("Input data must be a matrix with ncol >= 2.")
   }
   
   if (!is.null(scale)) {
@@ -46,22 +46,35 @@ tos.fit = function(data,
     stop("Data must be scaled to [0, 1] range.")
   }
   
-  d = ncol(data)
+  d = NCOL(data)
   if (d == 2) {
+    if (NROW(data) < 3) {
+      stop("Too few data, must have more than 3 points for 2D transport.")
+    }
     object = dualGraphs2D(data, epsilon, maxit, verbose)
     class(object) = "tos.2d"
     colnames(object$Centroid) = c("x", "y")
     colnames(object$Vertex.RDT) = c("cell", "x", "y", "id")
     colnames(object$Vertex.RVD) = c("cell", "x", "y")
   } else if (d == 3) {
-    stop("3-dimension are not supported currently.")
+    if (NROW(data) < 4) {
+      stop("Too few data, must have more than 4 points for 3D transport.")
+    }
+    object = dualGraphs3D(data, epsilon, maxit, verbose)
+    class(object) = "tos.3d"
+    colnames(object$Centroid) = c("x", "y", "z")
+    colnames(object$Vertex.RDT) = c("cell", "facet", "x", "y", "z", "id")
+    object$Vertex.RVD = do.call(rbind, lapply(seq_along(object$Vertex.RVD), function(i) {
+      cbind(i, object$Vertex.RVD[[i]])
+    }))
+    colnames(object$Vertex.RVD) = c("cell", "facet", "x", "y", "z", "id")
   } else {
     stop("Dimension higher than 3 are not supported.")
   }
   
   # for computing Alexandrov's potential
   # note the sign of weights
-  object$Height = -(rowSums(object$Data ^ 2) - object$Weight) / 2
+  object$Height = -(rowSums(object$Data^2) - object$Weight) / 2
   
   if (!is.null(scale)) {
     object$Location = attr(data, "scaled:center")
@@ -76,7 +89,7 @@ tos.fit = function(data,
 #' Plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
 #' 2D semi-discrete optimal transport map.
 #' @param x a fitted \code{tos.2d} object.
-#' @param which specify which graph(s) to plot. Can be "\code{RVD}", "\code{RDT}", or "\code{Both}".
+#' @param which specify which graph(s) to plot. Can be \code{None}, \code{RVD}, \code{RDT}, or \code{Both}.
 #' @param col.data color of the data points.
 #' @param col.center color of the Voronoi centroids.
 #' @param col.edge color of the edges in plotting RVD and RDT.
@@ -94,21 +107,23 @@ tos.fit = function(data,
 #' @export
 plot.tos.2d = function(x,
                        which = "Both",
-                       col.data = "cornflowerblue",
-                       col.center = "firebrick",
+                       col.data = "dodgerblue3",
+                       col.center = "darkorange1",
                        col.edge = "black",
                        draw.data = T,
                        draw.center = T,
                        draw.map = F,
                        xlim = c(0, 1),
                        ylim = c(0, 1),
-                       xlab = expression('u'[1]),
-                       ylab = expression('u'[2]),
+                       xlab = expression('x'),
+                       ylab = expression('y'),
                        pch = 20,
                        ...) {
-  type = match.arg(which, c("RVD", "RDT", "Both"))
-  # plot the restricted Voronoi diagram
-  if (which == "RVD" || which == "Both") {
+  # validate plot type
+  type = match.arg(which, c("None", "RVD", "RDT", "Both"))
+  
+  # plot thins other than RVD and RDT
+  if (type != "RDT") {
     # plot data
     plot.default(
       x$Data[, 1],
@@ -122,39 +137,6 @@ plot.tos.2d = function(x,
       ylab = ylab,
       ...
     )
-    
-    # plot Laguerre cells
-    n.edge = nrow(x$Vertex.RVD)
-    rvd.edges = matrix(0, n.edge, 4)
-    curr.row = 1
-    
-    # extract edges
-    for (i in 1:x$N.Cells) {
-      curr.cell = subset(x$Vertex.RVD, x$Vertex.RVD[, 1] == i, select = 2:3)
-      for (j in 1:nrow(curr.cell)) {
-        p.id = j
-        q.id = 1 + j %% nrow(curr.cell)
-        
-        # sort by l1 norm, everything positive!
-        if (curr.cell[p.id, 1] + curr.cell[p.id, 2] <= curr.cell[q.id, 1] + curr.cell[q.id, 2]) {
-          rvd.edges[curr.row,] = c(curr.cell[p.id, 1], curr.cell[p.id, 2],
-                                   curr.cell[q.id, 1], curr.cell[q.id, 2])
-        } else {
-          rvd.edges[curr.row,] = c(curr.cell[q.id, 1], curr.cell[q.id, 2],
-                                   curr.cell[p.id, 1], curr.cell[p.id, 2])
-        }
-        curr.row = curr.row + 1
-      }
-    }
-    
-    # remove duplicated edges
-    rvd.edges = unique(round(rvd.edges, 8))
-    
-    for (i in 1:nrow(rvd.edges)) {
-      segments(rvd.edges[i, 1], rvd.edges[i, 2],
-               rvd.edges[i, 3], rvd.edges[i, 4],
-               col = col.edge, ...)
-    }
     
     # plot centroids
     if (draw.center) {
@@ -186,12 +168,23 @@ plot.tos.2d = function(x,
     }
   }
   
+  # plot the restricted Voronoi diagram
+  if (type == "RVD" || type == "Both") {
+    rvd.edges = extract.segment(x$Vertex.RVD, 1, 2:3)
+    for (i in 1:nrow(rvd.edges)) {
+      segments(rvd.edges[i, 1], rvd.edges[i, 2],
+               rvd.edges[i, 3], rvd.edges[i, 4],
+               col = col.edge, ...)
+    }
+  }
+  
   # plot the restricted Delaunay triangulation
-  if (which == "RDT" || which == "Both") {
+  if (type == "RDT" || type == "Both") {
     # plot data
     plot.default(
       x$Data[, 1],
       x$Data[, 2],
+      type = ifelse(draw.data, "p", "n"),
       col = col.data,
       pch = pch,
       xlim = xlim,
@@ -201,33 +194,7 @@ plot.tos.2d = function(x,
       ...
     )
     
-    # plot triangles
-    n.edge = nrow(x$Vertex.RDT)
-    rdt.edges = matrix(0, n.edge, 4)
-    curr.row = 1
-    
-    # extract edges
-    for (i in 1:x$N.Triangles) {
-      curr.cell = subset(x$Vertex.RDT, x$Vertex.RDT[, 1] == i, select = 2:3)
-      for (j in 1:nrow(curr.cell)) {
-        p.id = j
-        q.id = 1 + j %% nrow(curr.cell)
-        
-        # sort by l1 norm, everything positive!
-        if (curr.cell[p.id, 1] + curr.cell[p.id, 2] <= curr.cell[q.id, 1] + curr.cell[q.id, 2]) {
-          rdt.edges[curr.row,] = c(curr.cell[p.id, 1], curr.cell[p.id, 2],
-                                   curr.cell[q.id, 1], curr.cell[q.id, 2])
-        } else {
-          rdt.edges[curr.row,] = c(curr.cell[q.id, 1], curr.cell[q.id, 2],
-                                   curr.cell[p.id, 1], curr.cell[p.id, 2])
-        }
-        curr.row = curr.row + 1
-      }
-    }
-    
-    # remove duplicated edges
-    rdt.edges = unique(round(rdt.edges, 8))
-    
+    rdt.edges = extract.segment(x$Vertex.RDT, 1, 2:3)
     for (i in 1:nrow(rdt.edges)) {
       segments(rdt.edges[i, 1], rdt.edges[i, 2],
                rdt.edges[i, 3], rdt.edges[i, 4],
@@ -235,3 +202,233 @@ plot.tos.2d = function(x,
     }
   }
 }
+
+#' Plot the 3D Semi-discrete Optimal Transport Map
+#'
+#' Plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
+#' 3D semi-discrete optimal transport map.
+#' @param x a fitted \code{tos.2d} object.
+#' @param interactive logical indicating if the plot should be interactive.
+#' @param which specify which graph(s) to plot. Can be \code{None}, \code{RVD}, \code{RDT}, or \code{Both}.
+#' @param col.data color of the data points.
+#' @param col.center color of the Voronoi centroids.
+#' @param col.rvd color of the edges in RVD plot.
+#' @param col.rdt color of the edges in RDT plot.
+#' @param draw.data logical indicating if the data points should be plotted.
+#' @param draw.center logical indicating if the centroids should be plotted.
+#' @param draw.map logical indicating if dashed lines should be added to show mapping between the data and the Voronoi cells.
+#' @param draw.id vector of indices specifying which data points (and the corresponding cells in RVD and RDT) will be plotted. 
+#' Set it to \code{NULL} to plot all points. When it is not \code{NULL} and RDT is to be drawn, 
+#' \code{plot.tos.3d} will plot all tetrahedra that have points in \code{draw.id} as one of its vertices.
+#' @param xlim the x limits of the plot.
+#' @param ylim the y limits of the plot.
+#' @param zlim the z limits of the plot.
+#' @param xlab a label for the x axis.
+#' @param ylab a label for the y axis.
+#' @param zlab a label for the z axis.
+#' @param size size of the plotted points in the interactive plots. 
+#' @param theta,phi the angles defining the viewing direction for non-interactive plots. \code{theta} gives the azimuthal direction and \code{phi} the colatitude.
+#' @param pch a vector of plotting characters or symbols.
+#' @param \dots other graphical parameters to plot.
+#' @keywords hplot
+#' @importFrom plot3D points3D segments3D
+#' @importFrom rgl clear3d plot3d points3d segments3d
+#' @export
+plot.tos.3d = function(x,
+                       interactive = TRUE,
+                       which = "Both",
+                       col.data = "dodgerblue3",
+                       col.center = "darkorange1",
+                       col.rvd = "black",
+                       col.rdt = "firebrick3",
+                       draw.data = T,
+                       draw.center = T,
+                       draw.map = F,
+                       draw.id = NULL,
+                       xlim = c(0, 1),
+                       ylim = c(0, 1),
+                       zlim = c(0, 1),
+                       xlab = expression('x'),
+                       ylab = expression('y'),
+                       zlab = expression('z'),
+                       size = 10,
+                       phi = 45,
+                       theta = 45,
+                       pch = 20,
+                       ...) {
+  # validate plot type
+  type = match.arg(which, c("None", "RVD", "RDT", "Both"))
+  
+  # indices of elements to plot
+  if (is.null(draw.id)) {
+    id.draw = 1:nrow(x$Data)
+  } else {
+    id.draw = draw.id
+  }
+  
+  if (interactive) {
+    # clear exisiting plot, if any
+    clear3d(type = "all")
+    
+    # plot data
+    plot3d(
+      x$Data[id.draw, , drop = F],
+      type = ifelse(draw.data, "p", "n"),
+      col = col.data,
+      pch = pch,
+      size = size,
+      xlim = xlim,
+      ylim = ylim,
+      zlim = zlim,
+      xlab = xlab,
+      ylab = ylab,
+      zlab = zlab,
+      ...
+    )
+    
+    # plot centroids
+    if (draw.center) {
+      points3d(x$Centroid[id.draw, , drop = F],
+               col = col.center,
+               pch = pch,
+               size = size,
+               ...)
+    }
+    
+    # plot mappings
+    if (draw.map) {
+      for (i in id.draw) {
+        segments3d(rbind(x$Data[i, ], x$Centroid[i, ]), col = "gray50", lwd = 1.0)
+      }
+    }
+    
+    # plot RVD
+    if (type == "RVD" || type == "Both") {
+      rvd.edges = lapply(id.draw, function(i) {
+        # extract segments cell by cell
+        extract.segment(subset(x$Vertex.RVD, x$Vertex.RVD[, 1] == i), 2, 3:5) 
+      })
+      rvd.edges = do.call(rbind, rvd.edges)
+      rvd.edges = matrix(t(rvd.edges), ncol = 3, byrow = T)
+      segments3d(rvd.edges, col = col.rvd, ...)
+    }
+    
+    # plot RDT
+    if (type == "RDT" || type == "Both") {
+      # plot RVD segments
+      if (is.null(draw.id)) {
+        # draw all the cells in RDT
+        id.draw = unique(A$Vertex.RDT[, 1])
+      } else {
+        # get the cells that contain vertices in the draw list
+        id.draw = unique(subset(x$Vertex.RDT, x$Vertex.RDT[, 6] %in% id.draw)[, 1])
+      }
+      rdt.edges = lapply(id.draw, function(i) {
+        # extract segments cell by cell
+        extract.segment(subset(x$Vertex.RDT, x$Vertex.RDT[, 1] == i), 2, 3:5) 
+      })
+      rdt.edges = do.call(rbind, rdt.edges)
+      rdt.edges = matrix(t(rdt.edges), ncol = 3, byrow = T)
+      segments3d(rdt.edges, col = col.rdt, ...)
+    }
+  } else {
+    # plot data
+    points3D(
+      x = x$Data[id.draw, 1, drop = F],
+      y = x$Data[id.draw, 2, drop = F],
+      z = x$Data[id.draw, 3, drop = F],
+      alpha = ifelse(draw.data, 1, 0),
+      col = col.data,
+      pch = pch,
+      phi = phi,
+      theta = theta,
+      xlim = xlim,
+      ylim = ylim,
+      zlim = zlim,
+      xlab = xlab,
+      ylab = ylab,
+      zlab = zlab,
+      ...
+    )
+    
+    # plot centroids
+    if (draw.center) {
+      points3D(
+        x = x$Centroid[id.draw, 1, drop = F],
+        y = x$Centroid[id.draw, 2, drop = F],
+        z = x$Centroid[id.draw, 3, drop = F],
+        col = col.center,
+        pch = pch,
+        add = T,
+        ...
+      )
+    }
+    
+    # plot mappings
+    if (draw.map) {
+      for (i in id.draw) {
+        segments3D(
+          x0 = x$Data[i, 1, drop = F],
+          y0 = x$Data[i, 2, drop = F],
+          z0 = x$Data[i, 3, drop = F],
+          x1 = x$Centroid[i, 1, drop = F],
+          y1 = x$Centroid[i, 2, drop = F],
+          z1 = x$Centroid[i, 3, drop = F],
+          lty = 2,
+          lwd = 1.0,
+          add = T
+        )
+      }
+    }
+    
+    # plot RVD
+    if (type == "RVD" || type == "Both") {
+      # plot RVD segments
+      rvd.edges = lapply(id.draw, function(i) {
+        # extract segments cell by cell
+        extract.segment(subset(x$Vertex.RVD, x$Vertex.RVD[, 1] == i), 2, 3:5) 
+      })
+      rvd.edges = do.call(rbind, rvd.edges)
+      segments3D(
+        rvd.edges[, 1],
+        rvd.edges[, 2],
+        rvd.edges[, 3],
+        rvd.edges[, 4],
+        rvd.edges[, 5],
+        rvd.edges[, 6],
+        col = col.rvd,
+        add = T,
+        ...
+      )
+    }
+    
+    # plot RDT
+    if (type == "RDT" || type == "Both") {
+      # plot RVD segments
+      if (is.null(draw.id)) {
+        # draw all the cells in RDT
+        id.draw = unique(A$Vertex.RDT[, 1])
+      } else {
+        # get the cells that contain vertices in the draw list
+        id.draw = unique(subset(x$Vertex.RDT, x$Vertex.RDT[, 6] %in% id.draw)[, 1])
+      }
+      rdt.edges = lapply(id.draw, function(i) {
+        # extract segments cell by cell
+        extract.segment(subset(x$Vertex.RDT, x$Vertex.RDT[, 1] == i), 2, 3:5) 
+      })
+      rdt.edges = do.call(rbind, rdt.edges)
+      segments3D(
+        rdt.edges[, 1],
+        rdt.edges[, 2],
+        rdt.edges[, 3],
+        rdt.edges[, 4],
+        rdt.edges[, 5],
+        rdt.edges[, 6],
+        col = col.rdt,
+        add = T,
+        ...
+      )
+    }
+  }
+}
+  

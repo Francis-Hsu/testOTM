@@ -24,9 +24,8 @@ void setUniMesh(GEO::Mesh &M, unsigned int d, bool tri);
 arma::vec getWeights(GEO::OptimalTransportMap &OTM);
 arma::mat getCentroids(GEO::OptimalTransportMap &OTM);
 arma::mat getVertices2D(GEO::Mesh &M);
-arma::mat getVertices3D(GEO::Mesh &M);
+arma::mat getVertices3D(GEO::Mesh &M, bool volumetric);
 arma::mat getVerticesGen2D(GEO::Mesh &S, GEO::OptimalTransportMap &OTM);
-arma::mat getVerticesGen3D(GEO::Mesh &S, GEO::OptimalTransportMap &OTM);
 arma::mat cubeVert(unsigned int d);
 
 namespace GEOGen {
@@ -34,7 +33,6 @@ namespace GEOGen {
   public:
     using RestrictedVoronoiDiagram<DIM>::RestrictedVoronoiDiagram;
     using RestrictedVoronoiDiagram<DIM>::intersect_cell_facet;
-    using RestrictedVoronoiDiagram<DIM>::intersect_cell_cell;
   };
 }
 

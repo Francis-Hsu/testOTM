@@ -35,8 +35,8 @@ tos.rank = function(object, query, scale = TRUE, rank.data = "uniform", rank.alg
 #' @param query a numeric matrix where each row represents a query point.
 #' @param scale logical indicating if the queries should be scaled.
 #' @param rank.data choose the method for assigning ranks to the data points. 
-#' Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".
-#' @param rank.algo choose the algorithm for computing the ranks. Can be "\code{lp}" or "\code{geom}".
+#' Can be \code{max}, \code{min}, \code{center}, or \code{uniform}.
+#' @param rank.algo choose the algorithm for computing the ranks. Can be \code{lp} or \code{geom}.
 #' @param \dots additional arguments, currently without effect.
 #' @return a list containing the ranks of the data and the corresponding convex conjugate potential values.
 #' If \code{rank.algo = "geom"} then the conjugate potentials will not be computed (\code{NA}s will be returned).
@@ -125,6 +125,86 @@ tos.rank.tos.2d = function(object, query, scale = TRUE, rank.data = "uniform", r
                                      acc.verts)
     tos.dual.potential[lp.id] = dual.potential$dual.potential
     tos.ranks[lp.id, ] = dual.potential$optimal.vertex
+  }
+  
+  return(list(Rank = tos.ranks, Dual.Potential = tos.dual.potential))
+}
+
+#' 3D Semi-discrete Optimal Transport Rank
+#'
+#' The 3D implementation of \code{tos.rank}.
+#' @param object a fitted 3D optimal transport map object.
+#' @param query a numeric matrix where each row represents a query point.
+#' @param scale logical indicating if the queries should be scaled.
+#' @param rank.data choose the method for assigning ranks to the data points. 
+#' Can be \code{max}, \code{min},  or \code{center}.
+#' @param \dots additional arguments, currently without effect.
+#' @return a list containing the ranks of the data and the corresponding convex conjugate potential values.
+#' @keywords internal
+#' @importFrom stats aggregate na.omit
+#' @export
+tos.rank.tos.3d = function(object,
+                           query,
+                           scale = TRUE,
+                           rank.data = "center",
+                           ...) {
+  n = nrow(query)
+  d = 3
+  
+  rank.id = switch(rank.data,
+                   center = 0,
+                   max = 1,
+                   min = 2,
+                   stop("Unknown method of rank mapping!"))
+  
+  # containers for the result
+  tos.dual.potential = rep(NA_integer_, n)
+  tos.ranks = matrix(0, n, d)
+  lp.id = !logical(n)
+  
+  # scale the queries
+  if (scale) {
+    query = scale(query, object$Location, object$Scale)
+    query = query * diff(range(object$Data)) + min(object$Data)
+  }
+  
+  # find data points (if any) in the queries
+  data.match = match(split(round(query, 8), 1:n),
+                     split(round(object$Data, 8), 1:nrow(object$Data)))
+  if (!all(is.na(data.match))) {
+    query.data.id = which(!is.na(data.match))
+    data.id = data.match[query.data.id]
+    
+    # assign ranks to data points
+    if (rank.id == 0) {
+      tos.ranks[query.data.id,] = object$Centroid[data.id,]
+    } else {
+      data.rank = lapply(split(object$Vertex.RVD[, -1], object$Vertex.RVD[, 1]),
+                         matrix,
+                         ncol = 2)[data.id]
+      tos.ranks[query.data.id,] = t(sapply(data.rank, choose.vert, type = rank.id))
+    }
+    
+    lp.id[query.data.id] = F
+  }
+  
+  # get unique vertices from each cell
+  unique.vert = lapply(unique(unique.vert[, 1]), function(i) {
+    sub.cell = subset(unique.vert, unique.vert[, 1] == i)
+    sub.cell[!duplicated(sub.cell[, 5]),]
+  })
+  unique.vert = do.call(rbind, unique.vert)
+  
+  # compute the ranks through LP
+  if (any(lp.id)) {
+    acc.verts = c(0, cumsum(as.vector(table(unique.vert[, 1]))))
+    dual.potential = dualPotential3D(query[lp.id, , drop = F],
+                                     object$Data,
+                                     unique.vert[, 3:5],
+                                     object$Height,
+                                     acc.verts)
+    tos.dual.potential[lp.id] = dual.potential$dual.potential
+    tos.ranks[lp.id,] = dual.potential$optimal.vertex
   }
   
   return(list(Rank = tos.ranks, Dual.Potential = tos.dual.potential))

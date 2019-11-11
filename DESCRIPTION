@@ -2,7 +2,7 @@ Package: testOTM
 Type: Package
 Title: Multivariate Ranks and Quantiles by Optimal Transport
 Version: 0.10
-Date: 2019-11-05
+Date: 2019-11-11
 Authors@R: person(given = "Peng", family = "Xu", role = c("aut", "cre"), email = "px2132@columbia.edu")
 Author: Peng Xu <px2132@columbia.edu> [aut, cre]
 Maintainer: Peng Xu <px2132@columbia.edu>
