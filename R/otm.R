@@ -318,7 +318,7 @@ plot.tos.3d = function(x,
       # plot RVD segments
       if (is.null(draw.id)) {
         # draw all the cells in RDT
-        id.draw = unique(A$Vertex.RDT[, 1])
+        id.draw = unique(x$Vertex.RDT[, 1])
       } else {
         # get the cells that contain vertices in the draw list
         id.draw = unique(subset(x$Vertex.RDT, x$Vertex.RDT[, 6] %in% id.draw)[, 1])
@@ -407,7 +407,7 @@ plot.tos.3d = function(x,
       # plot RVD segments
       if (is.null(draw.id)) {
         # draw all the cells in RDT
-        id.draw = unique(A$Vertex.RDT[, 1])
+        id.draw = unique(x$Vertex.RDT[, 1])
       } else {
         # get the cells that contain vertices in the draw list
         id.draw = unique(subset(x$Vertex.RDT, x$Vertex.RDT[, 6] %in% id.draw)[, 1])
