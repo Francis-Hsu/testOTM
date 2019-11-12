@@ -13,7 +13,7 @@ dualGraphs3D(X, epsilon, maxit, verbose)
 
 \item{maxit}{maximum number of solver iterations.}
 
-\item{verbose}{logical indicating wether to display optimization messages.}
+\item{verbose}{logical indicating whether to display optimization messages.}
 }
 \value{
 a list describing the resulting optimal transport map.

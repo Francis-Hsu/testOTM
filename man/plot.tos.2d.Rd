@@ -4,10 +4,22 @@
 \alias{plot.tos.2d}
 \title{Plot the 2D Semi-discrete Optimal Transport Map}
 \usage{
-\method{plot}{tos.2d}(x, which = "Both", col.data = "dodgerblue3",
-  col.center = "darkorange1", col.edge = "black", draw.data = T,
-  draw.center = T, draw.map = F, xlim = c(0, 1), ylim = c(0, 1),
-  xlab = expression("x"), ylab = expression("y"), pch = 20, ...)
+\method{plot}{tos.2d}(
+  x,
+  which = "Both",
+  col.data = "dodgerblue3",
+  col.center = "darkorange1",
+  col.edge = "black",
+  draw.data = T,
+  draw.center = T,
+  draw.map = F,
+  xlim = c(0, 1),
+  ylim = c(0, 1),
+  xlab = expression("x"),
+  ylab = expression("y"),
+  pch = 20,
+  ...
+)
 }
 \arguments{
 \item{x}{a fitted \code{tos.2d} object.}

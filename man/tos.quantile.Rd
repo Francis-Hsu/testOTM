@@ -2,7 +2,7 @@
 % Please edit documentation in R/quantile.R
 \name{tos.quantile}
 \alias{tos.quantile}
-\title{Semi-discrete Optimal Transport queryuantile}
+\title{Semi-discrete Optimal Transport Quantiles}
 \usage{
 tos.quantile(object, query, scale = TRUE, ...)
 }

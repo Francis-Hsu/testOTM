@@ -29,7 +29,7 @@ void OTM3D(GEO::OptimalTransportMap3d &OTM, const arma::mat &X, double epsilon, 
 //' @param X input data matrix.
 //' @param epsilon maximum error for the optimization algorithm.
 //' @param maxit maximum number of solver iterations.
-//' @param verbose logical indicating wether to display optimization messages.
+//' @param verbose logical indicating whether to display optimization messages.
 //' @return a list describing the resulting optimal transport map.
 //' @keywords internal
 // [[Rcpp::export]]

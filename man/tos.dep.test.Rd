@@ -4,8 +4,16 @@
 \alias{tos.dep.test}
 \title{1D (Permutation) Test of Independence}
 \usage{
-tos.dep.test(X, Y, n.perm = 0, scale = c(0, 1),
-  rank.data = "uniform", epsilon = 1e-06, maxit = 100, verbose = F)
+tos.dep.test(
+  X,
+  Y,
+  n.perm = 0,
+  scale = c(0, 1),
+  rank.data = "uniform",
+  epsilon = 1e-06,
+  maxit = 100,
+  verbose = F
+)
 }
 \arguments{
 \item{X}{input data vector.}
@@ -35,9 +43,9 @@ the semi-discrete optimal transport map.
 }
 \details{
 \code{tos.dep.test} tests the null hypothesis that \eqn{X} and \eqn{Y} are independent. 
-The \eqn{p}-value is computed through permuatation. For a very samll samlple (size less than \eqn{8}), 
+The \eqn{p}-value is computed through permutations. For a very small sample (size less than \eqn{8}), 
 all possible permutations are generated (assuming a suitable \code{n.perm} is provided). 
-For larger sample size Monte Carlo permutation sampling is used to approximate the permuatation \eqn{p}-value.
+For larger sample size Monte Carlo permutation sampling is used to approximate the permutations \eqn{p}-value.
 
 Given samples \eqn{(X_1, Y_1), \dots, (X_n, Y_n)}, the following statistic is used for test of independence:
 \deqn{T_n=\sum_{i=1}^n\|\hat{R}(X_i, Y_i)-\tilde{R}(X_i, Y_i)\|^2.} 

@@ -15,7 +15,7 @@ jointRankHelper2D(XY, center, epsilon, maxit, verbose)
 
 \item{maxit}{max number of iterations before termination.}
 
-\item{verbose}{logical indicating wether to display optimization messages.}
+\item{verbose}{logical indicating whether to display optimization messages.}
 }
 \value{
 a matrix, represents either the centroids/cells of the RVD of joint samples.

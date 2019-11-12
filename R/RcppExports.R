@@ -6,7 +6,7 @@
 #' @param X input data matrix.
 #' @param epsilon maximum error for the optimization algorithm.
 #' @param maxit maximum number of solver iterations.
-#' @param verbose logical indicating wether to display optimization messages.
+#' @param verbose logical indicating whether to display optimization messages.
 #' @return a list describing the resulting optimal transport map.
 #' @keywords internal
 dualGraphs2D <- function(X, epsilon, maxit, verbose) {
@@ -48,7 +48,7 @@ locateRDT2D <- function(Q, V) {
 #' @param U sequence used to evaluate the integral.
 #' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.
-#' @param verbose logical indicating wether to display optimization messages.
+#' @param verbose logical indicating whether to display optimization messages.
 #' @return a list containing the quantile indices for \eqn{X} and \eqn{Y}.
 #' @keywords internal
 gof2DHelper <- function(X, Y, U, epsilon, maxit, verbose) {
@@ -62,7 +62,7 @@ gof2DHelper <- function(X, Y, U, epsilon, maxit, verbose) {
 #' @param center logical indicating if the centroids should be computed.
 #' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.
-#' @param verbose logical indicating wether to display optimization messages.
+#' @param verbose logical indicating whether to display optimization messages.
 #' @return a matrix, represents either the centroids/cells of the RVD of joint samples.
 #' @keywords internal
 jointRankHelper2D <- function(XY, center, epsilon, maxit, verbose) {
@@ -74,7 +74,7 @@ jointRankHelper2D <- function(XY, center, epsilon, maxit, verbose) {
 #' @param X input data matrix.
 #' @param epsilon maximum error for the optimization algorithm.
 #' @param maxit maximum number of solver iterations.
-#' @param verbose logical indicating wether to display optimization messages.
+#' @param verbose logical indicating whether to display optimization messages.
 #' @return a list describing the resulting optimal transport map.
 #' @keywords internal
 dualGraphs3D <- function(X, epsilon, maxit, verbose) {

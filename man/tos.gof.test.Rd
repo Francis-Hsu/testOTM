@@ -4,9 +4,18 @@
 \alias{tos.gof.test}
 \title{2D Goodness-of-fit Test}
 \usage{
-tos.gof.test(X, Y, mc = 10000, n.perm = 0, scale = c(0, 1),
-  rank.data = "uniform", epsilon = 1e-06, maxit = 100, verbose = F,
-  na.rm = F)
+tos.gof.test(
+  X,
+  Y,
+  mc = 10000,
+  n.perm = 0,
+  scale = c(0, 1),
+  rank.data = "uniform",
+  epsilon = 1e-06,
+  maxit = 100,
+  verbose = F,
+  na.rm = F
+)
 }
 \arguments{
 \item{X}{input data matrix, of size \eqn{n} by \eqn{2}.}

@@ -36,7 +36,7 @@ void OTM2D(GEO::OptimalTransportMap2d &OTM, const arma::mat &X, const arma::vec*
 //' @param X input data matrix.
 //' @param epsilon maximum error for the optimization algorithm.
 //' @param maxit maximum number of solver iterations.
-//' @param verbose logical indicating wether to display optimization messages.
+//' @param verbose logical indicating whether to display optimization messages.
 //' @return a list describing the resulting optimal transport map.
 //' @keywords internal
 // [[Rcpp::export]]
@@ -239,7 +239,7 @@ arma::ivec locateRDT2D(const arma::mat &Q, const arma::mat &V) {
 //' @param U sequence used to evaluate the integral.
 //' @param epsilon convergence threshold for optimization.
 //' @param maxit max number of iterations before termination.
-//' @param verbose logical indicating wether to display optimization messages.
+//' @param verbose logical indicating whether to display optimization messages.
 //' @return a list containing the quantile indices for \eqn{X} and \eqn{Y}.
 //' @keywords internal
 // [[Rcpp::export]]
@@ -283,7 +283,7 @@ List gof2DHelper(const arma::mat &X, const arma::mat &Y, const arma::mat &U,
 //' @param center logical indicating if the centroids should be computed.
 //' @param epsilon convergence threshold for optimization.
 //' @param maxit max number of iterations before termination.
-//' @param verbose logical indicating wether to display optimization messages.
+//' @param verbose logical indicating whether to display optimization messages.
 //' @return a matrix, represents either the centroids/cells of the RVD of joint samples.
 //' @keywords internal
 // [[Rcpp::export]]

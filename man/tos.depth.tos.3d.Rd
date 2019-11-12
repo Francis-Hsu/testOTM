@@ -4,8 +4,7 @@
 \alias{tos.depth.tos.3d}
 \title{3D Semi-discrete Optimal Transport Depth}
 \usage{
-\method{tos.depth}{tos.3d}(object, query, scale = TRUE,
-  rank.data = "center", ...)
+\method{tos.depth}{tos.3d}(object, query, scale = TRUE, rank.data = "center", ...)
 }
 \arguments{
 \item{object}{a fitted 3D optimal transport map object.}

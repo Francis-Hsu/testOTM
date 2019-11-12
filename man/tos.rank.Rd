@@ -4,8 +4,14 @@
 \alias{tos.rank}
 \title{Semi-discrete Optimal Transport Rank}
 \usage{
-tos.rank(object, query, scale = TRUE, rank.data = "uniform",
-  rank.algo = "lp", ...)
+tos.rank(
+  object,
+  query,
+  scale = TRUE,
+  rank.data = "uniform",
+  rank.algo = "lp",
+  ...
+)
 }
 \arguments{
 \item{object}{a fitted optimal transport map object.}

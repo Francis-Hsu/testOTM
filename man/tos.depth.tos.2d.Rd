@@ -4,8 +4,7 @@
 \alias{tos.depth.tos.2d}
 \title{2D Semi-discrete Optimal Transport Depth}
 \usage{
-\method{tos.depth}{tos.2d}(object, query, scale = TRUE,
-  rank.data = "uniform", ...)
+\method{tos.depth}{tos.2d}(object, query, scale = TRUE, rank.data = "uniform", ...)
 }
 \arguments{
 \item{object}{a fitted 2D optimal transport map object.}

@@ -4,13 +4,30 @@
 \alias{plot.tos.3d}
 \title{Plot the 3D Semi-discrete Optimal Transport Map}
 \usage{
-\method{plot}{tos.3d}(x, interactive = TRUE, which = "Both",
-  col.data = "dodgerblue3", col.center = "darkorange1",
-  col.rvd = "black", col.rdt = "firebrick3", draw.data = T,
-  draw.center = T, draw.map = F, draw.id = NULL, xlim = c(0, 1),
-  ylim = c(0, 1), zlim = c(0, 1), xlab = expression("x"),
-  ylab = expression("y"), zlab = expression("z"), size = 10,
-  phi = 45, theta = 45, pch = 20, ...)
+\method{plot}{tos.3d}(
+  x,
+  interactive = TRUE,
+  which = "Both",
+  col.data = "dodgerblue3",
+  col.center = "darkorange1",
+  col.rvd = "black",
+  col.rdt = "firebrick3",
+  draw.data = T,
+  draw.center = T,
+  draw.map = F,
+  draw.id = NULL,
+  xlim = c(0, 1),
+  ylim = c(0, 1),
+  zlim = c(0, 1),
+  xlab = expression("x"),
+  ylab = expression("y"),
+  zlab = expression("z"),
+  size = 10,
+  phi = 45,
+  theta = 45,
+  pch = 20,
+  ...
+)
 }
 \arguments{
 \item{x}{a fitted \code{tos.2d} object.}

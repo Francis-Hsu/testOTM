@@ -4,8 +4,14 @@
 \alias{tos.rank.tos.2d}
 \title{2D Semi-discrete Optimal Transport Rank}
 \usage{
-\method{tos.rank}{tos.2d}(object, query, scale = TRUE,
-  rank.data = "uniform", rank.algo = "lp", ...)
+\method{tos.rank}{tos.2d}(
+  object,
+  query,
+  scale = TRUE,
+  rank.data = "uniform",
+  rank.algo = "lp",
+  ...
+)
 }
 \arguments{
 \item{object}{a fitted 2D optimal transport map object.}

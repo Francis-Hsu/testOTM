@@ -4,8 +4,14 @@
 \alias{tos.fit}
 \title{Uniform Semi-discrete Optimal Transport Map}
 \usage{
-tos.fit(data, scale = c(0.05, 0.95), na.rm = F, epsilon = 1e-06,
-  maxit = 100, verbose = F)
+tos.fit(
+  data,
+  scale = c(0.05, 0.95),
+  na.rm = F,
+  epsilon = 1e-06,
+  maxit = 100,
+  verbose = F
+)
 }
 \arguments{
 \item{data}{a numeric matrix for the input data, of size \eqn{n} by \eqn{d}.}
@@ -21,7 +27,7 @@ tos.fit(data, scale = c(0.05, 0.95), na.rm = F, epsilon = 1e-06,
 \item{verbose}{logical indicating whether to display optimization messages.}
 }
 \value{
-\code{tos.fit} returns an object of class "\code{tos.2d}" or "\code{tos.3d}", depending on the dimesion of input data.
+\code{tos.fit} returns an object of class "\code{tos.2d}" or "\code{tos.3d}", depending on the dimension of input data.
 An object of class "\code{tos}" is a list describing the resulting optimal transport map.
 }
 \description{

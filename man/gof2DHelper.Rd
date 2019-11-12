@@ -17,7 +17,7 @@ gof2DHelper(X, Y, U, epsilon, maxit, verbose)
 
 \item{maxit}{max number of iterations before termination.}
 
-\item{verbose}{logical indicating wether to display optimization messages.}
+\item{verbose}{logical indicating whether to display optimization messages.}
 }
 \value{
 a list containing the quantile indices for \eqn{X} and \eqn{Y}.

@@ -1,4 +1,4 @@
-#' Semi-discrete Optimal Transport queryuantile
+#' Semi-discrete Optimal Transport Quantiles
 #'
 #' \code{tos.quantile} computes the optimal transport quantiles.
 #' @param object a fitted optimal transport map object.
@@ -12,7 +12,7 @@ tos.quantile = function(object, query, scale = TRUE, ...) {
   UseMethod("tos.quantile")
 }
 
-#' 2D Semi-discrete Optimal Transport queryuantile
+#' 2D Semi-discrete Optimal Transport Quantiles
 #'
 #' The 2D implementation for \code{tos.quantile}.
 #' @param object a fitted 2D optimal transport map object.
@@ -31,10 +31,10 @@ tos.quantile.tos.2d = function(object, query, scale = TRUE, ...) {
   
   cell.id = locateRVD2D(query, object$Data, object$Weight)
   
-  return(list(queryuantiles = object$Data[cell.id, ], Cell.Id = cell.id))
+  return(list(Quantiles = object$Data[cell.id, ], Cell.Id = cell.id))
 }
 
-#' 3D Semi-discrete Optimal Transport queryuantile
+#' 3D Semi-discrete Optimal Transport Quantiles
 #'
 #' The 3D implementation for \code{tos.quantile}.
 #' @param object a fitted 3D optimal transport map object.
@@ -53,5 +53,5 @@ tos.quantile.tos.3d = function(object, query, scale = TRUE, ...) {
   
   cell.id = locateRVD3D(query, object$Data, object$Weight)
   
-  return(list(queryuantiles = object$Data[cell.id, ], Cell.Id = cell.id))
+  return(list(Quantiles = object$Data[cell.id, ], Cell.Id = cell.id))
 }

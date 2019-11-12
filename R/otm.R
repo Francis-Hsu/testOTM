@@ -10,7 +10,7 @@
 #' @details Input data needs be scaled within the [0, 1] range for computation. 
 #' Supply \code{scale} to let the function handles the scaling internally.
 #' Locations and scales will be returned to help transforming the results back to their original range.
-#' @return \code{tos.fit} returns an object of class "\code{tos.2d}" or "\code{tos.3d}", depending on the dimesion of input data.
+#' @return \code{tos.fit} returns an object of class "\code{tos.2d}" or "\code{tos.3d}", depending on the dimension of input data.
 #' An object of class "\code{tos}" is a list describing the resulting optimal transport map.
 #' @keywords optimize, graphs
 #' @importFrom stats complete.cases
