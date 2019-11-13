@@ -6,3 +6,5 @@
 ^README\.bib$
 ^README\.html$
 ^README\.Rmd$
+^doc$
+^Meta$

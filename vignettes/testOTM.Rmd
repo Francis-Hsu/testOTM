@@ -1,0 +1,22 @@
+---
+title: "testOTM"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{testOTM}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(testOTM)
+```
+
+# Introduction
+`testOTM` is a package that computes stuff.
