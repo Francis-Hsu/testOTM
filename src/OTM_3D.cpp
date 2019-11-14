@@ -68,7 +68,7 @@ List dualGraphs3D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
   }
   
   // save the RVD to a mesh
-  // we set integration_simplices to true so that 
+  // set integration_simplices to true so that 
   // the tetrahedra have the data as the first vertex
   // GEO::Mesh otmRVD;
   // GEO::Attribute<GEO::index_t> tet_region(otmRVD.cells.attributes(), "region");
@@ -146,17 +146,16 @@ List dualPotential3D(const arma::mat &Y, const arma::mat &X, const arma::mat &V,
 arma::ivec locateRVD3D(const arma::mat &Q, const arma::mat &X, const arma::vec &w) {
   const int m = Q.n_rows;
   const int n = X.n_rows;
-  const int d = 3;
   
   // setup weighted vertices for X
-  double wX[(d + 1) * n];
-  getWeightedVerts(X, w, wX);
+  arma::vec wX(4 * n);
+  getWeightedVerts(X, w, wX.memptr());
   
   // build a Kd-tree
-  GEO::NearestNeighborSearch* treeX = GEO::NearestNeighborSearch::create(d + 1, "BNN");
-  treeX->set_points(n, wX);
+  GEO::NearestNeighborSearch* treeX = GEO::NearestNeighborSearch::create(4, "BNN");
+  treeX->set_points(n, wX.memptr());
   
-  double p[d + 1] = {};
+  double p[4] = {};
   arma::ivec cellID(m, arma::fill::zeros);
   for (int i = 0; i < m; i++) {
     p[0] = Q(i, 0);
