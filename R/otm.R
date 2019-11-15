@@ -207,7 +207,7 @@ plot.tos.2d = function(x,
 #'
 #' Plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
 #' 3D semi-discrete optimal transport map.
-#' @param x a fitted \code{tos.2d} object.
+#' @param x a fitted \code{tos.3d} object.
 #' @param interactive logical indicating if the plot should be interactive.
 #' @param which specify which graph(s) to plot. Can be \code{None}, \code{RVD}, \code{RDT}, or \code{Both}.
 #' @param col.data color of the data points.
@@ -216,7 +216,7 @@ plot.tos.2d = function(x,
 #' @param col.rdt color of the edges in RDT plot.
 #' @param draw.data logical indicating if the data points should be plotted.
 #' @param draw.center logical indicating if the centroids should be plotted.
-#' @param draw.map logical indicating if dashed lines should be added to show mapping between the data and the Voronoi cells.
+#' @param draw.map logical indicating if lines should be added to show mapping between the data and the Voronoi cells.
 #' @param draw.id vector of indices specifying which data points (and the corresponding cells in RVD and RDT) will be plotted. 
 #' Set it to \code{NULL} to plot all points. When it is not \code{NULL} and RDT is to be drawn, 
 #' \code{plot.tos.3d} will plot all tetrahedra that have points in \code{draw.id} as one of its vertices.

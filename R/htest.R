@@ -1,13 +1,14 @@
-#' 2D Goodness-of-fit Test
+#' 2D/3D Goodness-of-fit Test
 #' 
-#' \code{tos.gof.test} computes the 2D goodness-of-test statistic using ranks defined through the semi-discrete optimal transport map.
-#' @param X input data matrix, of size \eqn{n} by \eqn{2}.
-#' @param Y input data matrix, of size \eqn{m} by \eqn{2}.
+#' \code{tos.gof.test} computes the 2D/3D goodness-of-test statistic using ranks defined through the semi-discrete optimal transport map.
+#' @param X input data matrix, of size \eqn{n} by \eqn{2} or \eqn{3}.
+#' @param Y input data matrix, of size \eqn{m} by \eqn{2} or \eqn{3}.
 #' @param mc number of quasi-Monte-Carlo samples used to evaluate the test statistic.
 #' @param n.perm number of permutations used for computing \eqn{p}-value.
 #' @param scale a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.
 #' @param rank.data choose the method for assigning ranks to the data points. 
-#' Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".
+#' Can be \code{max}, \code{min}, \code{center}, or \code{uniform}. 
+#' \code{uniform} is not currently implemented for 3D, and \code{center} will be used if it is chosen
 #' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.
 #' @param verbose logical indicating whether to display optimization messages.
@@ -20,34 +21,32 @@
 #' @keywords htest, multivariate
 #' @importFrom randtoolbox sobol
 #' @export
-tos.gof.test = function(X,
-                        Y,
-                        mc = 10000,
-                        n.perm = 0,
-                        scale = c(0, 1),
-                        rank.data = "uniform",
-                        epsilon = 1e-6,
-                        maxit = 100,
-                        verbose = F,
-                        na.rm = F) {
+tos.gof.test = function(X, Y, mc = 10000, n.perm = 0, scale = c(0, 1), rank.data = "uniform", epsilon = 1e-6, maxit = 100, verbose = F, na.rm = F) {
   # get number of elements
+  D = NCOL(X)
   NX = NROW(X)
   NY = NROW(Y)
   N = NX + NY
   
   # validate inputs
-  if (!is.matrix(X) || !is.matrix(Y) || ncol(X) < 2 || ncol(Y) < 2) {
-    stop("Input data must be matrices with more than 2 columns.")
-  }
-  
-  if (NCOL(X) !=  NCOL(Y)) {
+  if (D != NCOL(Y)) {
     stop("Mismatch in dimensions of the input data.")
   }
   
-  if (NX < 3 || NY < 3) {
-    stop("Input data should contain more than two samples.")
+  if (!is.matrix(X) || !is.matrix(Y) || D < 2 || D > 3) {
+    stop("Input data must be matrices with 2 or 3 columns.")
   }
   
+  if (D == 2) {
+    if (NX < 3 || NY < 3) {
+      stop("Input data should contain at least 3 samples for 2D testing.")
+    }
+  } else {
+    if (NX < 4 || NY < 4) {
+      stop("Input data should contain at least 4 samples for 3D testing.")
+    }
+  }
+
   if (n.perm < 0 || n.perm %% 1 != 0) {
     stop("n.perm must be an integera greater than or equal to 0.")
   }
@@ -75,13 +74,15 @@ tos.gof.test = function(X,
                    min = 2,
                    uniform = 3,
                    stop("Unknown method of rank mapping!"))
+  if (D == 3 && rank.id == 3) {
+    rank.id = 0
+  }
   
   # scale X and Y together
   XY = scaling.min.max(rbind(X, Y), scale[1], scale[2])
   
   # generate quasi-MC sequence
-  d = NCOL(XY)
-  U = sobol(mc, d)
+  U = sobol(mc, D)
   
   # for small sample size we use all possible permutations, 
   # otherwise we generate distinct random permutations for moderate sample size
@@ -103,12 +104,24 @@ tos.gof.test = function(X,
   # storage for test statistics
   gof.stats = rep(0, n.perm + 1)
   
-  # compute the first joint RVD
-  gof.elem = jointRankHelper2D(XY, rank.id == 0, epsilon, maxit, verbose)
-  
   # first test statistic (for the original samples)
-  gof.rank = gof.assign.rank(gof.elem, rank.id)
-  gof.list = gof2DHelper(XY[1:NX, ], XY[(NX + 1):(NX + NY), ], U, epsilon, maxit, verbose)
+  if (D == 2) {
+    # compute the first joint RVD
+    gof.elem = jointRankHelper2D(XY, rank.id == 0, epsilon, maxit, verbose)
+    gof.rank = gof.assign.rank(gof.elem, rank.id, D)
+    gof.list = gof2DHelper(XY[1:NX, ], XY[(NX + 1):(NX + NY), ], U, epsilon, maxit, verbose)
+  } else {
+    gof.elem = jointRankHelper3D(XY, rank.id == 0, epsilon, maxit, verbose)
+    if (rank.id == 0) {
+      gof.elem = gof.elem[[1]]
+    } else {
+      gof.elem = do.call(rbind, lapply(seq_along(gof.elem), function(i) {
+        cbind(i, gof.elem[[i]][, 3:5])
+      }))
+    }
+    gof.rank = gof.assign.rank(gof.elem, rank.id, D)
+    gof.list = gof3DHelper(XY[1:NX, ], XY[(NX + 1):(NX + NY), ], U, epsilon, maxit, verbose)
+  }
   gof.stats[1] = mean(rowSums((gof.rank[gof.list$U_Map_X, ] - gof.rank[gof.list$U_Map_Y + NX, ])^2))
   
   # compute the permutation test statistics
@@ -140,11 +153,16 @@ tos.gof.test = function(X,
         gof.elem.perm[, 1] = perm.inv[gof.elem[, 1]]
       }
       
-      # compute the quantiles of quasi-MC
-      gof.list = gof2DHelper(tempX, tempY, U, epsilon, maxit, verbose)
-      
-      # assign ranks
-      gof.rank = gof.assign.rank(gof.elem.perm, rank.id)
+      if (D == 2) {
+        # assign ranks
+        gof.rank = gof.assign.rank(gof.elem.perm, rank.id)
+        
+        # compute the quantiles of quasi-MC
+        gof.list = gof2DHelper(tempX, tempY, U, epsilon, maxit, verbose)
+      } else {
+        gof.rank = gof.assign.rank(gof.elem.perm, rank.id, D)
+        gof.list = gof3DHelper(tempX, tempY, U, epsilon, maxit, verbose)
+      }
       
       # compute the test statistic
       gof.stats[i + 1] = mean(rowSums((gof.rank[gof.list$U_Map_X, ] - gof.rank[gof.list$U_Map_Y + NX, ])^2))
@@ -181,14 +199,7 @@ tos.gof.test = function(X,
 #' @seealso \code{\link{tos.rank}} for semi-discrete optimal transport rank.
 #' @keywords htest, multivariate
 #' @export
-tos.dep.test = function(X,
-                        Y,
-                        n.perm = 0,
-                        scale = c(0, 1),
-                        rank.data = "uniform",
-                        epsilon = 1e-6,
-                        maxit = 100,
-                        verbose = F) {
+tos.dep.test = function(X, Y, n.perm = 0, scale = c(0, 1), rank.data = "uniform", epsilon = 1e-6, maxit = 100, verbose = F) {
   # get number of elements
   NX = NROW(X)
   NY = NROW(Y)

@@ -3,15 +3,14 @@ using namespace Rcpp;
 
 void OTM2D(GEO::OptimalTransportMap2d &OTM, const arma::mat &X, double epsilon, int maxit, bool verbose) {
   const int n = X.n_rows;
-  const int d = 2;
   
   // create a mesh for data points
-  GEO::Mesh dataMesh(d, false);
+  GEO::Mesh dataMesh(2, false);
   dataMesh.vertices.create_vertices(n);
   setMeshPoint(dataMesh, X);
   
   // embed in 3-dimension
-  dataMesh.vertices.set_dimension(d + 1);
+  dataMesh.vertices.set_dimension(3);
   
   // setup OTM
   OTM.set_points(n, dataMesh.vertices.point_ptr(0), dataMesh.vertices.dimension());

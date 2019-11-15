@@ -19,4 +19,5 @@ library(testOTM)
 ```
 
 # Introduction
-`testOTM` is a package that computes stuff.
+`testOTM` is a package that computes multivariate ranks and quantiles definded through the theory of optimal transpots. This package also implments several applications, such as the goodness-of-fit testing, of these generalized notions.
+

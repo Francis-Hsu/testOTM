@@ -37,7 +37,7 @@ unscaling.min.max = function(data, center, scale) {
 #' a.k.a. Steinhaus-Johnson-Trotter, algorithm.
 #' @param n number of elements to permute.
 #' @param m number of permutations to generate.
-#' @return a \eqn{m} by \eqn{n} matrix of indices where each row represents a permutation. 
+#' @return an \eqn{m} by \eqn{n} matrix of indices where each row represents a permutation. 
 #' Rows beyond the \eqn{n!}-th one will be filled with 0s.
 #' @keywords utilities
 #' @references Donald E. Knuth. \emph{The Art of Computer Programming: Combinatorial Algorithms, Part 1}. 1st. 
@@ -190,15 +190,15 @@ uniform.rank = function(V) {
 #' Helper for Assigning Ranks for Goodness-of-fit Test
 #' 
 #' @keywords internal
-gof.assign.rank = function(elem, rank.id) {
+gof.assign.rank = function(elem, rank.id, d) {
   if (rank.id == 0) {
     r = elem
   } else if (rank.id == 3) {
-    r = lapply(split(elem[, -1], elem[, 1]), matrix, ncol = 2)
+    r = lapply(split(elem[, -1], elem[, 1]), matrix, ncol = d)
     r = uniform.rank(r)
   } else {
-    r = lapply(split(elem[, -1], elem[, 1]), matrix, ncol = 2)
-    r = t(sapply(rank, choose.vert, type = rank.id))
+    r = lapply(split(elem[, -1], elem[, 1]), matrix, ncol = d)
+    r = t(sapply(r, choose.vert, type = rank.id))
   }
   
   return(r)

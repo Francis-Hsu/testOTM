@@ -27,5 +27,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Peng Xu \email{px2132@columbia.edu}
 
+Other contributors:
+\itemize{
+  \item Bruno Lévy (author of Geogram) [contributor, copyright holder]
+}
+
 }
 \keyword{internal}

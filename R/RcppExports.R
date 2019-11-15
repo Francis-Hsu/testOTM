@@ -97,3 +97,32 @@ locateRVD3D <- function(Q, X, w) {
     .Call('_testOTM_locateRVD3D', PACKAGE = 'testOTM', Q, X, w)
 }
 
+#' 3D Goodness-of-fit Test Helper
+#' 
+#' Compute the SDOT quantiles of quasi-MC sequence \eqn{U} with respect to \eqn{X} and \eqn{Y}.
+#' @param X input data matrix.
+#' @param Y input data matrix.
+#' @param U sequence used to evaluate the integral.
+#' @param epsilon convergence threshold for optimization.
+#' @param maxit max number of iterations before termination.
+#' @param verbose logical indicating whether to display optimization messages.
+#' @return a list containing the quantile indices for \eqn{X} and \eqn{Y}.
+#' @keywords internal
+gof3DHelper <- function(X, Y, U, epsilon, maxit, verbose) {
+    .Call('_testOTM_gof3DHelper', PACKAGE = 'testOTM', X, Y, U, epsilon, maxit, verbose)
+}
+
+#' 3D Joint Samples Rank Helper
+#' 
+#' Helps computing the Empirical Rank for 3D Joint Samples \eqn{(X, Y)}.
+#' @param XY 3D input data matrix.
+#' @param center logical indicating if the centroids should be computed.
+#' @param epsilon convergence threshold for optimization.
+#' @param maxit max number of iterations before termination.
+#' @param verbose logical indicating whether to display optimization messages.
+#' @return a matrix, represents either the centroids/cells of the RVD of joint samples.
+#' @keywords internal
+jointRankHelper3D <- function(XY, center, epsilon, maxit, verbose) {
+    .Call('_testOTM_jointRankHelper3D', PACKAGE = 'testOTM', XY, center, epsilon, maxit, verbose)
+}
+

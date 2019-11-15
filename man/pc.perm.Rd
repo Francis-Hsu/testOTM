@@ -12,7 +12,7 @@ pc.perm(n, m)
 \item{m}{number of permutations to generate.}
 }
 \value{
-a \eqn{m} by \eqn{n} matrix of indices where each row represents a permutation. 
+an \eqn{m} by \eqn{n} matrix of indices where each row represents a permutation. 
 Rows beyond the \eqn{n!}-th one will be filled with 0s.
 }
 \description{

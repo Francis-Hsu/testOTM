@@ -9,10 +9,7 @@
 
 This repository contains a R package which implements the multivariate
 ranks and quantiles, together with their application in statistical
-testing, that based on the semi-discrete optimal transportation. The
-underlying geometric computation is performed by the
-[Geogram](http://alice.loria.fr/index.php/software/4-library/75-geogram.html)
-library.
+testing, that based on the semi-discrete optimal transportation.
 
 ## Installation
 
@@ -34,20 +31,24 @@ You can install the development version from
 
 ## Example
 
-This is a basic example which shows you how to use `testOTM`:
+This is a basic example which shows you how to use `testOTM` to
+visualize the optimal transport map from \(U[0, 1]^2\) to a dataset:
 
 ``` r
 library(testOTM)
 
 # generate some data
+p = 2
 n = 100
-X = cbind(rnorm(n, 0, 1), rnorm(n, 0, 0.5))
+Sigma = matrix(c(1, 0, 0, 1), 2, 2)
+eS = eigen(Sigma, symmetric = TRUE)
+X = t(eS$vectors %*% diag(sqrt(pmax(eS$values, 0)), p) %*% matrix(rnorm(p * n), p))
 
 # scale the data to [0, 1] range
 X = scaling.min.max(X)
 
 # compute the optimal transport map from U[0, 1]^2 to the data
-X.OTM = otm.fit(X)
+X.OTM = tos.fit(X)
 
 # plot the restricted Voronoi diagram and the restricted Delaunay triangulation
 par(mfrow = c(1, 2))
@@ -56,9 +57,29 @@ plot(X.OTM, which = "Both", draw.center = F, draw.map = T)
 
 ![](man/figures/README-example-1.png)<!-- -->
 
+## Acknowledgements
+
+The author is extremely grateful to Prof. [Bodhisattva
+Sen](http://www.stat.columbia.edu/~bodhi/Bodhi/Welcome.html) and his
+student Promit Ghosal for their guidance in the development of this
+package. The author would also like to thank Dr. [Bruno
+Lévy](https://members.loria.fr/BLevy/) for his assistance with the
+[Geogram](http://alice.loria.fr/index.php/software/4-library/75-geogram.html)
+library, and [TraME](http://www.trame-project.com/) team, whose
+[`Rgeogram`](https://github.com/TraME-Project/Rgeogram) package provides
+inspirations in the early build of this package.
+
 ## Reference
 
 <div id="refs" class="references">
+
+<div id="ref-CGHH2017">
+
+Chernozhukov, Victor, Alfred Galichon, Marc Hallin, and Marc Henry.
+2017. “Monge–Kantorovich depth, quantiles, ranks and signs.” *The Annals
+of Statistics* 45 (1): 223–56. <https://doi.org/10.1214/16-AOS1450>.
+
+</div>
 
 <div id="ref-GS2019">
 

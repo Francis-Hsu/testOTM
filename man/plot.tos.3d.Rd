@@ -30,7 +30,7 @@
 )
 }
 \arguments{
-\item{x}{a fitted \code{tos.2d} object.}
+\item{x}{a fitted \code{tos.3d} object.}
 
 \item{interactive}{logical indicating if the plot should be interactive.}
 
@@ -48,7 +48,7 @@
 
 \item{draw.center}{logical indicating if the centroids should be plotted.}
 
-\item{draw.map}{logical indicating if dashed lines should be added to show mapping between the data and the Voronoi cells.}
+\item{draw.map}{logical indicating if lines should be added to show mapping between the data and the Voronoi cells.}
 
 \item{draw.id}{vector of indices specifying which data points (and the corresponding cells in RVD and RDT) will be plotted. 
 Set it to \code{NULL} to plot all points. When it is not \code{NULL} and RDT is to be drawn, 

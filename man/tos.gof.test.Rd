@@ -2,7 +2,7 @@
 % Please edit documentation in R/htest.R
 \name{tos.gof.test}
 \alias{tos.gof.test}
-\title{2D Goodness-of-fit Test}
+\title{2D/3D Goodness-of-fit Test}
 \usage{
 tos.gof.test(
   X,
@@ -18,9 +18,9 @@ tos.gof.test(
 )
 }
 \arguments{
-\item{X}{input data matrix, of size \eqn{n} by \eqn{2}.}
+\item{X}{input data matrix, of size \eqn{n} by \eqn{2} or \eqn{3}.}
 
-\item{Y}{input data matrix, of size \eqn{m} by \eqn{2}.}
+\item{Y}{input data matrix, of size \eqn{m} by \eqn{2} or \eqn{3}.}
 
 \item{mc}{number of quasi-Monte-Carlo samples used to evaluate the test statistic.}
 
@@ -29,7 +29,8 @@ tos.gof.test(
 \item{scale}{a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.}
 
 \item{rank.data}{choose the method for assigning ranks to the data points. 
-Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".}
+Can be \code{max}, \code{min}, \code{center}, or \code{uniform}. 
+\code{uniform} is not currently implemented for 3D, and \code{center} will be used if it is chosen}
 
 \item{epsilon}{convergence threshold for optimization.}
 
@@ -43,7 +44,7 @@ Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".}
 the value of the goodness-of-fit test statistic.
 }
 \description{
-\code{tos.gof.test} computes the 2D goodness-of-test statistic using ranks defined through the semi-discrete optimal transport map.
+\code{tos.gof.test} computes the 2D/3D goodness-of-test statistic using ranks defined through the semi-discrete optimal transport map.
 }
 \details{
 Given samples \eqn{X_1, \dots, X_n} and \eqn{Y_1, \dots, Y_m}, we use the following statistic for goodness-of-fit testing:

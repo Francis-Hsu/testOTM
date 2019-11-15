@@ -163,3 +163,92 @@ arma::ivec locateRVD3D(const arma::mat &Q, const arma::mat &X, const arma::vec &
   
   return cellID;
 }
+
+//' 3D Goodness-of-fit Test Helper
+//' 
+//' Compute the SDOT quantiles of quasi-MC sequence \eqn{U} with respect to \eqn{X} and \eqn{Y}.
+//' @param X input data matrix.
+//' @param Y input data matrix.
+//' @param U sequence used to evaluate the integral.
+//' @param epsilon convergence threshold for optimization.
+//' @param maxit max number of iterations before termination.
+//' @param verbose logical indicating whether to display optimization messages.
+//' @return a list containing the quantile indices for \eqn{X} and \eqn{Y}.
+//' @keywords internal
+// [[Rcpp::export]]
+List gof3DHelper(const arma::mat &X, const arma::mat &Y, const arma::mat &U, 
+                 double epsilon, int maxit, bool verbose) {
+  // initialize the Geogram library.
+  initializeGeogram();
+  
+  // create a mesh for 2D uniform measure
+  GEO::Mesh unifMesh(3, false);
+  setUniMesh(unifMesh, 3, true);
+  
+  // compute OTMs
+  GEO::OptimalTransportMap3d OTMX(&unifMesh);
+  GEO::OptimalTransportMap3d OTMY(&unifMesh);
+  OTM3D(OTMX, X, epsilon, maxit, verbose);
+  OTM3D(OTMY, Y, epsilon, maxit, verbose);
+  
+  // get weights
+  arma::vec wX = getWeights(OTMX);
+  arma::vec wY = getWeights(OTMY);
+  
+  // get the optimal transport mapping
+  arma::ivec uX = locateRVD3D(U, X, wX);
+  arma::ivec uY = locateRVD3D(U, Y, wY);
+  
+  // collect objects to return
+  List lst;
+  lst["U_Map_X"] = uX;
+  lst["U_Map_Y"] = uY;
+  
+  return lst;
+}
+
+//' 3D Joint Samples Rank Helper
+//' 
+//' Helps computing the Empirical Rank for 3D Joint Samples \eqn{(X, Y)}.
+//' @param XY 3D input data matrix.
+//' @param center logical indicating if the centroids should be computed.
+//' @param epsilon convergence threshold for optimization.
+//' @param maxit max number of iterations before termination.
+//' @param verbose logical indicating whether to display optimization messages.
+//' @return a matrix, represents either the centroids/cells of the RVD of joint samples.
+//' @keywords internal
+// [[Rcpp::export]]
+arma::field<arma::mat> jointRankHelper3D(const arma::mat &XY, bool center, double epsilon, int maxit, bool verbose) {
+  // initialize the Geogram library.
+  initializeGeogram();
+  
+  // create a mesh for 2D uniform measure
+  GEO::Mesh unifMesh(3, false);
+  setUniMesh(unifMesh, 3, true);
+  
+  // embed in 4-dimension
+  unifMesh.vertices.set_dimension(4);
+  
+  // compute OTMs
+  GEO::OptimalTransportMap3d OTMXY(&unifMesh);
+  OTM3D(OTMXY, XY, epsilon, maxit, verbose);
+  
+  // get elements from corresponding cells to help computing ranks
+  arma::field<arma::mat> elemXY;
+  if (center) {
+    elemXY.set_size(1);
+    elemXY(0) = getCentroids(OTMXY);
+  } else {
+    elemXY.set_size(OTMXY.nb_points());
+    // compute the RVCs and save the vertices to a field
+    GEO::Mesh otmRVD;
+    setUniMesh(unifMesh, 3, false);
+    for (unsigned int i = 0; i < OTMXY.nb_points(); i++) {
+      otmRVD.clear();
+      OTMXY.RVD()->compute_RVC(i, unifMesh, otmRVD);
+      elemXY(i) = getVertices3D(otmRVD, false);
+    }
+  }
+  
+  return elemXY;
+}
