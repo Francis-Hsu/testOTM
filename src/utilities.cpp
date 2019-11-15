@@ -126,9 +126,9 @@ arma::mat getVertices2D(GEO::Mesh &M) {
       id = M.facets.vertex(i, j);
       v = M.vertices.point(id);
       Vert(accuVert[i] + j, 0) = i + 1;
-      Vert(accuVert[i] + j, 1) = v.x;
-      Vert(accuVert[i] + j, 2) = v.y;
-      Vert(accuVert[i] + j, 3) = id + 1;
+      Vert(accuVert[i] + j, 1) = id + 1;
+      Vert(accuVert[i] + j, 2) = v.x;
+      Vert(accuVert[i] + j, 3) = v.y;
     }
   }
   
@@ -186,10 +186,10 @@ arma::mat getVertices3D(GEO::Mesh &M, bool volumetric) {
           v = M.vertices.point(id);
           Vert(accuVert[accuFacets] + k, 0) = i + 1;
           Vert(accuVert[accuFacets] + k, 1) = j + 1;
-          Vert(accuVert[accuFacets] + k, 2) = v.x;
-          Vert(accuVert[accuFacets] + k, 3) = v.y;
-          Vert(accuVert[accuFacets] + k, 4) = v.z;
-          Vert(accuVert[accuFacets] + k, 5) = id + 1;
+          Vert(accuVert[accuFacets] + k, 2) = id + 1;
+          Vert(accuVert[accuFacets] + k, 3) = v.x;
+          Vert(accuVert[accuFacets] + k, 4) = v.y;
+          Vert(accuVert[accuFacets] + k, 5) = v.z;
         }
         accuFacets++;
       }
@@ -200,10 +200,10 @@ arma::mat getVertices3D(GEO::Mesh &M, bool volumetric) {
         id = M.facets.vertex(i, j);
         v = M.vertices.point(id);
         Vert(accuVert[i] + j, 0) = i + 1;
-        Vert(accuVert[i] + j, 1) = v.x;
-        Vert(accuVert[i] + j, 2) = v.y;
-        Vert(accuVert[i] + j, 3) = v.z;
-        Vert(accuVert[i] + j, 4) = id + 1;
+        Vert(accuVert[i] + j, 1) = id + 1;
+        Vert(accuVert[i] + j, 2) = v.x;
+        Vert(accuVert[i] + j, 3) = v.y;
+        Vert(accuVert[i] + j, 4) = v.z;
       }
     }
   }

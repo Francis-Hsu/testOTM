@@ -3,15 +3,14 @@ using namespace Rcpp;
 
 void OTM3D(GEO::OptimalTransportMap3d &OTM, const arma::mat &X, double epsilon, int maxit, bool verbose) {
   const int n = X.n_rows;
-  const int d = 3;
   
   // create a mesh for data points
-  GEO::Mesh dataMesh(d, false);
+  GEO::Mesh dataMesh(3, false);
   dataMesh.vertices.create_vertices(n);
   setMeshPoint(dataMesh, X);
   
   // embed in 4-dimension
-  dataMesh.vertices.set_dimension(d + 1);
+  dataMesh.vertices.set_dimension(4);
   
   // setup OTM
   OTM.set_points(n, dataMesh.vertices.point_ptr(0), dataMesh.vertices.dimension());
@@ -34,14 +33,12 @@ void OTM3D(GEO::OptimalTransportMap3d &OTM, const arma::mat &X, double epsilon, 
 //' @keywords internal
 // [[Rcpp::export]]
 List dualGraphs3D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
-  const int d = 3;
-  
   // initialize the Geogram library.
   initializeGeogram();
   
   // create a mesh for 3D uniform measure
-  GEO::Mesh unifMesh(d, false);
-  setUniMesh(unifMesh, d, true);
+  GEO::Mesh unifMesh(3, false);
+  setUniMesh(unifMesh, 3, true);
   
   // compute OTM
   GEO::OptimalTransportMap3d OTM(&unifMesh);
@@ -60,7 +57,7 @@ List dualGraphs3D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
   // compute the RVCs and save the vertices to a field
   GEO::Mesh otmRVD;
   arma::field<arma::mat> rvcVerts(OTM.nb_points());
-  setUniMesh(unifMesh, d, false);
+  setUniMesh(unifMesh, 3, false);
   for (unsigned int i = 0; i < OTM.nb_points(); i++) {
     otmRVD.clear();
     OTM.RVD()->compute_RVC(i, unifMesh, otmRVD);
@@ -92,7 +89,6 @@ List dualPotential3D(const arma::mat &Y, const arma::mat &X, const arma::mat &V,
                      const arma::uvec accuVerts) {
   const int m = Y.n_rows;
   const int n = X.n_rows;
-  const int d = 3;
   
   // seperate the vertices out for each cell
   // then shift each by its Voronoi site
@@ -111,7 +107,7 @@ List dualPotential3D(const arma::mat &Y, const arma::mat &X, const arma::mat &V,
   
   // to recover the optimal vertices
   // which corresponds to ranks
-  arma::mat argmaxVert(m, d, arma::fill::zeros);
+  arma::mat argmaxVert(m, 3, arma::fill::zeros);
   
   // search through the cells to find vertices that maximizes the inner product
   arma::vec tempProd;

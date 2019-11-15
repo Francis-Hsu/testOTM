@@ -35,14 +35,12 @@ void OTM2D(GEO::OptimalTransportMap2d &OTM, const arma::mat &X, double epsilon, 
 //' @keywords internal
 // [[Rcpp::export]]
 List dualGraphs2D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
-  const int d = 2;
-  
   // initialize the Geogram library.
   initializeGeogram();
   
   // create a mesh for 2D uniform measure
-  GEO::Mesh unifMesh(d, false);
-  setUniMesh(unifMesh, d, true);
+  GEO::Mesh unifMesh(2, false);
+  setUniMesh(unifMesh, 2, true);
   
   // compute OTM
   GEO::OptimalTransportMap2d OTM(&unifMesh);
@@ -55,7 +53,7 @@ List dualGraphs2D(const arma::mat &X, double epsilon, int maxit, bool verbose) {
   arma::vec W = getWeights(OTM);
   
   // create a squared uniform mesh
-  setUniMesh(unifMesh, d, false);
+  setUniMesh(unifMesh, 2, false);
   
   // this will not return the correct cell order
   // GEO::Mesh otmRVD;
@@ -84,7 +82,6 @@ List dualPotential2D(const arma::mat &Y, const arma::mat &X, const arma::mat &V,
                      const arma::uvec accuVerts) {
   const int m = Y.n_rows;
   const int n = X.n_rows;
-  const int d = 2;
   
   // seperate the vertices out for each cell
   // then shift each by its Voronoi site
@@ -103,7 +100,7 @@ List dualPotential2D(const arma::mat &Y, const arma::mat &X, const arma::mat &V,
   
   // to recover the optimal vertices
   // which corresponds to ranks
-  arma::mat argmaxVert(m, d, arma::fill::zeros);
+  arma::mat argmaxVert(m, 2, arma::fill::zeros);
   
   // search through the cells to find vertices that maximizes the inner product
   arma::vec tempProd;
@@ -238,14 +235,12 @@ arma::ivec locateRDT2D(const arma::mat &Q, const arma::mat &V) {
 // [[Rcpp::export]]
 List gof2DHelper(const arma::mat &X, const arma::mat &Y, const arma::mat &U, 
                  double epsilon, int maxit, bool verbose) {
-  const int d = 2;
-  
   // initialize the Geogram library.
   initializeGeogram();
   
   // create a mesh for 2D uniform measure
-  GEO::Mesh unifMesh(d, false);
-  setUniMesh(unifMesh, d, true);
+  GEO::Mesh unifMesh(2, false);
+  setUniMesh(unifMesh, 2, true);
   
   // compute OTMs
   GEO::OptimalTransportMap2d OTMX(&unifMesh);
@@ -281,17 +276,15 @@ List gof2DHelper(const arma::mat &X, const arma::mat &Y, const arma::mat &U,
 //' @keywords internal
 // [[Rcpp::export]]
 arma::mat jointRankHelper2D(const arma::mat &XY, bool center, double epsilon, int maxit, bool verbose) {
-  const int d = 2;
-  
   // initialize the Geogram library.
   initializeGeogram();
   
   // create a mesh for 2D uniform measure
-  GEO::Mesh unifMesh(d, false);
-  setUniMesh(unifMesh, d, true);
+  GEO::Mesh unifMesh(2, false);
+  setUniMesh(unifMesh, 2, true);
   
   // embed in 3-dimension
-  unifMesh.vertices.set_dimension(d + 1);
+  unifMesh.vertices.set_dimension(3);
   
   // compute OTMs
   GEO::OptimalTransportMap2d OTMXY(&unifMesh);
@@ -303,7 +296,7 @@ arma::mat jointRankHelper2D(const arma::mat &XY, bool center, double epsilon, in
     elemXY = getCentroids(OTMXY);
   } else {
     // create a squared uniform mesh
-    setUniMesh(unifMesh, d, false);
+    setUniMesh(unifMesh, 2, false);
     
     // get Voronoi cells
     elemXY = getVerticesGen2D(unifMesh, OTMXY);

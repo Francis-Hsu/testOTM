@@ -17,7 +17,7 @@
 #' The rank for a non-data query point can be computed by solving a series of linear programming, 
 #' or by finding the intersection of Laguerre cells that corresponds to the simplex containing the query.
 #' Set \code{rank.algo} to \code{lp} to use the former and \code{geom} for the latter.
-#' Note the geometric method is slow and does not work for points lie outside the RDT, \code{lp} method will still be used if they are present.
+#' Note the geometric method is slow and does not work for points lie outside the RDT, \code{lp} method will be called if they are present.
 #' @return a list containing the ranks of the data and the corresponding convex conjugate potential values.
 #' If \code{rank.algo = "geom"} or data points are presented in the queries,
 #' then the corresponding conjugate potentials will not be computed (\code{NA}s will be returned).
@@ -80,12 +80,15 @@ tos.rank.tos.2d = function(object, query, scale = TRUE, rank.data = "uniform", r
     # assign ranks to data points
     if (rank.id == 0) {
       tos.ranks[query.data.id, ] = object$Centroid[data.id, ]
-    } else if (rank.id == 3) {
-      data.rank = lapply(split(object$Vertex.RVD[, -1], object$Vertex.RVD[, 1]), matrix, ncol = 2)[data.id]
-      tos.ranks[query.data.id, ] = uniform.rank(data.rank)
     } else {
-      data.rank = lapply(split(object$Vertex.RVD[, -1], object$Vertex.RVD[, 1]), matrix, ncol = 2)[data.id]
-      tos.ranks[query.data.id, ] = t(sapply(data.rank, choose.vert, type = rank.id))
+      data.rank = subset(object$Vertex.RVD, object$Vertex.RVD[, 1] %in% data.id)
+      data.rank = lapply(split(data.rank[, -1], data.rank[, 1]), matrix, ncol = 2)
+      
+      if (rank.id == 3) {
+        tos.ranks[query.data.id, ] = uniform.rank(data.rank)
+      } else {
+        tos.ranks[query.data.id, ] = t(sapply(data.rank, choose.vert, type = rank.id))
+      }
     }
     
     lp.id[query.data.id] = F
@@ -93,7 +96,7 @@ tos.rank.tos.2d = function(object, query, scale = TRUE, rank.data = "uniform", r
   
   # compute the ranks geometrically
   if (algo.id == 1) {
-    location.id = locateRDT2D(query, as.matrix(object$Vertex.RDT[, 2:3]))
+    location.id = locateRDT2D(query, as.matrix(object$Vertex.RDT[, 3:4]))
     inside.id = (1:n)[location.id > 0]
     lp.id[inside.id] = F
     for (i in inside.id) {
@@ -115,12 +118,10 @@ tos.rank.tos.2d = function(object, query, scale = TRUE, rank.data = "uniform", r
   
   # compute the ranks through LP
   if (any(lp.id)) {
-    acc.verts = c(0, cumsum(as.vector(table(
-      object$Vertex.RVD[, 1]
-    ))))
+    acc.verts = c(0, cumsum(as.vector(table(object$Vertex.RVD[, 1]))))
     dual.potential = dualPotential2D(query[lp.id, , drop = F],
                                      object$Data,
-                                     as.matrix(object$Vertex.RVD[, 2:3]),
+                                     object$Vertex.RVD[, 2:3],
                                      object$Height,
                                      acc.verts)
     tos.dual.potential[lp.id] = dual.potential$dual.potential
@@ -177,21 +178,20 @@ tos.rank.tos.3d = function(object,
     
     # assign ranks to data points
     if (rank.id == 0) {
-      tos.ranks[query.data.id,] = object$Centroid[data.id,]
+      tos.ranks[query.data.id, ] = object$Centroid[data.id, ]
     } else {
-      data.rank = lapply(split(object$Vertex.RVD[, -1], object$Vertex.RVD[, 1]),
-                         matrix,
-                         ncol = 2)[data.id]
-      tos.ranks[query.data.id,] = t(sapply(data.rank, choose.vert, type = rank.id))
+      data.rank = subset(object$Vertex.RVD, object$Vertex.RVD[, 1] %in% data.id)[, c(1, 4:6)]
+      data.rank = lapply(split(data.rank[, -1], data.rank[, 1]), matrix, ncol = 3)
+      tos.ranks[query.data.id, ] = t(sapply(data.rank, choose.vert, type = rank.id))
     }
     
     lp.id[query.data.id] = F
   }
   
   # get unique vertices from each cell
-  unique.vert = lapply(unique(unique.vert[, 1]), function(i) {
-    sub.cell = subset(unique.vert, unique.vert[, 1] == i)
-    sub.cell[!duplicated(sub.cell[, 5]),]
+  unique.vert = lapply(unique(object$Vertex.RVD[, 1]), function(i) {
+    sub.cell = subset(object$Vertex.RVD, object$Vertex.RVD[, 1] == i)
+    sub.cell[!duplicated(sub.cell[, 3]),]
   })
   unique.vert = do.call(rbind, unique.vert)
   
@@ -200,7 +200,7 @@ tos.rank.tos.3d = function(object,
     acc.verts = c(0, cumsum(as.vector(table(unique.vert[, 1]))))
     dual.potential = dualPotential3D(query[lp.id, , drop = F],
                                      object$Data,
-                                     unique.vert[, 3:5],
+                                     unique.vert[, 4:6],
                                      object$Height,
                                      acc.verts)
     tos.dual.potential[lp.id] = dual.potential$dual.potential

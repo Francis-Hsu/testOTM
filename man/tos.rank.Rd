@@ -45,7 +45,7 @@ Finally, option \code{uniform} will sample a point uniformly from the Laguerre c
 The rank for a non-data query point can be computed by solving a series of linear programming, 
 or by finding the intersection of Laguerre cells that corresponds to the simplex containing the query.
 Set \code{rank.algo} to \code{lp} to use the former and \code{geom} for the latter.
-Note the geometric method is slow and does not work for points lie outside the RDT, \code{lp} method will still be used if they are present.
+Note the geometric method is slow and does not work for points lie outside the RDT, \code{lp} method will be called if they are present.
 }
 \seealso{
 \code{\link{tos.gof.test}} and \code{\link{tos.dep.test}} for statistical tests using optimal transport rank.

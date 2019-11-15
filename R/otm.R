@@ -54,7 +54,7 @@ tos.fit = function(data,
     object = dualGraphs2D(data, epsilon, maxit, verbose)
     class(object) = "tos.2d"
     colnames(object$Centroid) = c("x", "y")
-    colnames(object$Vertex.RDT) = c("cell", "x", "y", "id")
+    colnames(object$Vertex.RDT) = c("cell", "id", "x", "y")
     colnames(object$Vertex.RVD) = c("cell", "x", "y")
   } else if (d == 3) {
     if (NROW(data) < 4) {
@@ -63,11 +63,11 @@ tos.fit = function(data,
     object = dualGraphs3D(data, epsilon, maxit, verbose)
     class(object) = "tos.3d"
     colnames(object$Centroid) = c("x", "y", "z")
-    colnames(object$Vertex.RDT) = c("cell", "facet", "x", "y", "z", "id")
+    colnames(object$Vertex.RDT) = c("cell", "facet", "id", "x", "y", "z")
     object$Vertex.RVD = do.call(rbind, lapply(seq_along(object$Vertex.RVD), function(i) {
       cbind(i, object$Vertex.RVD[[i]])
     }))
-    colnames(object$Vertex.RVD) = c("cell", "facet", "x", "y", "z", "id")
+    colnames(object$Vertex.RVD) = c("cell", "facet", "id", "x", "y", "z")
   } else {
     stop("Dimension higher than 3 are not supported.")
   }
@@ -194,7 +194,7 @@ plot.tos.2d = function(x,
       ...
     )
     
-    rdt.edges = extract.segment(x$Vertex.RDT, 1, 2:3)
+    rdt.edges = extract.segment(x$Vertex.RDT, 1, 3:4)
     for (i in 1:nrow(rdt.edges)) {
       segments(rdt.edges[i, 1], rdt.edges[i, 2],
                rdt.edges[i, 3], rdt.edges[i, 4],
@@ -306,7 +306,7 @@ plot.tos.3d = function(x,
     if (type == "RVD" || type == "Both") {
       rvd.edges = lapply(id.draw, function(i) {
         # extract segments cell by cell
-        extract.segment(subset(x$Vertex.RVD, x$Vertex.RVD[, 1] == i), 2, 3:5) 
+        extract.segment(subset(x$Vertex.RVD, x$Vertex.RVD[, 1] == i), 2, 4:6) 
       })
       rvd.edges = do.call(rbind, rvd.edges)
       rvd.edges = matrix(t(rvd.edges), ncol = 3, byrow = T)
@@ -325,7 +325,7 @@ plot.tos.3d = function(x,
       }
       rdt.edges = lapply(id.draw, function(i) {
         # extract segments cell by cell
-        extract.segment(subset(x$Vertex.RDT, x$Vertex.RDT[, 1] == i), 2, 3:5) 
+        extract.segment(subset(x$Vertex.RDT, x$Vertex.RDT[, 1] == i), 2, 4:6) 
       })
       rdt.edges = do.call(rbind, rdt.edges)
       rdt.edges = matrix(t(rdt.edges), ncol = 3, byrow = T)
@@ -386,7 +386,7 @@ plot.tos.3d = function(x,
       # plot RVD segments
       rvd.edges = lapply(id.draw, function(i) {
         # extract segments cell by cell
-        extract.segment(subset(x$Vertex.RVD, x$Vertex.RVD[, 1] == i), 2, 3:5) 
+        extract.segment(subset(x$Vertex.RVD, x$Vertex.RVD[, 1] == i), 2, 4:6) 
       })
       rvd.edges = do.call(rbind, rvd.edges)
       segments3D(
@@ -414,7 +414,7 @@ plot.tos.3d = function(x,
       }
       rdt.edges = lapply(id.draw, function(i) {
         # extract segments cell by cell
-        extract.segment(subset(x$Vertex.RDT, x$Vertex.RDT[, 1] == i), 2, 3:5) 
+        extract.segment(subset(x$Vertex.RDT, x$Vertex.RDT[, 1] == i), 2, 4:6) 
       })
       rdt.edges = do.call(rbind, rdt.edges)
       segments3D(
