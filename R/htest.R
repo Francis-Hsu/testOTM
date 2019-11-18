@@ -52,7 +52,7 @@ tos.gof.test = function(X, Y, mc = 10000, n.perm = 0, scale = c(0, 1), rank.data
   }
   
   if (n.perm != 0 && n.perm < 500) {
-    warning("n.perm is relatively small. The permutation p-value may not be reliable.")
+    message("Consider setting n.perm to a larger value, otherwise the permutation p-value may not be reliable.")
   }
   
   if (!is.null(scale)) {
@@ -228,7 +228,7 @@ tos.dep.test = function(X, Y, n.perm = 0, scale = c(0, 1), rank.data = "uniform"
   }
   
   if (n.perm != 0 && n.perm < 500) {
-    warning("n.perm is relatively small. The permutation p-value may not be reliable.")
+    message("Consider setting n.perm to a larger value, otherwise the permutation p-value may not be reliable.")
   }
   
   # switch method for rank mapping

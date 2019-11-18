@@ -12,13 +12,12 @@ ranks/quantiles defined using the theory of optimal transportation.
 
 ## Installation
 
-<!--
-You can install the released version of testOTM from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of testOTM from
+[CRAN](https://CRAN.R-project.org) with:
 
 ``` r
 install.packages("testOTM")
 ```
--->
 
 You can install the development version from
 [GitHub](https://github.com/) with:
@@ -31,7 +30,8 @@ You can install the development version from
 ## Example
 
 This is a basic example which shows you how to use `testOTM` to
-visualize the optimal transport map from \(U[0, 1]^2\) to a dataset:
+visualize the optimal transport map from \(U[0, 1]^2\) to a bivariate
+normal sample:
 
 ``` r
 library(testOTM)

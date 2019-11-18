@@ -1,6 +1,6 @@
 ---
 output: github_document
-bibliography: ./doc/testOTM.bib
+bibliography: ./vignettes/testOTM.bib
 nocite: '@*'
 ---
 
@@ -25,13 +25,12 @@ set.seed(2019)
 `testOTM` is a R package that provides applications of the multivariate ranks/quantiles defined using the theory of optimal transportation.
 
 ## Installation
-<!--
 You can install the released version of testOTM from [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
 install.packages("testOTM")
 ```
--->
+
 You can install the development version from [GitHub](https://github.com/) with:
 
 ``` r
@@ -40,7 +39,7 @@ You can install the development version from [GitHub](https://github.com/) with:
 ```
 ## Example
 
-This is a basic example which shows you how to use `testOTM` to visualize the optimal transport map from $U[0, 1]^2$ to a dataset:
+This is a basic example which shows you how to use `testOTM` to visualize the optimal transport map from $U[0, 1]^2$ to a bivariate normal sample:
 
 ```{r example}
 library(testOTM)

@@ -51,7 +51,7 @@
 \item{\dots}{other graphical parameters to plot.}
 }
 \description{
-\cdoe{plot.tos.2d} plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
+\code{plot.tos.2d} plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
 2D semi-discrete optimal transport map.
 }
 \keyword{hplot}

@@ -96,7 +96,7 @@ tos.fit = function(data,
 
 #' Plotting 2D Semi-discrete Optimal Transport Map
 #'
-#' \cdoe{plot.tos.2d} plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
+#' \code{plot.tos.2d} plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
 #' 2D semi-discrete optimal transport map.
 #' @param x a fitted \code{tos.2d} object.
 #' @param which specify which graph(s) to plot. Can be \code{None}, \code{RVD}, \code{RDT}, or \code{Both}.
