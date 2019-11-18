@@ -14,7 +14,7 @@
 \item{scale}{logical indicating if the queries should be scaled.}
 
 \item{rank.data}{choose the method for assigning ranks to the data points. 
-Can be \code{max}, \code{min},  or \code{center}.}
+Can be \code{max}, \code{min}, or \code{center}.}
 
 \item{\dots}{additional arguments, currently without effect.}
 }

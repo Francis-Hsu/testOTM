@@ -2,7 +2,7 @@
 % Please edit documentation in R/otm.R
 \name{plot.tos.3d}
 \alias{plot.tos.3d}
-\title{Plot the 3D Semi-discrete Optimal Transport Map}
+\title{Plotting the 3D Semi-discrete Optimal Transport Map}
 \usage{
 \method{plot}{tos.3d}(
   x,
@@ -51,7 +51,7 @@
 \item{draw.map}{logical indicating if lines should be added to show mapping between the data and the Voronoi cells.}
 
 \item{draw.id}{vector of indices specifying which data points (and the corresponding cells in RVD and RDT) will be plotted. 
-Set it to \code{NULL} to plot all points. When it is not \code{NULL} and RDT is to be drawn, 
+Set to \code{NULL} to plot all points. If it is not \code{NULL} and RDT is to be drawn, 
 \code{plot.tos.3d} will plot all tetrahedra that have points in \code{draw.id} as one of its vertices.}
 
 \item{xlim}{the x limits of the plot.}
@@ -68,14 +68,15 @@ Set it to \code{NULL} to plot all points. When it is not \code{NULL} and RDT is 
 
 \item{size}{size of the plotted points in the interactive plots.}
 
-\item{theta, phi}{the angles defining the viewing direction for non-interactive plots. \code{theta} gives the azimuthal direction and \code{phi} the colatitude.}
+\item{theta, phi}{the angles defining the viewing direction for non-interactive plots. 
+\code{theta} gives the azimuthal direction and \code{phi} the colatitude.}
 
 \item{pch}{a vector of plotting characters or symbols.}
 
 \item{\dots}{other graphical parameters to plot.}
 }
 \description{
-Plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
+\code{plot.tos.3d} plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
 3D semi-discrete optimal transport map.
 }
 \keyword{hplot}

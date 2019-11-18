@@ -2,7 +2,7 @@
 % Please edit documentation in R/otm.R
 \name{plot.tos.2d}
 \alias{plot.tos.2d}
-\title{Plot the 2D Semi-discrete Optimal Transport Map}
+\title{Plotting 2D Semi-discrete Optimal Transport Map}
 \usage{
 \method{plot}{tos.2d}(
   x,
@@ -51,7 +51,7 @@
 \item{\dots}{other graphical parameters to plot.}
 }
 \description{
-Plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
+\cdoe{plot.tos.2d} plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
 2D semi-discrete optimal transport map.
 }
 \keyword{hplot}

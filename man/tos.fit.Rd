@@ -2,7 +2,7 @@
 % Please edit documentation in R/otm.R
 \name{tos.fit}
 \alias{tos.fit}
-\title{Uniform Semi-discrete Optimal Transport Map}
+\title{Fitting Uniform Semi-discrete Optimal Transport Map}
 \usage{
 tos.fit(
   data,
@@ -14,7 +14,7 @@ tos.fit(
 )
 }
 \arguments{
-\item{data}{a numeric matrix for the input data, of size \eqn{n} by \eqn{d}.}
+\item{data}{a numeric matrix for the input data, of size \eqn{n} by \eqn{2} or \eqn{3}.}
 
 \item{scale}{a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.}
 
@@ -27,16 +27,26 @@ tos.fit(
 \item{verbose}{logical indicating whether to display optimization messages.}
 }
 \value{
-\code{tos.fit} returns an object of class "\code{tos.2d}" or "\code{tos.3d}", depending on the dimension of input data.
-An object of class "\code{tos}" is a list describing the resulting optimal transport map.
+\code{tos.fit} returns an object of class \code{tos.2d} or \code{tos.3d}, depending on the dimension of input data.
+An object of class \code{tos.2d} or \code{tos.3d} is a list describing the optimal transport map. It contains the following elements:
+\item{Data}{Scaled data.}
+\item{Centroid}{Centroid of the Laguerre cells.}
+\item{Weight}{Weights of the Laguerre cells.}
+\item{Vertex.RDT}{Vertices of the restricted Delaunay triangulation (RDT), organized by cells.}
+\item{Vertex.RVD}{Vertices of the restricted Voronoi diagram (RVD), organized by cells and facets.}
+\item{N.Triangles}{Number of tetrahedra in the RDT.}
+\item{N.Cells}{Number of Laguerre cells in the RVD.}
+\item{Height}{Height of the Laguerre cells, used for computing Alexandrov's potential.}
+\item{Location}{The numeric centering applied to the data.}
+\item{Scale}{The numeric scalings applied to the data.}
 }
 \description{
 \code{tos.fit} computes the semi-discrete optimal transport map from the \eqn{U[0, 1]^d} measure to the input data set.
 }
 \details{
 Input data needs be scaled within the [0, 1] range for computation. 
-Supply \code{scale} to let the function handles the scaling internally.
-Locations and scales will be returned to help transforming the results back to their original range.
+Supply \code{scale} to let \code{tos.fit} handles the scaling internally.
+Centering and scaling factors will be returned to help transforming the results back to their original range.
 }
 \keyword{graphs}
 \keyword{optimize,}

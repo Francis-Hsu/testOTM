@@ -22,7 +22,7 @@ tos.gof.test(
 
 \item{Y}{input data matrix, of size \eqn{m} by \eqn{2} or \eqn{3}.}
 
-\item{mc}{number of quasi-Monte-Carlo samples used to evaluate the test statistic.}
+\item{mc}{number of quasi-Monte Carlo samples used to evaluate the test statistic.}
 
 \item{n.perm}{number of permutations used for computing \eqn{p}-value.}
 
@@ -30,7 +30,7 @@ tos.gof.test(
 
 \item{rank.data}{choose the method for assigning ranks to the data points. 
 Can be \code{max}, \code{min}, \code{center}, or \code{uniform}. 
-\code{uniform} is not currently implemented for 3D, and \code{center} will be used if it is chosen}
+\code{uniform} is not currently implemented for 3D, and \code{center} will be used if it is chosen.}
 
 \item{epsilon}{convergence threshold for optimization.}
 
@@ -41,7 +41,7 @@ Can be \code{max}, \code{min}, \code{center}, or \code{uniform}.
 \item{na.rm}{logical indicating whether \code{NA} values should be stripped before the computation proceeds.}
 }
 \value{
-the value of the goodness-of-fit test statistic.
+a list that contains the permutation test statistics and the \eqn{p}-value.
 }
 \description{
 \code{tos.gof.test} computes the 2D/3D goodness-of-test statistic using ranks defined through the semi-discrete optimal transport map.
@@ -49,7 +49,7 @@ the value of the goodness-of-fit test statistic.
 \details{
 Given samples \eqn{X_1, \dots, X_n} and \eqn{Y_1, \dots, Y_m}, we use the following statistic for goodness-of-fit testing:
 \deqn{T_{X,Y}=\int_{[0, 1]^d}\|\hat{R}_{X,Y}[\hat{Q}_{X}(u)]-\hat{R}_{X,Y}[\hat{Q}_{Y}(u)]\|^2\,d\mu(u),} 
-where \eqn{\mu\sim U[0, 1]^d}. Evaluation of this integral is done through quasi-Monte-Carlo using Sobol sequence.
+where \eqn{\mu\sim U[0, 1]^d}. Evaluation of this integral is done through quasi-Monte Carlo using Sobol sequence.
 }
 \seealso{
 \code{\link{tos.rank}} for optimal transport rank.

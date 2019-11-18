@@ -25,7 +25,7 @@ tos.dep.test(
 \item{scale}{a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.}
 
 \item{rank.data}{choose the method for assigning ranks to the data points. 
-Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".}
+Can be \code{max}, \code{min}, \code{center}, or \code{uniform}.}
 
 \item{epsilon}{convergence threshold for optimization.}
 
@@ -34,8 +34,7 @@ Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".}
 \item{verbose}{logical indicating whether to display optimization messages.}
 }
 \value{
-a list, which contains the values of the independence test statistics,
-together with the \eqn{p}-value computed based on that sample.
+a list that contains the permutation test statistics and the \eqn{p}-value.
 }
 \description{
 \code{tos.dep.test} computes the 1D mutual independence test statistic using ranks defined through 
@@ -49,7 +48,7 @@ For larger sample size Monte Carlo permutation sampling is used to approximate t
 
 Given samples \eqn{(X_1, Y_1), \dots, (X_n, Y_n)}, the following statistic is used for test of independence:
 \deqn{T_n=\sum_{i=1}^n\|\hat{R}(X_i, Y_i)-\tilde{R}(X_i, Y_i)\|^2.} 
-This statistics will converge to \eqn{0} under the null hypothesis. We thus reject the null if \eqn{T_n} is too large.
+This statistics will converge to \eqn{0} under the null hypothesis. We thus reject the null if \eqn{T_n} is large.
 }
 \seealso{
 \code{\link{tos.rank}} for semi-discrete optimal transport rank.

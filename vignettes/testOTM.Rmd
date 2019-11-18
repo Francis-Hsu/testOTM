@@ -1,6 +1,7 @@
 ---
-title: "testOTM"
+title: "testOTM Vignette"
 output: rmarkdown::html_vignette
+bibliography: ../doc/testOTM.bib
 vignette: >
   %\VignetteIndexEntry{testOTM}
   %\VignetteEngine{knitr::rmarkdown}
@@ -10,14 +11,161 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  dpi = 96,
+  fig.retina = 2,
+  fig.width = 7,
+  fig.height = 4
 )
 ```
 
-```{r setup}
+```{r setup, include = FALSE}
 library(testOTM)
+library(rgl)
+set.seed(2019)
 ```
 
-# Introduction
-`testOTM` is a package that computes multivariate ranks and quantiles definded through the theory of optimal transpots. This package also implments several applications, such as the goodness-of-fit testing, of these generalized notions.
+`testOTM` is a package that computes multivariate ranks and quantiles defined through the theory of optimal transports. It also provides several applications of these statistics, most notably the two-sample multivariate goodness-of-fit testing.
 
+## Introduction
+As mentioned, the core of the definitions used by this package is optimal transport: given Borel (probabiliy) measures $\mu$ (source) and $\nu$ (target), whose convex compact supports are $\mathcal{X}\subset\mathbb{R}^d$ and $\mathcal{Y}\subset\mathbb{R}^d$ respectively, a map $T\colon\mathcal{X}\to\mathcal{Y}$ attaining \[\inf_{T: T\mathbin{\#}\mu=\nu}\int_{\mathcal{S}}\left\lVert s-T(s)\right\rVert_2^2\,d\mu(s)\] is called the ($L_2$-) optimal transport map, where the notation $T\mathbin{\#}\mu=\nu$ means $\mu(T^{-1}(B))=\nu(B)$ for all Borel $B\subset\mathcal{Y}$. When $\nu$ is univariate and $\mu\sim U[0,1]$, the map $T$ provides an analogues of the one-dimensional quantile function of $\nu$. Thus, by substituting $\mu\sim U[0,1]^d$ when $\nu$ is of dimension $d$, we are able to generalized the notions of quantiles and ranks, see [@GS2019; @CGHH2017] for more detail.
+
+In application, we do not usually know the target measure $\nu$, but have a finite sample $\{X_i\}_{i=1}^n$ from it. We thus replace the unknown $\nu$ by its empirical distribution $\hat{\nu}_n$, which satisfies \[\hat{\nu}_n(B)=\frac{1}{n}\sum_{i=1}^n\delta_{X_i}(B)\] for all Borel $B\subset\mathcal{Y}$. Accordingly, we define the empirical quantile function $\hat{Q}_n$ to be the solution of the optimal transport problem when $\hat{\nu}_n$ is used. An important result, known as Brenier-McCann's Theorem [@B1991; @M1995], states that there exists a piecewise affine function $\hat{\psi}_n$, here known as the empirical potential function, such that $\hat{Q}_n=\nabla\hat{\psi}_n$. The empirical rank function can then be defined as \[\hat{R}_n(\mathbf{x})=\operatorname*{arg\,min}_{\mathbf{y}\in\mathcal{Y}}\{\mathbf{x}^\top\mathbf{y}-\hat{\psi}_n(\mathbf{y})\},\] and it can be computed through linear programming.
+
+## Visualizing the Transport Map, Rank, and Quantiles
+When the source measure $\mu$ is continuous and target measure $\nu$ is discrete the optimal transport problem is said to be semi-discrete. The solution in this case turns out to have a nice geomtric interpretation: it is a partition of $\mathcal{X}$ by convex polytopes, where each polytope corresponds to one of the $X_i$'s (known as the seeds in this context). This partition is called the power diagram or the Laguerre diagram (and is in fact a generalization of the Voronoi diagram), see [@FA1987]. 
+
+Efficient algorithms for solving the problem in 2D/3D have been proposed in [@LS2018] and are implemented in the [`Geogram`](http://alice.loria.fr/software/geogram/doc/html/index.html) library. `testOTM` provides a wrapper to `Geogram` to solve the specific problems when $\mu$ equals $U[0,1]^2$ or $U[0,1]^3$.
+
+In the following example, we demonstrate how to use `testOTM` to compute the optimal transport map from $U[0,1]^2$ to a bivariate Gaussian sample $\{X_i\}_{i=1}^{20}$ and visualize it:
+```{r fit2D, message=FALSE}
+# generate bivariate normal sample
+p = 2
+n = 20
+Sigma = matrix(c(3, 1, 1, 3), p, p)
+eS = eigen(Sigma, symmetric = TRUE)
+X = t(eS$vectors %*% diag(sqrt(pmax(eS$values, 0)), p) %*% matrix(rnorm(p * n), p))
+
+# compute the optimal transport map from U[0, 1]^2 to X
+# notice that X will be automatically scaled into [0, 1] range
+# tos is an abbreviation for Transport Optimal Semi-discret
+X.OTM = tos.fit(X)
+
+# plot the restricted Voronoi diagram and the restricted Delaunay triangulation
+par(mfrow = c(1, 2))
+plot(X.OTM, which = "Both", draw.center = T, draw.map = T)
+```
+The two plots being produced are the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT). RVD is the partition we mentioned above, each polygon (cell) corresponds to one datum (blue point), and any point within that cell will be transported to the datum by the optimal map. The orange points are the centroids of the cells, and by setting `draw.map = T`, dashed line will be draw between the centroids and the data to indicate which cell corresponds to which point. The RDT on the other hand is the dual of the RVD and has many computational application, see for example [@CDS2013; @TOG2017] for more information.
+
+Now with a fitted `tos.2d` object available, we can use it to compute the (2D) empirical ranks and quantiles. The following snippet shows how to do so in `testOTM` for some arbitrary points $\{Y_i\}_{i=1}^{5}$:
+```{r rank, message=FALSE}
+# choose some arbitrary points
+Y = matrix(c(3.2, -0.9,
+             -1.2, 1.8,
+             4.1, -2.1,
+             -2.5, 0.1,
+             0, 0), ncol = 2, byrow = T)
+Y[5, ] = X[1, ] # take one point from data
+R = tos.rank(X.OTM, Y) # compute ranks
+Q = tos.quantile(X.OTM, Y) # compute quantiles
+
+# to visualize ranks and quantiles, we first apply the scaling of X on Y
+Y = scale(Y, X.OTM$Location, X.OTM$Scale)
+Y = Y * diff(range(X.OTM$Data)) + min(X.OTM$Data)
+
+# plot ranks
+par(mfrow = c(1, 2))
+plot(X.OTM, which = "RVD", draw.center = F, draw.map = F, draw.data = F)
+points(Y, col = "firebrick3", pch = 20)
+points(R$Rank, col = "forestgreen", pch = 20)
+segments(R$Rank[, 1], R$Rank[, 2], Y[, 1], Y[, 2], lty = 2)
+
+# plot quantiles
+plot(X.OTM, which = "RVD", draw.center = T, draw.map = T, draw.data = T)
+points(Y, col = "firebrick3", pch = 20)
+segments(Q$Quantiles[, 1], Q$Quantiles[, 2], Y[, 1], Y[, 2], lty = 2)
+```
+The left plot shows the query points (red) and their corresponding ranks (green). By the nature of their definition, ranks are always vertices of some cells in the RVD, except when the query is a data point $X_i$, in which case $\hat{R}_n$ is not uniquely defined and can be any point in the closure of the cell corresponds to $X_i$. By default, `tos.rank` will sample a point uniformly from that cell.
+
+The right plot meanwhile shows the quantiles of the query points. As pointed out earlier, the query points will be map to the data points that correspond to the cells they are in.
+
+The similar visualization procedure can be done for 3D data sets as well. `testOTM` supports both interactive (via package `rgl`) and non-interactive (via package `plot3D`) plotting of the RVD and the RDT. The following example shows the optimal transport map between $U[0,1]^3$ and a trivariate Gaussian sample:
+```{r fit3D, message=FALSE}
+# generate trivariate normal data
+p = 3
+n = 10
+Sigma = matrix(c(2, 1, 1, 1, 2, 1, 1, 1, 2), p, p)
+eS = eigen(Sigma, symmetric = TRUE)
+X = t(eS$vectors %*% diag(sqrt(pmax(eS$values, 0)), p) %*% matrix(rnorm(p * n), p))
+
+# compute the optimal transport map from U[0, 1]^3 to the data
+X.OTM = tos.fit(X)
+
+# plot the restricted Voronoi diagram and the restricted Delaunay triangulation
+plot(X.OTM, which = "RVD", draw.center = T, draw.map = T)
+
+# embed the plot into the current document
+rglwidget(elementId = "plot3drgl", height = 600, width = 600)
+```
+
+## Non-parametric Testing
+With multivariate ranks and quantiles defined, we can use them to construct non-parametric test statistics for various uses. One such application is the goodness-of-fit test: given independent $\{X_i\}_{i=1}^n\sim\nu_X$ and $\{Y_i\}_{i=1}^m\sim\nu_Y$, we want to test \[H_0\colon\nu_X=\nu_Y\qquad\text{versus}\qquad H_1\colon\nu_X\neq\nu_Y.\] Function `tos.gof.test` implements the statistic (for 2D and 3D) proposed in [@GS2019] for this test: \[T_{X,Y}=\int_{[0,1]^d}\left\lVert\hat{R}_{X,Y}(\hat{Q}_{X}(u))-\hat{R}_{X,Y}(\hat{Q}_{Y}(u))\right\rVert_2^2\,d\mu(u),\] where $\mu=U[0,1]^d$. Under the null hypothesis $T_{X,Y}$ is expected to be small so we reject $H_0$ if $T_{X,Y}$ exceeds certain critical value. However, since we do not yet have the analytical form of the null distribution, we compute the $p$-value through permutation instead. In addition, the integral in the definition of $d$ is evaluated through quasi-Monte Carlo, and by default we use a Sobol sequence of length $10000$.
+
+The following example showcases a goodness-of-fit test with $H_0$ not true. For simplicity we set the number of permutations to be $100$, in practice this parameter is usually set to $500$ or $1000$.
+```{r gof2D, warning=FALSE}
+# simulate data, H_0 false
+p = 2
+n = 100
+Sigma1 = matrix(c(3, 1, 1, 3), p, p)
+eS = eigen(Sigma1, symmetric = TRUE)
+X = t(eS$vectors %*% diag(sqrt(pmax(eS$values, 0)), p) %*% matrix(rnorm(p * n), p))
+Sigma2 = matrix(c(5, 3, 3, 2), p, p)
+eS = eigen(Sigma2, symmetric = TRUE)
+Y = t(eS$vectors %*% diag(sqrt(pmax(eS$values, 0)), p) %*% matrix(rnorm(p * n), p))
+
+# two sample goodness-of-fit test
+GoF = tos.gof.test(X, Y, n.perm = 100)
+GoF
+```
+
+Another useful application of the multivariate ranks and quantiles in non-parametric testing is the test of independence: given samples $\{Z_i=(X_i, Y_i)\}\sim\nu$, where $X_i\sim\nu_X$ and $Y_i\sim\nu_Y$, we'd like to test \[H_0\colon\nu=\nu_X\otimes\nu_Y\qquad\text{versus}\qquad H_1\colon\nu\neq\nu_X\otimes\nu_Y.\] A test statistic for this is presented in [@GS2019] and reduced to the following when both $X_i$ and $Y_i$ are univariate: \[T_n=\frac{1}{n}\sum_{i=1}^n\left\lVert\hat{R}_{Z}(\hat{Q}_{Z}(u))-\tilde{R}_{Z}(\hat{Q}_{Z}(u))\right\rVert_2^2,\] where $\tilde{R}_{Z}=(\hat{R}_{X},\hat{R}_{Y})$ is simply the joining of the usual 1D ranks of $X$ and $Y$. The following snippet showcases how to perform this test with `tos.dep.test`:
+```{r dep2D, warning=FALSE}
+# simulate data, H_0 false
+p = 2
+n = 100
+Sigma = matrix(c(5, 3, 3, 2), p, p)
+eS = eigen(Sigma, symmetric = TRUE)
+Z = t(eS$vectors %*% diag(sqrt(pmax(eS$values, 0)), p) %*% matrix(rnorm(p * n), p))
+X = Z[, 1]
+Y = Z[, 2]
+
+# test of independence
+Dep = tos.dep.test(X, Y, n.perm = 100)
+Dep
+```
+
+## Statistical Depth
+The statistical depth is a measurement of the center-outward ordering of points in the support of a distribution, and it can be used to generalize some univariate notions, such as the median, to multivariate. Following suggestion of [@CGHH2017], given samples $\{X_i\}_{i=1}^n\sim\nu$ in $\mathbb{R}^d$, we compute the depth as \[\hat{D}_n(\mathbf{x})=\frac{1}{2}-\left\lVert\hat{R}_{n}(\mathbf{x})-\frac{1}{2}\mathbf{1}_d\right\rVert_\infty.\] The following example shows the sample depth of the banana-shaped data presented in [@CGHH2017]:
+```{r banana, fig.width = 5, fig.height = 4}
+# simulate banana-shaped data
+n = 1000
+x = runif(n, -1, 1)
+phi = runif(n, 0, 2 * pi)
+z = runif(n, 0, 1)
+r = 0.2 * z * (1 + (1 - abs(x)) / 2)
+X = cbind(x + r * cos(phi), x^2 + r * sin(phi))
+
+# fit a transport map
+X.OTM = tos.fit(X)
+
+# set a grid to evaluate the depth, so that we can plot them
+k = 100
+q = seq(0.05, 0.95, length.out = k)
+Q = as.matrix(expand.grid(q, q))
+
+# compute depth, then plot its heatmap
+D = tos.depth(X.OTM, Q, scale = F)
+filled.contour(q, q, matrix(D, k, k), color.palette = function(n) cm.colors(n)) 
+```
+
+## Reference

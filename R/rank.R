@@ -5,8 +5,8 @@
 #' @param query a numeric matrix where each row represents a query point.
 #' @param scale logical indicating if the queries should be scaled.
 #' @param rank.data choose the method for assigning ranks to the data points. 
-#' Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".
-#' @param rank.algo choose the algorithm for computing the ranks. Can be "\code{lp}" or "\code{geom}".
+#' Can be \code{max}, \code{min}, \code{center}, or \code{uniform}.
+#' @param rank.algo choose the algorithm for computing the ranks. Can be \code{lp} or \code{geom}.
 #' @param \dots additional arguments.
 #' @details The rank of the a data points used to fit the optimal transport map is not uniquely defined. 
 #' In principle it can be any point within the corresponding Laguerre cell. 
@@ -14,10 +14,11 @@
 #' which is analogous to the usual ECDF rank in 1D. Option \code{center} will assign the centroid of the cell as the rank.
 #' Finally, option \code{uniform} will sample a point uniformly from the Laguerre cell as the rank.
 #' 
-#' The rank for a non-data query point can be computed by solving a series of linear programming, 
-#' or by finding the intersection of Laguerre cells that corresponds to the simplex containing the query.
+#' The rank for a non-data query point can be computed by solving a series of linear programs, 
+#' or by finding the intersection of Laguerre cells that correspond to the simplex containing the query.
 #' Set \code{rank.algo} to \code{lp} to use the former and \code{geom} for the latter.
-#' Note the geometric method is slow and does not work for points lie outside the RDT, \code{lp} method will be called if they are present.
+#' Note the geometric method is slow and does not work for points lie outside the RDT, it is also not implemented for 3D, 
+#' \code{lp} method will be used in these cases.
 #' @return a list containing the ranks of the data and the corresponding convex conjugate potential values.
 #' If \code{rank.algo = "geom"} or data points are presented in the queries,
 #' then the corresponding conjugate potentials will not be computed (\code{NA}s will be returned).
@@ -138,7 +139,7 @@ tos.rank.tos.2d = function(object, query, scale = TRUE, rank.data = "uniform", r
 #' @param query a numeric matrix where each row represents a query point.
 #' @param scale logical indicating if the queries should be scaled.
 #' @param rank.data choose the method for assigning ranks to the data points. 
-#' Can be \code{max}, \code{min},  or \code{center}.
+#' Can be \code{max}, \code{min}, or \code{center}.
 #' @param \dots additional arguments, currently without effect.
 #' @return a list containing the ranks of the data and the corresponding convex conjugate potential values.
 #' @keywords internal

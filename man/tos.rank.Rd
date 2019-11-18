@@ -21,9 +21,9 @@ tos.rank(
 \item{scale}{logical indicating if the queries should be scaled.}
 
 \item{rank.data}{choose the method for assigning ranks to the data points. 
-Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".}
+Can be \code{max}, \code{min}, \code{center}, or \code{uniform}.}
 
-\item{rank.algo}{choose the algorithm for computing the ranks. Can be "\code{lp}" or "\code{geom}".}
+\item{rank.algo}{choose the algorithm for computing the ranks. Can be \code{lp} or \code{geom}.}
 
 \item{\dots}{additional arguments.}
 }
@@ -42,10 +42,11 @@ Set \code{rank.data} to \code{max} to use the vertices with the maximum l2 norm 
 which is analogous to the usual ECDF rank in 1D. Option \code{center} will assign the centroid of the cell as the rank.
 Finally, option \code{uniform} will sample a point uniformly from the Laguerre cell as the rank.
 
-The rank for a non-data query point can be computed by solving a series of linear programming, 
-or by finding the intersection of Laguerre cells that corresponds to the simplex containing the query.
+The rank for a non-data query point can be computed by solving a series of linear programs, 
+or by finding the intersection of Laguerre cells that correspond to the simplex containing the query.
 Set \code{rank.algo} to \code{lp} to use the former and \code{geom} for the latter.
-Note the geometric method is slow and does not work for points lie outside the RDT, \code{lp} method will be called if they are present.
+Note the geometric method is slow and does not work for points lie outside the RDT, it is also not implemented for 3D, 
+\code{lp} method will be used in these cases.
 }
 \seealso{
 \code{\link{tos.gof.test}} and \code{\link{tos.dep.test}} for statistical tests using optimal transport rank.

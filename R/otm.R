@@ -1,17 +1,27 @@
-#' Uniform Semi-discrete Optimal Transport Map
+#' Fitting Uniform Semi-discrete Optimal Transport Map
 #'
 #' \code{tos.fit} computes the semi-discrete optimal transport map from the \eqn{U[0, 1]^d} measure to the input data set.
-#' @param data a numeric matrix for the input data, of size \eqn{n} by \eqn{d}.
+#' @param data a numeric matrix for the input data, of size \eqn{n} by \eqn{2} or \eqn{3}.
 #' @param scale a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.
 #' @param na.rm logical indicating whether \code{NA} values should be stripped before the computation proceeds.
 #' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.
 #' @param verbose logical indicating whether to display optimization messages.
 #' @details Input data needs be scaled within the [0, 1] range for computation. 
-#' Supply \code{scale} to let the function handles the scaling internally.
-#' Locations and scales will be returned to help transforming the results back to their original range.
-#' @return \code{tos.fit} returns an object of class "\code{tos.2d}" or "\code{tos.3d}", depending on the dimension of input data.
-#' An object of class "\code{tos}" is a list describing the resulting optimal transport map.
+#' Supply \code{scale} to let \code{tos.fit} handles the scaling internally.
+#' Centering and scaling factors will be returned to help transforming the results back to their original range.
+#' @return \code{tos.fit} returns an object of class \code{tos.2d} or \code{tos.3d}, depending on the dimension of input data.
+#' An object of class \code{tos.2d} or \code{tos.3d} is a list describing the optimal transport map. It contains the following elements:
+#' \item{Data}{Scaled data.}
+#' \item{Centroid}{Centroid of the Laguerre cells.}
+#' \item{Weight}{Weights of the Laguerre cells.}
+#' \item{Vertex.RDT}{Vertices of the restricted Delaunay triangulation (RDT), organized by cells.}
+#' \item{Vertex.RVD}{Vertices of the restricted Voronoi diagram (RVD), organized by cells and facets.}
+#' \item{N.Triangles}{Number of tetrahedra in the RDT.}
+#' \item{N.Cells}{Number of Laguerre cells in the RVD.}
+#' \item{Height}{Height of the Laguerre cells, used for computing Alexandrov's potential.}
+#' \item{Location}{The numeric centering applied to the data.}
+#' \item{Scale}{The numeric scalings applied to the data.}
 #' @keywords optimize, graphs
 #' @importFrom stats complete.cases
 #' @export
@@ -84,9 +94,9 @@ tos.fit = function(data,
   return(object)
 }
 
-#' Plot the 2D Semi-discrete Optimal Transport Map
+#' Plotting 2D Semi-discrete Optimal Transport Map
 #'
-#' Plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
+#' \cdoe{plot.tos.2d} plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
 #' 2D semi-discrete optimal transport map.
 #' @param x a fitted \code{tos.2d} object.
 #' @param which specify which graph(s) to plot. Can be \code{None}, \code{RVD}, \code{RDT}, or \code{Both}.
@@ -203,9 +213,9 @@ plot.tos.2d = function(x,
   }
 }
 
-#' Plot the 3D Semi-discrete Optimal Transport Map
+#' Plotting the 3D Semi-discrete Optimal Transport Map
 #'
-#' Plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
+#' \code{plot.tos.3d} plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
 #' 3D semi-discrete optimal transport map.
 #' @param x a fitted \code{tos.3d} object.
 #' @param interactive logical indicating if the plot should be interactive.
@@ -218,7 +228,7 @@ plot.tos.2d = function(x,
 #' @param draw.center logical indicating if the centroids should be plotted.
 #' @param draw.map logical indicating if lines should be added to show mapping between the data and the Voronoi cells.
 #' @param draw.id vector of indices specifying which data points (and the corresponding cells in RVD and RDT) will be plotted. 
-#' Set it to \code{NULL} to plot all points. When it is not \code{NULL} and RDT is to be drawn, 
+#' Set to \code{NULL} to plot all points. If it is not \code{NULL} and RDT is to be drawn, 
 #' \code{plot.tos.3d} will plot all tetrahedra that have points in \code{draw.id} as one of its vertices.
 #' @param xlim the x limits of the plot.
 #' @param ylim the y limits of the plot.
@@ -227,7 +237,8 @@ plot.tos.2d = function(x,
 #' @param ylab a label for the y axis.
 #' @param zlab a label for the z axis.
 #' @param size size of the plotted points in the interactive plots. 
-#' @param theta,phi the angles defining the viewing direction for non-interactive plots. \code{theta} gives the azimuthal direction and \code{phi} the colatitude.
+#' @param theta,phi the angles defining the viewing direction for non-interactive plots. 
+#' \code{theta} gives the azimuthal direction and \code{phi} the colatitude.
 #' @param pch a vector of plotting characters or symbols.
 #' @param \dots other graphical parameters to plot.
 #' @keywords hplot

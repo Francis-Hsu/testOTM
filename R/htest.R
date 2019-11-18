@@ -3,20 +3,20 @@
 #' \code{tos.gof.test} computes the 2D/3D goodness-of-test statistic using ranks defined through the semi-discrete optimal transport map.
 #' @param X input data matrix, of size \eqn{n} by \eqn{2} or \eqn{3}.
 #' @param Y input data matrix, of size \eqn{m} by \eqn{2} or \eqn{3}.
-#' @param mc number of quasi-Monte-Carlo samples used to evaluate the test statistic.
+#' @param mc number of quasi-Monte Carlo samples used to evaluate the test statistic.
 #' @param n.perm number of permutations used for computing \eqn{p}-value.
 #' @param scale a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.
 #' @param rank.data choose the method for assigning ranks to the data points. 
 #' Can be \code{max}, \code{min}, \code{center}, or \code{uniform}. 
-#' \code{uniform} is not currently implemented for 3D, and \code{center} will be used if it is chosen
+#' \code{uniform} is not currently implemented for 3D, and \code{center} will be used if it is chosen.
 #' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.
 #' @param verbose logical indicating whether to display optimization messages.
 #' @param na.rm logical indicating whether \code{NA} values should be stripped before the computation proceeds.
 #' @details Given samples \eqn{X_1, \dots, X_n} and \eqn{Y_1, \dots, Y_m}, we use the following statistic for goodness-of-fit testing:
 #' \deqn{T_{X,Y}=\int_{[0, 1]^d}\|\hat{R}_{X,Y}[\hat{Q}_{X}(u)]-\hat{R}_{X,Y}[\hat{Q}_{Y}(u)]\|^2\,d\mu(u),} 
-#' where \eqn{\mu\sim U[0, 1]^d}. Evaluation of this integral is done through quasi-Monte-Carlo using Sobol sequence.
-#' @return the value of the goodness-of-fit test statistic.
+#' where \eqn{\mu\sim U[0, 1]^d}. Evaluation of this integral is done through quasi-Monte Carlo using Sobol sequence.
+#' @return a list that contains the permutation test statistics and the \eqn{p}-value.
 #' @seealso \code{\link{tos.rank}} for optimal transport rank.
 #' @keywords htest, multivariate
 #' @importFrom randtoolbox sobol
@@ -155,7 +155,7 @@ tos.gof.test = function(X, Y, mc = 10000, n.perm = 0, scale = c(0, 1), rank.data
       
       if (D == 2) {
         # assign ranks
-        gof.rank = gof.assign.rank(gof.elem.perm, rank.id)
+        gof.rank = gof.assign.rank(gof.elem.perm, rank.id, D)
         
         # compute the quantiles of quasi-MC
         gof.list = gof2DHelper(tempX, tempY, U, epsilon, maxit, verbose)
@@ -182,7 +182,7 @@ tos.gof.test = function(X, Y, mc = 10000, n.perm = 0, scale = c(0, 1), rank.data
 #' @param n.perm number of permutations used for computing \eqn{p}-value.
 #' @param scale a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.
 #' @param rank.data choose the method for assigning ranks to the data points. 
-#' Can be "\code{max}", "\code{min}", "\code{center}", or "\code{uniform}".
+#' Can be \code{max}, \code{min}, \code{center}, or \code{uniform}.
 #' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.
 #' @param verbose logical indicating whether to display optimization messages.
@@ -193,9 +193,8 @@ tos.gof.test = function(X, Y, mc = 10000, n.perm = 0, scale = c(0, 1), rank.data
 #' 
 #' Given samples \eqn{(X_1, Y_1), \dots, (X_n, Y_n)}, the following statistic is used for test of independence:
 #' \deqn{T_n=\sum_{i=1}^n\|\hat{R}(X_i, Y_i)-\tilde{R}(X_i, Y_i)\|^2.} 
-#' This statistics will converge to \eqn{0} under the null hypothesis. We thus reject the null if \eqn{T_n} is too large.
-#' @return a list, which contains the values of the independence test statistics,
-#' together with the \eqn{p}-value computed based on that sample.
+#' This statistics will converge to \eqn{0} under the null hypothesis. We thus reject the null if \eqn{T_n} is large.
+#' @return a list that contains the permutation test statistics and the \eqn{p}-value.
 #' @seealso \code{\link{tos.rank}} for semi-discrete optimal transport rank.
 #' @keywords htest, multivariate
 #' @export
