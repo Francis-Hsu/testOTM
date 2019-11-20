@@ -109,11 +109,44 @@ Goodness-of-Fit Testing.” <http://arxiv.org/abs/1905.05340>.
 
 </div>
 
+<div id="ref-WEB:GEOGRAM">
+
+Inria, project ALICE-GRAPHYS. 2019. “Geogram: A Programming Library of
+Geometric Algorithms.”
+<http://alice.loria.fr/software/geogram/doc/html/index.html>.
+
+</div>
+
+<div id="ref-L2015">
+
+Lévy, Bruno. 2015. “A Numerical Algorithm for L2 Semi-Discrete Optimal
+Transport in 3D.” *ESAIM: M2AN* 49 (6): 1693–1715.
+<https://doi.org/10.1051/m2an/2015055>.
+
+</div>
+
+<div id="ref-L2015HAL">
+
+Lévy, Bruno. 2015. “Robustness and Efficiency of Geometric Programs The
+Predicate Construction Kit (PCK).” *Computer-Aided Design*.
+<https://hal.inria.fr/hal-01225202>.
+
+</div>
+
 <div id="ref-LS2018">
 
 Lévy, Bruno, and Erica L. Schwindt. 2018. “Notions of Optimal Transport
 Theory and How to Implement Them on a Computer.” *Computers & Graphics*
 72: 135–48. <https://doi.org/10.1016/j.cag.2018.01.009>.
+
+</div>
+
+<div id="ref-Liu2009">
+
+Liu, Yang, Wenping Wang, Bruno Lévy, Feng Sun, Dong-Ming Yan, Lin Lu,
+and Chenglei Yang. 2009. “On Centroidal Voronoi Tessellation–Energy
+Smoothness and Fast Computation.” *ACM Transactions on Graphics* 28 (4):
+Article 101. <https://doi.org/10.1145/1559755.1559758>.
 
 </div>
 
@@ -130,6 +163,15 @@ Measure-Preserving Maps.” *Duke Math. J.* 80 (2): 309–23.
 Toth, Csaba D., Joseph O’Rourke, and Jacob E. Goodman, eds. 2017.
 *Handbook of Discrete and Computational Geometry*. 3rd ed. Chapman;
 Hall/CRC.
+
+</div>
+
+<div id="ref-Xin2016">
+
+Xin, Shi-Qing, Bruno Lévy, Zhonggui Chen, Lei Chu, Yaohui Yu, Changhe
+Tu, and Wenping Wang. 2016. “Centroidal Power Diagrams with Capacity
+Constraints: Computation, Applications, and Extension.” *ACM Trans.
+Graph.* 35 (6): 244:1–244:12. <https://doi.org/10.1145/2980179.2982428>.
 
 </div>
 
