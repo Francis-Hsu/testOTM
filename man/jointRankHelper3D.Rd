@@ -18,7 +18,7 @@ jointRankHelper3D(XY, center, epsilon, maxit, verbose)
 \item{verbose}{logical indicating whether to display optimization messages.}
 }
 \value{
-a matrix, represents either the centroids/cells of the RVD of joint samples.
+a matrix, represents either the centroids or the cells of the RVD of joint samples.
 }
 \description{
 Helps computing the Empirical Rank for 3D Joint Samples \eqn{(X, Y)}.
