@@ -16,7 +16,7 @@
 \item{\dots}{additional arguments, currently without effect.}
 }
 \value{
-a list containing the quantiles of the queries, as well as the indices of the corresponding cells.
+a list containing the quantiles of the queries and the indices of the corresponding cells.
 }
 \description{
 The 2D implementation for \code{tos.quantile}.

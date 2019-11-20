@@ -22,7 +22,7 @@
 #' @return a list containing the ranks of the data and the corresponding convex conjugate potential values.
 #' If \code{rank.algo = "geom"} or data points are presented in the queries,
 #' then the corresponding conjugate potentials will not be computed (\code{NA}s will be returned).
-#' @seealso \code{\link{tos.gof.test}} and \code{\link{tos.dep.test}} for statistical tests using optimal transport rank.
+#' @seealso \code{\link{tos.gof.test}} and \code{\link{tos.dep.test}} for non-parametric tests using optimal transport rank.
 #' @keywords multivariate
 #' @export
 tos.rank = function(object, query, scale = TRUE, rank.data = "uniform", rank.algo = "lp", ...) {

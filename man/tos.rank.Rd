@@ -49,6 +49,6 @@ Note the geometric method is slow and does not work for points lie outside the R
 \code{lp} method will be used in these cases.
 }
 \seealso{
-\code{\link{tos.gof.test}} and \code{\link{tos.dep.test}} for statistical tests using optimal transport rank.
+\code{\link{tos.gof.test}} and \code{\link{tos.dep.test}} for non-parametric tests using optimal transport rank.
 }
 \keyword{multivariate}

@@ -6,7 +6,7 @@
 #' @param scale logical indicating if the queries should be scaled.
 #' @param rank.data choose the method for assigning ranks to the data points. 
 #' @param \dots additional arguments.
-#' @return a vector containing the depths of the data.
+#' @return a vector containing depths of the queries.
 #' @keywords multivariate
 #' @export
 tos.depth = function(object, query, scale = TRUE, rank.data = "uniform", ...) {
@@ -20,7 +20,7 @@ tos.depth = function(object, query, scale = TRUE, rank.data = "uniform", ...) {
 #' @param query a numeric matrix where each row represents a query point.
 #' @param rank.data choose the method for assigning ranks to the data points. 
 #' @param \dots additional arguments, currently without effect.
-#' @return a vector containing the depths of the data.
+#' @return a vector containing depths of the queries.
 #' @keywords internal
 #' @export
 tos.depth.tos.2d = function(object, query, scale = TRUE, rank.data = "uniform", ...) {
@@ -37,7 +37,7 @@ tos.depth.tos.2d = function(object, query, scale = TRUE, rank.data = "uniform", 
 #' @param query a numeric matrix where each row represents a query point.
 #' @param rank.data choose the method for assigning ranks to the data points. 
 #' @param \dots additional arguments, currently without effect.
-#' @return a vector containing the depths of the data.
+#' @return a vector containing the depths of the queries.
 #' @keywords internal
 #' @export
 tos.depth.tos.3d = function(object, query, scale = TRUE, rank.data = "center", ...) {
@@ -49,9 +49,9 @@ tos.depth.tos.3d = function(object, query, scale = TRUE, rank.data = "center", .
 
 #' Multivariate Uniform Depth Function
 #' 
-#' \code{tos.depth} computes the depths associated with the \eqn{U[0, 1]^d} measure.
+#' \code{depth.uniform} computes the depths associated with the \eqn{U[0, 1]^d} measure.
 #' @param query a numeric matrix where each row represents a query point.
-#' @return a vector containing the depths of the data.
+#' @return a vector containing the depths of the queries.
 #' @keywords internal
 depth.uniform = function(query) {
   depth = 0.5 - apply(abs(t(t(query) - rep(0.5, NCOL(query)))), 1, max)

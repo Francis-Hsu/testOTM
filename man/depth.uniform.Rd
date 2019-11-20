@@ -10,9 +10,9 @@ depth.uniform(query)
 \item{query}{a numeric matrix where each row represents a query point.}
 }
 \value{
-a vector containing the depths of the data.
+a vector containing the depths of the queries.
 }
 \description{
-\code{tos.depth} computes the depths associated with the \eqn{U[0, 1]^d} measure.
+\code{depth.uniform} computes the depths associated with the \eqn{U[0, 1]^d} measure.
 }
 \keyword{internal}

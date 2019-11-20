@@ -16,7 +16,7 @@
 \item{\dots}{additional arguments, currently without effect.}
 }
 \value{
-a vector containing the depths of the data.
+a vector containing depths of the queries.
 }
 \description{
 The 2D implementation of \code{tos.depth}.

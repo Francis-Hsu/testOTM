@@ -5,7 +5,7 @@
 #' @param query a numeric matrix where each row represents a query point.
 #' @param scale logical indicating if the queries should be scaled.
 #' @param \dots additional arguments, currently without effect.
-#' @return a list containing the quantiles of the queries, as well as the indices of the corresponding cells.
+#' @return a list containing the quantiles of the queries and the indices of the corresponding cells.
 #' @keywords multivariate
 #' @export
 tos.quantile = function(object, query, scale = TRUE, ...) {
@@ -19,7 +19,7 @@ tos.quantile = function(object, query, scale = TRUE, ...) {
 #' @param query a numeric matrix where each row represents a query point.
 #' @param scale logical indicating if the queries should be scaled.
 #' @param \dots additional arguments, currently without effect.
-#' @return a list containing the quantiles of the queries, as well as the indices of the corresponding cells.
+#' @return a list containing the quantiles of the queries and the indices of the corresponding cells.
 #' @keywords internal
 #' @export
 tos.quantile.tos.2d = function(object, query, scale = TRUE, ...) {
@@ -41,7 +41,7 @@ tos.quantile.tos.2d = function(object, query, scale = TRUE, ...) {
 #' @param query a numeric matrix where each row represents a query point.
 #' @param scale logical indicating if the queries should be scaled.
 #' @param \dots additional arguments, currently without effect.
-#' @return a list containing the quantiles of the queries, as well as the indices of the corresponding cells.
+#' @return a list containing the quantiles of the queries and the indices of the corresponding cells.
 #' @keywords internal
 #' @export
 tos.quantile.tos.3d = function(object, query, scale = TRUE, ...) {

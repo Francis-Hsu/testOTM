@@ -13,10 +13,15 @@
 #' @param maxit max number of iterations before termination.
 #' @param verbose logical indicating whether to display optimization messages.
 #' @param na.rm logical indicating whether \code{NA} values should be stripped before the computation proceeds.
-#' @details Given samples \eqn{X_1, \dots, X_n} and \eqn{Y_1, \dots, Y_m}, we use the following statistic for goodness-of-fit testing:
-#' \deqn{T_{X,Y}=\int_{[0, 1]^d}\|\hat{R}_{X,Y}[\hat{Q}_{X}(u)]-\hat{R}_{X,Y}[\hat{Q}_{Y}(u)]\|^2\,d\mu(u),} 
-#' where \eqn{\mu\sim U[0, 1]^d}. Evaluation of this integral is done through quasi-Monte Carlo using Sobol sequence.
-#' @return a list that contains the permutation test statistics and the \eqn{p}-value.
+#' @details \code{tos.gof.test} tests whether the samples come from the same population. 
+#' The \eqn{p}-value is computed through permutations. For a very small sample (size less than \eqn{8}), 
+#' all possible permutations are generated (assuming a suitable \code{n.perm} is provided). 
+#' For larger sample size, Monte Carlo permutation sampling is used to approximate the permutations \eqn{p}-value.
+#' 
+#' Given samples \eqn{X_1, \dots, X_n} and \eqn{Y_1, \dots, Y_m}, we use the following statistic for goodness-of-fit testing:
+#' \deqn{T_{X,Y}=\int_{[0, 1]^d}\|\hat{R}_{X,Y}[\hat{Q}_{X}(u)]-\hat{R}_{X,Y}[\hat{Q}_{Y}(u)]\|_2^2\,d\mu(u),} 
+#' where \eqn{\mu\sim U[0, 1]^d}. Evaluation of this integral is done through quasi-Monte Carlo with Sobol sequence.
+#' @return a list which contains the permutation test statistics and the \eqn{p}-value.
 #' @seealso \code{\link{tos.rank}} for optimal transport rank.
 #' @keywords htest, multivariate
 #' @importFrom randtoolbox sobol
@@ -189,12 +194,12 @@ tos.gof.test = function(X, Y, mc = 10000, n.perm = 0, scale = c(0, 1), rank.data
 #' @details \code{tos.dep.test} tests the null hypothesis that \eqn{X} and \eqn{Y} are independent. 
 #' The \eqn{p}-value is computed through permutations. For a very small sample (size less than \eqn{8}), 
 #' all possible permutations are generated (assuming a suitable \code{n.perm} is provided). 
-#' For larger sample size Monte Carlo permutation sampling is used to approximate the permutations \eqn{p}-value.
+#' For larger sample size, Monte Carlo permutation sampling is used to approximate the permutations \eqn{p}-value.
 #' 
 #' Given samples \eqn{(X_1, Y_1), \dots, (X_n, Y_n)}, the following statistic is used for test of independence:
-#' \deqn{T_n=\sum_{i=1}^n\|\hat{R}(X_i, Y_i)-\tilde{R}(X_i, Y_i)\|^2.} 
-#' This statistics will converge to \eqn{0} under the null hypothesis. We thus reject the null if \eqn{T_n} is large.
-#' @return a list that contains the permutation test statistics and the \eqn{p}-value.
+#' \deqn{T_n=\sum_{i=1}^n\|\hat{R}(X_i, Y_i)-\tilde{R}(X_i, Y_i)\|^2,} 
+#' where \eqn{\tilde{R}} is the joining of the usual 1D ranks.
+#' @return a list which contains the permutation test statistics and the \eqn{p}-value.
 #' @seealso \code{\link{tos.rank}} for semi-discrete optimal transport rank.
 #' @keywords htest, multivariate
 #' @export

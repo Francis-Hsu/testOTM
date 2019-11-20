@@ -19,7 +19,7 @@ dualPotential2D <- function(Y, X, V, h, accuVerts) {
 
 #' Locate within a 2D RVD
 #' 
-#' Find the RVD cells where a set Q of query points is transported to.
+#' Find the RVD seeds where a set Q of query points is transported to.
 #' @param Q input query matrix.
 #' @param X input data used to build the RVD.
 #' @param w weights of the RVD cells.
@@ -87,7 +87,7 @@ dualPotential3D <- function(Y, X, V, h, accuVerts) {
 
 #' Locate within a 3D RVD
 #' 
-#' Find the RVD cells where a set Q of query points is transported to.
+#' Find the RVD seeds where a set Q of query points is transported to.
 #' @param Q input query matrix.
 #' @param X input data used to build the RVD.
 #' @param w weights of the RVD cells.
@@ -120,7 +120,7 @@ gof3DHelper <- function(X, Y, U, epsilon, maxit, verbose) {
 #' @param epsilon convergence threshold for optimization.
 #' @param maxit max number of iterations before termination.
 #' @param verbose logical indicating whether to display optimization messages.
-#' @return a matrix, represents either the centroids/cells of the RVD of joint samples.
+#' @return a matrix, represents either the centroids or the cells of the RVD of joint samples.
 #' @keywords internal
 jointRankHelper3D <- function(XY, center, epsilon, maxit, verbose) {
     .Call('_testOTM_jointRankHelper3D', PACKAGE = 'testOTM', XY, center, epsilon, maxit, verbose)

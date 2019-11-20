@@ -1,0 +1,68 @@
+The following files are modified to accommodate CRAN Repository Policy:
+
+Replace std::cerr (C++):
+../src/lib/geogram/basic/assert.cpp
+../src/lib/geogram/basic/logger.cpp
+../src/lib/geogram/basic/environment.cpp
+../src/lib/geogram/delaunay/delaunay_2d.cpp
+../src/lib/geogram/delaunay/delaunay_3d.cpp
+../src/lib/geogram/numerics/multi_precision.cpp
+../src/lib/exploragram/optimal_transport/optimal_transport.cpp
+../src/lib/exploragram/optimal_transport/optimal_transport_2d.cpp
+
+Replace std::cout (C++):
+../src/lib/geogram/basic/command_line.o
+../src/lib/geogram/basic/process_unix.o
+../src/lib/geogram/third_party/HLBFGS/HLBFGS.o
+
+Replace abort (C):
+../src/lib/geogram/NL/nl_os.o
+../src/lib/geogram/basic/assert.o
+../src/lib/geogram/image/image_serializer_xpm.o
+
+Replace exit (C):
+../src/lib/geogram/NL/nl_cuda.o
+../src/lib/geogram/basic/command_line.o
+../src/lib/geogram/basic/process_unix.o
+
+Replace printf (C):
+../src/lib/geogram/NL/nl_os.o
+
+Replace random and srandom(C):
+../src/lib/geogram/basic/numeric.o
+../src/lib/geogram/basic/numeric.o
+
+Replace stderr (C):
+../src/lib/geogram/NL/nl_api.o
+../src/lib/geogram/NL/nl_blas.o
+../src/lib/geogram/NL/nl_cholmod.o
+../src/lib/geogram/NL/nl_cuda.o
+../src/lib/geogram/NL/nl_os.o
+../src/lib/geogram/NL/nl_arpack.o
+../src/lib/geogram/third_party/rply/rply.o
+../src/lib/geogram/basic/logger.o
+
+Replace stdout (C):
+../src/lib/geogram/NL/nl_api.o
+../src/lib/geogram/basic/logger.o
+
+Disable diagnostics suppressing or non-portable pragma(s):
+../src/lib/geogram/third_party/tetgen/tetgen.h
+../src/lib/geogram/third_party/tetgen/tetgen.h
+../src/lib/geogram/third_party/triangle/triangle.h
+../src/lib/geogram/NL/nl.h 
+../src/lib/geogram/NL/nl_blas.c
+../src/lib/geogram/NL/nl_matrix.c 
+../src/lib/geogram/api/defs.h
+../src/lib/geogram/basic/numeric.cpp
+../src/lib/geogram/basic/process_unix.cpp
+../src/lib/geogram/delaunay/parallel_delaunay_3d.cpp
+../src/lib/geogram/delaunay/periodic_delaunay_3d.cpp
+../src/lib/geogram/image/image_serializer_stb.cpp
+../src/lib/geogram/mesh/mesh_frame_field.cpp
+../src/lib/geogram/mesh/mesh_io.cpp
+../src/lib/geogram/third_party/PoissonRecon/poisson_geogram.cpp
+../src/lib/geogram/third_party/lua/luaconf.h
+../src/lib/geogram/third_party/triangle/triangle.c
+../src/lib/geogram/third_party/triangle/triangle.h
+../src/lib/geogram/third_party/xatlas/xatlas.h

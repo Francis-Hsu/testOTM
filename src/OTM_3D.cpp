@@ -132,7 +132,7 @@ List dualPotential3D(const arma::mat &Y, const arma::mat &X, const arma::mat &V,
 
 //' Locate within a 3D RVD
 //' 
-//' Find the RVD cells where a set Q of query points is transported to.
+//' Find the RVD seeds where a set Q of query points is transported to.
 //' @param Q input query matrix.
 //' @param X input data used to build the RVD.
 //' @param w weights of the RVD cells.
@@ -215,7 +215,7 @@ List gof3DHelper(const arma::mat &X, const arma::mat &Y, const arma::mat &U,
 //' @param epsilon convergence threshold for optimization.
 //' @param maxit max number of iterations before termination.
 //' @param verbose logical indicating whether to display optimization messages.
-//' @return a matrix, represents either the centroids/cells of the RVD of joint samples.
+//' @return a matrix, represents either the centroids or the cells of the RVD of joint samples.
 //' @keywords internal
 // [[Rcpp::export]]
 arma::field<arma::mat> jointRankHelper3D(const arma::mat &XY, bool center, double epsilon, int maxit, bool verbose) {

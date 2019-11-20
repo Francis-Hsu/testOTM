@@ -16,7 +16,7 @@ tos.quantile(object, query, scale = TRUE, ...)
 \item{\dots}{additional arguments, currently without effect.}
 }
 \value{
-a list containing the quantiles of the queries, as well as the indices of the corresponding cells.
+a list containing the quantiles of the queries and the indices of the corresponding cells.
 }
 \description{
 \code{tos.quantile} computes the optimal transport quantiles.

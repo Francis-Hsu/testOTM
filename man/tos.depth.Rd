@@ -18,7 +18,7 @@ tos.depth(object, query, scale = TRUE, rank.data = "uniform", ...)
 \item{\dots}{additional arguments.}
 }
 \value{
-a vector containing the depths of the data.
+a vector containing depths of the queries.
 }
 \description{
 \code{tos.depth} computes the optimal transport depth relative to the multivariate uniform distribution \eqn{U[0, 1]^d}.

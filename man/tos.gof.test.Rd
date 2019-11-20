@@ -41,15 +41,20 @@ Can be \code{max}, \code{min}, \code{center}, or \code{uniform}.
 \item{na.rm}{logical indicating whether \code{NA} values should be stripped before the computation proceeds.}
 }
 \value{
-a list that contains the permutation test statistics and the \eqn{p}-value.
+a list which contains the permutation test statistics and the \eqn{p}-value.
 }
 \description{
 \code{tos.gof.test} computes the 2D/3D goodness-of-test statistic using ranks defined through the semi-discrete optimal transport map.
 }
 \details{
+\code{tos.gof.test} tests whether the samples come from the same population. 
+The \eqn{p}-value is computed through permutations. For a very small sample (size less than \eqn{8}), 
+all possible permutations are generated (assuming a suitable \code{n.perm} is provided). 
+For larger sample size, Monte Carlo permutation sampling is used to approximate the permutations \eqn{p}-value.
+
 Given samples \eqn{X_1, \dots, X_n} and \eqn{Y_1, \dots, Y_m}, we use the following statistic for goodness-of-fit testing:
-\deqn{T_{X,Y}=\int_{[0, 1]^d}\|\hat{R}_{X,Y}[\hat{Q}_{X}(u)]-\hat{R}_{X,Y}[\hat{Q}_{Y}(u)]\|^2\,d\mu(u),} 
-where \eqn{\mu\sim U[0, 1]^d}. Evaluation of this integral is done through quasi-Monte Carlo using Sobol sequence.
+\deqn{T_{X,Y}=\int_{[0, 1]^d}\|\hat{R}_{X,Y}[\hat{Q}_{X}(u)]-\hat{R}_{X,Y}[\hat{Q}_{Y}(u)]\|_2^2\,d\mu(u),} 
+where \eqn{\mu\sim U[0, 1]^d}. Evaluation of this integral is done through quasi-Monte Carlo with Sobol sequence.
 }
 \seealso{
 \code{\link{tos.rank}} for optimal transport rank.

@@ -123,7 +123,7 @@ List dualPotential2D(const arma::mat &Y, const arma::mat &X, const arma::mat &V,
 
 //' Locate within a 2D RVD
 //' 
-//' Find the RVD cells where a set Q of query points is transported to.
+//' Find the RVD seeds where a set Q of query points is transported to.
 //' @param Q input query matrix.
 //' @param X input data used to build the RVD.
 //' @param w weights of the RVD cells.

@@ -110,7 +110,7 @@ pc.perm = function(n, m) {
   return(perm.indices)
 }
 
-#' Generate \eqn{m} Distinct Permutations of \eqn{n} Elements Randomly.
+#' Generate \eqn{m} Distinct Permutations of \eqn{n} Elements Uniformly.
 #' 
 #' @keywords internal
 rand.perm = function(n, m) {

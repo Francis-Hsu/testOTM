@@ -2,11 +2,11 @@
 % Please edit documentation in R/utilities.R
 \name{rand.perm}
 \alias{rand.perm}
-\title{Generate \eqn{m} Distinct Permutations of \eqn{n} Elements Randomly.}
+\title{Generate \eqn{m} Distinct Permutations of \eqn{n} Elements Uniformly.}
 \usage{
 rand.perm(n, m)
 }
 \description{
-Generate \eqn{m} Distinct Permutations of \eqn{n} Elements Randomly.
+Generate \eqn{m} Distinct Permutations of \eqn{n} Elements Uniformly.
 }
 \keyword{internal}
