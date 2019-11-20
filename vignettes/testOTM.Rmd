@@ -132,8 +132,6 @@ GoF = tos.gof.test(X, Y, n.perm = 100)
 GoF
 ```
 
-[Back to Top](#top)
-
 Another useful application of the multivariate ranks and quantiles in non-parametric testing is the test of independence: given samples $\{Z_i=(X_i, Y_i)\}\sim\nu$, where $X_i\sim\nu_X$ and $Y_i\sim\nu_Y$, we'd like to test \[H_0\colon\nu=\nu_X\otimes\nu_Y\qquad\text{versus}\qquad H_1\colon\nu\neq\nu_X\otimes\nu_Y.\] A test statistic for this is presented in [@GS2019] and reduced to the following when both $X_i$ and $Y_i$ are univariate: \[T_n=\frac{1}{n}\sum_{i=1}^n\left\lVert\hat{R}_{Z}(\hat{Q}_{Z}(u))-\tilde{R}_{Z}(\hat{Q}_{Z}(u))\right\rVert_2^2,\] where $\tilde{R}_{Z}=(\hat{R}_{X},\hat{R}_{Y})$ is simply the joining of the usual 1D ranks of $X$ and $Y$. The following snippet demonstrates how to perform this test with `tos.dep.test`:
 ```{r dep2D, warning=FALSE}
 # simulate data, H_0 false
