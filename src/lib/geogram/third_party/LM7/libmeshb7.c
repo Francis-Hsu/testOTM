@@ -316,7 +316,7 @@ static void CalF77Prc(int64_t, int64_t, void *, int, void **);
 int64_t GmfOpenMesh(char *FilNam, int mod, ...)
 {
     int KwdCod, res, *PtrVer, *PtrDim;
-    int64_t MshIdx;
+    long long MshIdx;
     char str[ GmfStrSiz ];
     va_list VarArg;
     GmfMshSct *msh;
@@ -328,7 +328,7 @@ int64_t GmfOpenMesh(char *FilNam, int mod, ...)
     if(!(msh = calloc(1, sizeof(GmfMshSct))))
         return(0);
 
-    MshIdx = (int64_t)msh;
+    MshIdx = (intptr_t) msh;
 
     /* Save the current stack environment for longjmp */
 

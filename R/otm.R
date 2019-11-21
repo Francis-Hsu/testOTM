@@ -22,7 +22,7 @@
 #' \item{Height}{Height of the Laguerre cells, used for computing Alexandrov's potential.}
 #' \item{Location}{The numeric centering applied to the data.}
 #' \item{Scale}{The numeric scalings applied to the data.}
-#' @keywords optimize, graphs
+#' @keywords optimize graphs
 #' @importFrom stats complete.cases
 #' @export
 tos.fit = function(data,

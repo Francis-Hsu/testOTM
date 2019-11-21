@@ -7,8 +7,10 @@
 
 <!-- badges: end -->
 
-`testOTM` is a R package that provides applications of the multivariate
-ranks/quantiles defined using the theory of optimal transportation.
+`testOTM` is a R package that computes multivariate ranks and quantiles
+defined through the theory of optimal transports. It also provides
+several applications of these statistics, most notably the two-sample
+multivariate goodness-of-fit testing.
 
 ## Installation
 

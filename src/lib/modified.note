@@ -66,3 +66,6 @@ Disable diagnostics suppressing or non-portable pragma(s):
 ../src/lib/geogram/third_party/triangle/triangle.c
 ../src/lib/geogram/third_party/triangle/triangle.h
 ../src/lib/geogram/third_party/xatlas/xatlas.h
+
+Use intptr_t to avoid warning:
+../src/lib/geogram/third_party/LM7/libmeshb7.h

@@ -23,7 +23,7 @@
 #' where \eqn{\mu\sim U[0, 1]^d}. Evaluation of this integral is done through quasi-Monte Carlo with Sobol sequence.
 #' @return a list which contains the permutation test statistics and the \eqn{p}-value.
 #' @seealso \code{\link{tos.rank}} for optimal transport rank.
-#' @keywords htest, multivariate
+#' @keywords htest multivariate
 #' @importFrom randtoolbox sobol
 #' @export
 tos.gof.test = function(X, Y, mc = 10000, n.perm = 0, scale = c(0, 1), rank.data = "uniform", epsilon = 1e-6, maxit = 100, verbose = F, na.rm = F) {
@@ -201,7 +201,7 @@ tos.gof.test = function(X, Y, mc = 10000, n.perm = 0, scale = c(0, 1), rank.data
 #' where \eqn{\tilde{R}} is the joining of the usual 1D ranks.
 #' @return a list which contains the permutation test statistics and the \eqn{p}-value.
 #' @seealso \code{\link{tos.rank}} for semi-discrete optimal transport rank.
-#' @keywords htest, multivariate
+#' @keywords htest multivariate
 #' @export
 tos.dep.test = function(X, Y, n.perm = 0, scale = c(0, 1), rank.data = "uniform", epsilon = 1e-6, maxit = 100, verbose = F) {
   # get number of elements

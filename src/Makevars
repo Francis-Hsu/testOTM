@@ -141,4 +141,6 @@ R_OBJECTS = $(R_SOURCES:.cpp=.o)
 
 OBJECTS = $(GEO_OBJECTS_C) $(GEO_OBJECTS_CPP) $(R_OBJECTS)
 
-all: $(SHLIB)
+all: preclean $(SHLIB)
+preclean: 
+	rm -f $(OBJECTS)

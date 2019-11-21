@@ -59,5 +59,5 @@ where \eqn{\mu\sim U[0, 1]^d}. Evaluation of this integral is done through quasi
 \seealso{
 \code{\link{tos.rank}} for optimal transport rank.
 }
-\keyword{htest,}
+\keyword{htest}
 \keyword{multivariate}

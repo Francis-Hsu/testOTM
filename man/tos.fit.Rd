@@ -49,4 +49,4 @@ Supply \code{scale} to let \code{tos.fit} handles the scaling internally.
 Centering and scaling factors will be returned to help transforming the results back to their original range.
 }
 \keyword{graphs}
-\keyword{optimize,}
+\keyword{optimize}

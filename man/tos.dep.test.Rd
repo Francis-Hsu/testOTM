@@ -53,5 +53,5 @@ where \eqn{\tilde{R}} is the joining of the usual 1D ranks.
 \seealso{
 \code{\link{tos.rank}} for semi-discrete optimal transport rank.
 }
-\keyword{htest,}
+\keyword{htest}
 \keyword{multivariate}

@@ -91,14 +91,14 @@ arma::mat getCentroids(GEO::OptimalTransportMap &OTM) {
   const unsigned int d = OTM.dimension();
   
   // extract the centroids
-  double ct[n * d];
-  OTM.compute_Laguerre_centroids(ct);
+  arma::vec ct(n * d);
+  OTM.compute_Laguerre_centroids(ct.memptr());
   
   // save the centroids to a matrix
   arma::mat Centroid(n, d);
   for (unsigned int i = 0; i < n; i++) {
     for (unsigned int j = 0; j < d; j++) {
-      Centroid(i, j) = ct[i * d + j];
+      Centroid(i, j) = ct(i * d + j);
     }
   }
   
@@ -111,24 +111,24 @@ arma::mat getVertices2D(GEO::Mesh &M) {
   GEO::vec3 v;
   
   int totalNbVert = 0;
-  int nbVert[nFacets];
-  int accuVert[nFacets];
+  arma::ivec nbVert(nFacets);
+  arma::ivec accuVert(nFacets);
   for (unsigned int i = 0; i < nFacets; i++) {
-    nbVert[i] = M.facets.nb_vertices(i);
-    accuVert[i] = totalNbVert;
-    totalNbVert += nbVert[i];
+    nbVert(i) = M.facets.nb_vertices(i);
+    accuVert(i) = totalNbVert;
+    totalNbVert += nbVert(i);
   }
   
   unsigned int id;
   arma::mat Vert(totalNbVert, 4);
   for (unsigned int i = 0; i < nFacets; i++) {
-    for (int j = 0; j < nbVert[i]; j++) {
+    for (int j = 0; j < nbVert(i); j++) {
       id = M.facets.vertex(i, j);
       v = M.vertices.point(id);
-      Vert(accuVert[i] + j, 0) = i + 1;
-      Vert(accuVert[i] + j, 1) = id + 1;
-      Vert(accuVert[i] + j, 2) = v.x;
-      Vert(accuVert[i] + j, 3) = v.y;
+      Vert(accuVert(i) + j, 0) = i + 1;
+      Vert(accuVert(i) + j, 1) = id + 1;
+      Vert(accuVert(i) + j, 2) = v.x;
+      Vert(accuVert(i) + j, 3) = v.y;
     }
   }
   
@@ -153,22 +153,22 @@ arma::mat getVertices3D(GEO::Mesh &M, bool volumetric) {
   // count total number of (repeated) vertices to store
   unsigned int accuFacets = 0;
   int totalNbVert = 0;
-  int nbVert[nElems];
-  int accuVert[nElems];
+  arma::ivec nbVert(nElems);
+  arma::ivec accuVert(nElems);
   if (volumetric) {
     for (unsigned int i = 0; i < M.cells.nb(); i++) {
       for (unsigned int j = 0; j < M.cells.nb_facets(i); j++) {
-        nbVert[accuFacets] = M.cells.facet_nb_vertices(i, j);
-        accuVert[accuFacets] = totalNbVert;
-        totalNbVert += nbVert[accuFacets];
+        nbVert(accuFacets) = M.cells.facet_nb_vertices(i, j);
+        accuVert(accuFacets) = totalNbVert;
+        totalNbVert += nbVert(accuFacets);
         accuFacets++;
       }
     }
   } else {
     for (unsigned int i = 0; i < nElems; i++) {
-      nbVert[i] = M.facets.nb_vertices(i);
-      accuVert[i] = totalNbVert;
-      totalNbVert += nbVert[i];
+      nbVert(i) = M.facets.nb_vertices(i);
+      accuVert(i) = totalNbVert;
+      totalNbVert += nbVert(i);
     }
   }
   
@@ -184,26 +184,26 @@ arma::mat getVertices3D(GEO::Mesh &M, bool volumetric) {
         for (unsigned int k = 0; k < M.cells.facet_nb_vertices(i, j); k++) {
           id = M.cells.facet_vertex(i, j, k);
           v = M.vertices.point(id);
-          Vert(accuVert[accuFacets] + k, 0) = i + 1;
-          Vert(accuVert[accuFacets] + k, 1) = j + 1;
-          Vert(accuVert[accuFacets] + k, 2) = id + 1;
-          Vert(accuVert[accuFacets] + k, 3) = v.x;
-          Vert(accuVert[accuFacets] + k, 4) = v.y;
-          Vert(accuVert[accuFacets] + k, 5) = v.z;
+          Vert(accuVert(accuFacets) + k, 0) = i + 1;
+          Vert(accuVert(accuFacets) + k, 1) = j + 1;
+          Vert(accuVert(accuFacets) + k, 2) = id + 1;
+          Vert(accuVert(accuFacets) + k, 3) = v.x;
+          Vert(accuVert(accuFacets) + k, 4) = v.y;
+          Vert(accuVert(accuFacets) + k, 5) = v.z;
         }
         accuFacets++;
       }
     }
   } else {
     for (unsigned int i = 0; i < nElems; i++) {
-      for (int j = 0; j < nbVert[i]; j++) {
+      for (int j = 0; j < nbVert(i); j++) {
         id = M.facets.vertex(i, j);
         v = M.vertices.point(id);
-        Vert(accuVert[i] + j, 0) = i + 1;
-        Vert(accuVert[i] + j, 1) = id + 1;
-        Vert(accuVert[i] + j, 2) = v.x;
-        Vert(accuVert[i] + j, 3) = v.y;
-        Vert(accuVert[i] + j, 4) = v.z;
+        Vert(accuVert(i) + j, 0) = i + 1;
+        Vert(accuVert(i) + j, 1) = id + 1;
+        Vert(accuVert(i) + j, 2) = v.x;
+        Vert(accuVert(i) + j, 3) = v.y;
+        Vert(accuVert(i) + j, 4) = v.z;
       }
     }
   }
@@ -228,8 +228,8 @@ arma::mat getVerticesGen2D(GEO::Mesh &S, GEO::OptimalTransportMap &OTM) {
   GEOGen::Polygon* cP; // polygon that stores the intersection
   std::vector<double> RVDVerts; 
   int totalNbVert = 0;
-  int nbVert[n];
-  int accuVert[n];
+  arma::ivec nbVert(n);
+  arma::ivec accuVert(n);
   
   // construct a generic RVD
   GEOGen::RVDHelper<3> transMapGen(OTM.RVD()->delaunay(), &S);
@@ -237,9 +237,9 @@ arma::mat getVerticesGen2D(GEO::Mesh &S, GEO::OptimalTransportMap &OTM) {
   // compute intersections
   for (unsigned int i = 0; i < n; i++) {
     cP = transMapGen.intersect_cell_facet(i, P);
-    nbVert[i] = cP->nb_vertices();
-    accuVert[i] = totalNbVert;
-    totalNbVert += nbVert[i];
+    nbVert(i) = cP->nb_vertices();
+    accuVert(i) = totalNbVert;
+    totalNbVert += nbVert(i);
     for (unsigned int j = 0; j < cP->nb_vertices(); j++) {
       RVDVerts.push_back(cP->vertex(j).point()[0]); 
       RVDVerts.push_back(cP->vertex(j).point()[1]);
@@ -251,8 +251,8 @@ arma::mat getVerticesGen2D(GEO::Mesh &S, GEO::OptimalTransportMap &OTM) {
   int currID;
   arma::mat Vert(totalNbVert, d + 1);
   for (unsigned int i = 0; i < n; i++) {
-    for (int j = 0; j < nbVert[i]; j++) {
-      currID = accuVert[i] + j;
+    for (int j = 0; j < nbVert(i); j++) {
+      currID = accuVert(i) + j;
       Vert(currID, 0) = i + 1;
       Vert(currID, 1) = RVDVerts[2 * currID];
       Vert(currID, 2) = RVDVerts[2 * currID + 1];
