@@ -7,6 +7,10 @@
 #' @param \dots additional arguments, currently without effect.
 #' @return a matrix containing the potentials of the queries.
 #' @keywords multivariate
+#' @references Xianfeng Gu, Feng Luo, Jian Sun, and Shing-Tung Yau. 2015.
+#' \emph{Variational Principles for Minkowski Type Problems, Discrete Optimal Transport, and Discrete Monge-Ampere Equations}.
+#' Asian Journal of Mathematics 20 (January).
+#' \url{https://doi.org/10.4310/AJM.2016.v20.n2.a7}.
 #' @export
 tos.potential = function(object, query, scale = TRUE, ...) {
   UseMethod("tos.potential")

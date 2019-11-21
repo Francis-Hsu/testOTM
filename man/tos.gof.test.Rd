@@ -56,6 +56,11 @@ Given samples \eqn{X_1, \dots, X_n} and \eqn{Y_1, \dots, Y_m}, we use the follow
 \deqn{T_{X,Y}=\int_{[0, 1]^d}\|\hat{R}_{X,Y}[\hat{Q}_{X}(u)]-\hat{R}_{X,Y}[\hat{Q}_{Y}(u)]\|_2^2\,d\mu(u),} 
 where \eqn{\mu\sim U[0, 1]^d}. Evaluation of this integral is done through quasi-Monte Carlo with Sobol sequence.
 }
+\references{
+Promit Ghosal and Bodhisattva Sen. 2019. 
+\emph{Multivariate Ranks and Quantiles Using Optimal Transportation and Applications to Goodness-of-Fit Testing}.
+\url{http://arxiv.org/abs/1905.05340}.
+}
 \seealso{
 \code{\link{tos.rank}} for optimal transport rank.
 }

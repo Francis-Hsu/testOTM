@@ -23,4 +23,10 @@ a vector containing depths of the queries.
 \description{
 \code{tos.depth} computes the optimal transport depth relative to the multivariate uniform distribution \eqn{U[0, 1]^d}.
 }
+\references{
+Victor Chernozhukov, Alfred Galichon, Marc Hallin, and Marc Henry. 2017.
+\emph{Monge–Kantorovich Depth, Quantiles, Ranks and Signs}.
+The Annals of Statistics 45 (1): 223–56.
+\url{https://doi.org/10.1214/16-AOS1450}.
+}
 \keyword{multivariate}

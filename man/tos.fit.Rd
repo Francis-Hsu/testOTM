@@ -48,5 +48,11 @@ Input data needs be scaled within the [0, 1] range for computation.
 Supply \code{scale} to let \code{tos.fit} handles the scaling internally.
 Centering and scaling factors will be returned to help transforming the results back to their original range.
 }
+\references{
+Bruno Lévy and Erica L. Schwindt. 2018.
+\emph{Notions of Optimal Transport Theory and How to Implement Them on a Computer}.
+Computers & Graphics 72: 135–48.
+\url{https://doi.org/10.1016/j.cag.2018.01.009}.
+}
 \keyword{graphs}
 \keyword{optimize}

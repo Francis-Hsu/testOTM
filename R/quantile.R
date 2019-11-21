@@ -7,6 +7,9 @@
 #' @param \dots additional arguments, currently without effect.
 #' @return a list containing the quantiles of the queries and the indices of the corresponding cells.
 #' @keywords multivariate
+#' @references Promit Ghosal and Bodhisattva Sen. 2019. 
+#' \emph{Multivariate Ranks and Quantiles Using Optimal Transportation and Applications to Goodness-of-Fit Testing}.
+#' \url{http://arxiv.org/abs/1905.05340}.
 #' @export
 tos.quantile = function(object, query, scale = TRUE, ...) {
   UseMethod("tos.quantile")

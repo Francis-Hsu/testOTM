@@ -23,6 +23,10 @@
 #' \item{Location}{The numeric centering applied to the data.}
 #' \item{Scale}{The numeric scalings applied to the data.}
 #' @keywords optimize graphs
+#' @references Bruno Lévy and Erica L. Schwindt. 2018.
+#' \emph{Notions of Optimal Transport Theory and How to Implement Them on a Computer}.
+#' Computers & Graphics 72: 135–48.
+#' \url{https://doi.org/10.1016/j.cag.2018.01.009}.
 #' @importFrom stats complete.cases
 #' @export
 tos.fit = function(data,

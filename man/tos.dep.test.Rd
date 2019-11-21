@@ -50,6 +50,11 @@ Given samples \eqn{(X_1, Y_1), \dots, (X_n, Y_n)}, the following statistic is us
 \deqn{T_n=\sum_{i=1}^n\|\hat{R}(X_i, Y_i)-\tilde{R}(X_i, Y_i)\|^2,} 
 where \eqn{\tilde{R}} is the joining of the usual 1D ranks.
 }
+\references{
+Promit Ghosal and Bodhisattva Sen. 2019. 
+\emph{Multivariate Ranks and Quantiles Using Optimal Transportation and Applications to Goodness-of-Fit Testing}.
+\url{http://arxiv.org/abs/1905.05340}.
+}
 \seealso{
 \code{\link{tos.rank}} for semi-discrete optimal transport rank.
 }

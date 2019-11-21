@@ -24,6 +24,9 @@
 #' @return a list which contains the permutation test statistics and the \eqn{p}-value.
 #' @seealso \code{\link{tos.rank}} for optimal transport rank.
 #' @keywords htest multivariate
+#' @references Promit Ghosal and Bodhisattva Sen. 2019. 
+#' \emph{Multivariate Ranks and Quantiles Using Optimal Transportation and Applications to Goodness-of-Fit Testing}.
+#' \url{http://arxiv.org/abs/1905.05340}.
 #' @importFrom randtoolbox sobol
 #' @export
 tos.gof.test = function(X, Y, mc = 10000, n.perm = 0, scale = c(0, 1), rank.data = "uniform", epsilon = 1e-6, maxit = 100, verbose = F, na.rm = F) {
@@ -202,6 +205,9 @@ tos.gof.test = function(X, Y, mc = 10000, n.perm = 0, scale = c(0, 1), rank.data
 #' @return a list which contains the permutation test statistics and the \eqn{p}-value.
 #' @seealso \code{\link{tos.rank}} for semi-discrete optimal transport rank.
 #' @keywords htest multivariate
+#' @references Promit Ghosal and Bodhisattva Sen. 2019. 
+#' \emph{Multivariate Ranks and Quantiles Using Optimal Transportation and Applications to Goodness-of-Fit Testing}.
+#' \url{http://arxiv.org/abs/1905.05340}.
 #' @export
 tos.dep.test = function(X, Y, n.perm = 0, scale = c(0, 1), rank.data = "uniform", epsilon = 1e-6, maxit = 100, verbose = F) {
   # get number of elements

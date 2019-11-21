@@ -8,6 +8,10 @@
 #' @param \dots additional arguments.
 #' @return a vector containing depths of the queries.
 #' @keywords multivariate
+#' @references Victor Chernozhukov, Alfred Galichon, Marc Hallin, and Marc Henry. 2017.
+#' \emph{Monge–Kantorovich Depth, Quantiles, Ranks and Signs}.
+#' The Annals of Statistics 45 (1): 223–56.
+#' \url{https://doi.org/10.1214/16-AOS1450}.
 #' @export
 tos.depth = function(object, query, scale = TRUE, rank.data = "uniform", ...) {
   UseMethod("tos.depth")

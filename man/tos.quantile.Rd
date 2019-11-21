@@ -21,4 +21,9 @@ a list containing the quantiles of the queries and the indices of the correspond
 \description{
 \code{tos.quantile} computes the optimal transport quantiles.
 }
+\references{
+Promit Ghosal and Bodhisattva Sen. 2019. 
+\emph{Multivariate Ranks and Quantiles Using Optimal Transportation and Applications to Goodness-of-Fit Testing}.
+\url{http://arxiv.org/abs/1905.05340}.
+}
 \keyword{multivariate}

@@ -48,6 +48,11 @@ Set \code{rank.algo} to \code{lp} to use the former and \code{geom} for the latt
 Note the geometric method is slow and does not work for points lie outside the RDT, it is also not implemented for 3D, 
 \code{lp} method will be used in these cases.
 }
+\references{
+Promit Ghosal and Bodhisattva Sen. 2019. 
+\emph{Multivariate Ranks and Quantiles Using Optimal Transportation and Applications to Goodness-of-Fit Testing}.
+\url{http://arxiv.org/abs/1905.05340}.
+}
 \seealso{
 \code{\link{tos.gof.test}} and \code{\link{tos.dep.test}} for non-parametric tests using optimal transport rank.
 }

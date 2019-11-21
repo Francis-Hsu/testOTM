@@ -23,6 +23,9 @@
 #' If \code{rank.algo = "geom"} or data points are presented in the queries,
 #' then the corresponding conjugate potentials will not be computed (\code{NA}s will be returned).
 #' @seealso \code{\link{tos.gof.test}} and \code{\link{tos.dep.test}} for non-parametric tests using optimal transport rank.
+#' @references Promit Ghosal and Bodhisattva Sen. 2019. 
+#' \emph{Multivariate Ranks and Quantiles Using Optimal Transportation and Applications to Goodness-of-Fit Testing}.
+#' \url{http://arxiv.org/abs/1905.05340}.
 #' @keywords multivariate
 #' @export
 tos.rank = function(object, query, scale = TRUE, rank.data = "uniform", rank.algo = "lp", ...) {
