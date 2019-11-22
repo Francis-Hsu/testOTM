@@ -222,7 +222,7 @@ arma::ivec locateRDT2D(const arma::mat &Q, const arma::mat &V) {
 
 //' 2D Goodness-of-fit Test Helper
 //' 
-//' Compute the SDOT quantiles of quasi-MC sequence \eqn{U} with respect to \eqn{X} and \eqn{Y}.
+//' Compute the semi-discrete optimal transport quantiles of quasi-MC sequence \eqn{U} with respect to \eqn{X} and \eqn{Y}.
 //' @param X input data matrix.
 //' @param Y input data matrix.
 //' @param U sequence used to evaluate the integral.

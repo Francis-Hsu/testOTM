@@ -42,7 +42,7 @@ locateRDT2D <- function(Q, V) {
 
 #' 2D Goodness-of-fit Test Helper
 #' 
-#' Compute the SDOT quantiles of quasi-MC sequence \eqn{U} with respect to \eqn{X} and \eqn{Y}.
+#' Compute the semi-discrete optimal transport quantiles of quasi-MC sequence \eqn{U} with respect to \eqn{X} and \eqn{Y}.
 #' @param X input data matrix.
 #' @param Y input data matrix.
 #' @param U sequence used to evaluate the integral.
@@ -99,7 +99,7 @@ locateRVD3D <- function(Q, X, w) {
 
 #' 3D Goodness-of-fit Test Helper
 #' 
-#' Compute the SDOT quantiles of quasi-MC sequence \eqn{U} with respect to \eqn{X} and \eqn{Y}.
+#' Compute the semi-discrete optimal transport quantiles of quasi-MC sequence \eqn{U} with respect to \eqn{X} and \eqn{Y}.
 #' @param X input data matrix.
 #' @param Y input data matrix.
 #' @param U sequence used to evaluate the integral.

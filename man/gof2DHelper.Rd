@@ -23,6 +23,6 @@ gof2DHelper(X, Y, U, epsilon, maxit, verbose)
 a list containing the quantile indices for \eqn{X} and \eqn{Y}.
 }
 \description{
-Compute the SDOT quantiles of quasi-MC sequence \eqn{U} with respect to \eqn{X} and \eqn{Y}.
+Compute the semi-discrete optimal transport quantiles of quasi-MC sequence \eqn{U} with respect to \eqn{X} and \eqn{Y}.
 }
 \keyword{internal}
