@@ -61,6 +61,6 @@ plot(X.OTM, which = "Both", draw.center = F, draw.map = T)
 ```
 
 ## Acknowledgment
-The author is extremely grateful to Prof. [Bodhisattva Sen](http://www.stat.columbia.edu/~bodhi/Bodhi/Welcome.html) and his student Promit Ghosal for their guidance in the development of this package. The author would also like to thank Dr. [Bruno Lévy](https://members.loria.fr/BLevy/) for his assistance with the [Geogram](http://alice.loria.fr/index.php/software/4-library/75-geogram.html) library, and the [TraME](http://www.trame-project.com/) team whose [`Rgeogram`](https://github.com/TraME-Project/Rgeogram) package provides inspirations to the early build of this package.
+The author is extremely grateful to Prof. [Bodhisattva Sen](http://www.stat.columbia.edu/~bodhi/Bodhi/Welcome.html) and his student Promit Ghosal for their guidance in the development of this package. The author would also like to thank Dr. [Bruno Lévy](https://members.loria.fr/BLevy/) for his assistance with the [Geogram](http://alice.loria.fr/index.php/software/4-library/75-geogram.html) library, and the [TraME](http://www.trame-project.com/) team, whose [`Rgeogram`](https://github.com/TraME-Project/Rgeogram) package provides inspirations to the early build of this package.
 
 ## Reference

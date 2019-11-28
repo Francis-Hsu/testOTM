@@ -64,7 +64,7 @@ student Promit Ghosal for their guidance in the development of this
 package. The author would also like to thank Dr. [Bruno
 Lévy](https://members.loria.fr/BLevy/) for his assistance with the
 [Geogram](http://alice.loria.fr/index.php/software/4-library/75-geogram.html)
-library, and the [TraME](http://www.trame-project.com/) team whose
+library, and the [TraME](http://www.trame-project.com/) team, whose
 [`Rgeogram`](https://github.com/TraME-Project/Rgeogram) package provides
 inspirations to the early build of this package.
 
