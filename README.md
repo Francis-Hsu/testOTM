@@ -8,13 +8,13 @@
 <!-- badges: end -->
 
 `testOTM` is an R package that computes multivariate ranks and quantiles
-defined through the theory of optimal transports. It also provides
-several applications of these statistics, most notably the two-sample
-multivariate goodness-of-fit testing.
+defined through the theory of optimal transportation. It also provides
+several applications of these statistics, most notably a method for
+two-sample multivariate goodness-of-fit testing.
 
 ## Installation
 
-You can install the released version of testOTM from
+You can install the released version of `testOTM` from
 [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
@@ -32,8 +32,8 @@ You can install the development version from
 ## Example
 
 This is a basic example which shows you how to use `testOTM` to
-visualize the optimal transport map from \(U[0, 1]^2\) to a bivariate
-normal sample:
+visualize the optimal transport map from \(U[0, 1]^2\) to a (scaled)
+bivariate Gaussian sample:
 
 ``` r
 library(testOTM)
@@ -64,7 +64,7 @@ student Promit Ghosal for their guidance in the development of this
 package. The author would also like to thank Dr. [Bruno
 Lévy](https://members.loria.fr/BLevy/) for his assistance with the
 [Geogram](http://alice.loria.fr/index.php/software/4-library/75-geogram.html)
-library, and [TraME](http://www.trame-project.com/) team, whose
+library, and the [TraME](http://www.trame-project.com/) team whose
 [`Rgeogram`](https://github.com/TraME-Project/Rgeogram) package provides
 inspirations to the early build of this package.
 

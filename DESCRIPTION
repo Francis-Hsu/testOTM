@@ -1,8 +1,8 @@
 Package: testOTM
 Type: Package
 Title: Multivariate Ranks and Quantiles by Optimal Transport
-Version: 0.11
-Date: 2019-11-21
+Version: 0.11.2
+Date: 2019-11-28
 Authors@R: c(person(given = "Peng", family = "Xu", role = c("aut", "cre"), email = "px2132@columbia.edu"),
   person(given = "Bruno", family = "Lévy", role = c("ctb", "cph"), comment = "author of Geogram"))
 Maintainer: Peng Xu <px2132@columbia.edu>
@@ -14,7 +14,8 @@ Imports:
   Rcpp,
   randtoolbox (>= 1.30.0),
   plot3D (>= 1.1.1),
-  rgl (>= 0.100.30)
+  rgl (>= 0.100.30),
+  httpuv (>= 1.5.2)
 LinkingTo: 
   Rcpp,
   RcppArmadillo
