@@ -141,6 +141,7 @@ R_OBJECTS = $(R_SOURCES:.cpp=.o)
 
 OBJECTS = $(GEO_OBJECTS_C) $(GEO_OBJECTS_CPP) $(R_OBJECTS)
 
-all: preclean $(SHLIB)
-preclean: 
-	rm -f $(OBJECTS)
+all: strippedLib $(SHLIB)
+		if test -e "/usr/bin/strip" & test -e "/bin/uname" & [[ `uname` == "Linux" ]] ; then /usr/bin/strip --strip-debug $(SHLIB); fi
+
+.PHONY: strippedLib

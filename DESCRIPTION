@@ -6,7 +6,7 @@ Date: 2019-11-29
 Authors@R: c(person(given = "Peng", family = "Xu", role = c("aut", "cre"), email = "px2132@columbia.edu"),
   person(given = "Bruno", family = "Lévy", role = c("ctb", "cph"), comment = "Geogram"))
 Maintainer: Peng Xu <px2132@columbia.edu>
-Description: Multivariate ranks and quantiles based on the theory of optimal transportation, following the definitions by Chernozhukov et al. (2017) <doi:10.1214/16-AOS1450>. This package also provides applications of these notions in nonparametric testing, which are suggested by Ghosal and Sen (2019) <arXiv:1905.05340>. The optimal transport maps are computed by the Geogram library, using methods mentioned in Lévy and Schwindt (2018) <doi:10.1016/j.cag.2018.01.009>.
+Description: Multivariate ranks and quantiles based on the theory of optimal transportation, following the definitions by Chernozhukov et al. (2017) <doi:10.1214/16-AOS1450>. This package also provides applications of these notions in nonparametric testing, using methods suggested in Ghosal and Sen (2019) <arXiv:1905.05340>. The optimal transport maps are computed by the Geogram library, and the algorithms used can be found in Lévy and Schwindt (2018) <doi:10.1016/j.cag.2018.01.009>.
 License: BSD_3_clause + file LICENSE
 URL: https://github.com/Francis-Hsu/testOTM
 BugReports: https://github.com/Francis-Hsu/testOTM/issues
