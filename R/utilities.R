@@ -5,12 +5,19 @@
 #' @param min desired minimum of the transformed data.
 #' @param max desired maximum of the transformed data.
 #' @return a matrix containing the scaled data.
+#' @examples
+#' # generate some data
+#' X = c(1.5, 3.2, 2.6, 0.3, 5.1)
+#' Y = c(3.3, 6.4, 1.8, 0.7, 2.2)
+#' 
+#' # scale (X, Y) into [0, 1] range
+#' scaling.min.max(cbind(X, Y), 0, 1)
 #' @keywords utilities
 #' @export
 scaling.min.max = function(data, min = 0, max = 1) {
   data = scale(data,
-               center = apply(as.matrix(data), 2, min, na.rm = T),
-               scale = diff(apply(as.matrix(data), 2, range, na.rm = T)))
+               center = apply(as.matrix(data), 2, min, na.rm = TRUE),
+               scale = diff(apply(as.matrix(data), 2, range, na.rm = TRUE)))
   data = data * (max - min) + min
   
   return(data)
@@ -22,11 +29,21 @@ scaling.min.max = function(data, min = 0, max = 1) {
 #' @param center a numeric vector containing the locations for transforming the data.
 #' @param scale a numeric vector containing the scales for transforming the data.
 #' @return a matrix containing the unscaled data.
+#' @examples
+#' # generate some data
+#' X = c(1.5, 3.2, 2.6, 0.3, 5.1)
+#' Y = c(3.3, 6.4, 1.8, 0.7, 2.2)
+#' 
+#' # scale (X, Y) into [0, 1] range
+#' Z = scaling.min.max(cbind(X, Y), 0, 1)
+#' 
+#' # undo the min-max scaling
+#' unscaling.min.max(Z, attr(Z, "scaled:center"), attr(Z, "scaled:scale"))
 #' @keywords utilities
 #' @export
 unscaling.min.max = function(data, center, scale) {
   data = (data - min(data)) / diff(range(data))
-  data = t(t(data) * scale + center)
+  data = t(t(data) * c(scale) + center)
   
   return(data)
 }
@@ -39,10 +56,13 @@ unscaling.min.max = function(data, center, scale) {
 #' @param m number of permutations to generate.
 #' @return an \eqn{m} by \eqn{n} matrix of indices where each row represents a permutation. 
 #' Rows beyond the \eqn{n!}-th one will be filled with 0s.
+#' @examples 
+#' # generate 3 permutations of 5 elements
+#' pc.perm(5, 3)
 #' @keywords utilities
-#' @references Donald E. Knuth. \emph{The Art of Computer Programming: Combinatorial Algorithms, Part 1}. 1st. 
-#' Vol. 4A. Art of Computer Programming. Addison-Wesley Professional, 2011. Sec. 7.2.1.2. 
-#' isbn: 978-0-201-03804-0.
+#' @references Donald E. Knuth (2011). \emph{The Art of Computer Programming: Combinatorial Algorithms, Part 1}. 
+#' Vol. 4A. Art of Computer Programming. Addison-Wesley Professional. Sec. 7.2.1.2. 
+#' ISBN: 978-0-201-03804-0.
 #' @export
 pc.perm = function(n, m) {
   if (n < 1 || m < 1 || (n + m) %% 1 != 0) {
@@ -143,9 +163,9 @@ rand.perm = function(n, m) {
 #' @keywords internal
 choose.vert = function(V, type = 1) {
   if (type == 1) {
-    as.numeric(V[which.max(rowSums(V^2)), , drop = F])
+    as.numeric(V[which.max(rowSums(V^2)), , drop = FALSE])
   } else if (type == 2) {
-    as.numeric(V[which.min(rowSums(V^2)), , drop = F])
+    as.numeric(V[which.min(rowSums(V^2)), , drop = FALSE])
   } else {
     stop("Unknown method of rank mapping!")
   }

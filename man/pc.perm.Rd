@@ -19,9 +19,13 @@ Rows beyond the \eqn{n!}-th one will be filled with 0s.
 \code{pc.perm} generates the first \eqn{m} distinct permutations of \eqn{n} elements with the Plain Changes, 
 a.k.a. Steinhaus-Johnson-Trotter, algorithm.
 }
+\examples{
+# generate 3 permutations of 5 elements
+pc.perm(5, 3)
+}
 \references{
-Donald E. Knuth. \emph{The Art of Computer Programming: Combinatorial Algorithms, Part 1}. 1st. 
-Vol. 4A. Art of Computer Programming. Addison-Wesley Professional, 2011. Sec. 7.2.1.2. 
-isbn: 978-0-201-03804-0.
+Donald E. Knuth (2011). \emph{The Art of Computer Programming: Combinatorial Algorithms, Part 1}. 
+Vol. 4A. Art of Computer Programming. Addison-Wesley Professional. Sec. 7.2.1.2. 
+ISBN: 978-0-201-03804-0.
 }
 \keyword{utilities}

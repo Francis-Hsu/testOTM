@@ -2,7 +2,8 @@
 #'
 #' \code{tos.rank} computes the optimal transport ranks.
 #' @param object a fitted optimal transport map object.
-#' @param query a numeric matrix where each row represents a query point.
+#' @param query a numeric matrix where each row represents a query point 
+#' (or a vector of length 2 or 3 representing a single point).
 #' @param scale logical indicating if the queries should be scaled.
 #' @param rank.data choose the method for assigning ranks to the data points. 
 #' Can be \code{max}, \code{min}, \code{center}, or \code{uniform}.
@@ -22,8 +23,18 @@
 #' @return a list containing the ranks of the data and the corresponding convex conjugate potential values.
 #' If \code{rank.algo = "geom"} or data points are presented in the queries,
 #' then the corresponding conjugate potentials will not be computed (\code{NA}s will be returned).
+#' @examples 
+#' # generate some data
+#' X = c(0.5, 0.8, -0.2, -1.5, 1.4, 0.5, -1.1, -0.1, -1.1, -2.6)
+#' Y = c(1.6, -1.0, -0.1, 0.5, -1.3, 2.9, -0.4, 1.3, -1.8, -2.5)
+#' 
+#' # compute the optimal transport map from U[0, 1]^2 to the data
+#' XY.OTM = tos.fit(cbind(X, Y))
+#' 
+#' # compute the rank of point (0, 0).
+#' tos.rank(XY.OTM, c(0, 0))
 #' @seealso \code{\link{tos.gof.test}} and \code{\link{tos.dep.test}} for non-parametric tests using optimal transport rank.
-#' @references Promit Ghosal and Bodhisattva Sen. 2019. 
+#' @references Promit Ghosal and Bodhisattva Sen (2019). 
 #' \emph{Multivariate Ranks and Quantiles Using Optimal Transportation and Applications to Goodness-of-Fit Testing}.
 #' \url{http://arxiv.org/abs/1905.05340}.
 #' @keywords multivariate
@@ -36,7 +47,8 @@ tos.rank = function(object, query, scale = TRUE, rank.data = "uniform", rank.alg
 #'
 #' The 2D implementation of \code{tos.rank}.
 #' @param object a fitted 2D optimal transport map object.
-#' @param query a numeric matrix where each row represents a query point.
+#' @param query a numeric matrix where each row represents a query point
+#' (or a vector of length 2 representing a single point).
 #' @param scale logical indicating if the queries should be scaled.
 #' @param rank.data choose the method for assigning ranks to the data points. 
 #' Can be \code{max}, \code{min}, \code{center}, or \code{uniform}.
@@ -44,11 +56,30 @@ tos.rank = function(object, query, scale = TRUE, rank.data = "uniform", rank.alg
 #' @param \dots additional arguments, currently without effect.
 #' @return a list containing the ranks of the data and the corresponding convex conjugate potential values.
 #' If \code{rank.algo = "geom"} then the conjugate potentials will not be computed (\code{NA}s will be returned).
+#' @examples 
+#' # generate some data
+#' X = c(0.5, 0.8, -0.2, -1.5, 1.4, 0.5, -1.1, -0.1, -1.1, -2.6)
+#' Y = c(1.6, -1.0, -0.1, 0.5, -1.3, 2.9, -0.4, 1.3, -1.8, -2.5)
+#' 
+#' # compute the optimal transport map from U[0, 1]^2 to the data
+#' XY.OTM = tos.fit(cbind(X, Y))
+#' 
+#' # compute the rank of point (0, 0).
+#' tos.rank(XY.OTM, c(0, 0))
 #' @keywords internal
 #' @importFrom stats aggregate na.omit
 #' @export
 tos.rank.tos.2d = function(object, query, scale = TRUE, rank.data = "uniform", rank.algo = "lp", ...) {
-  n = nrow(query)
+  # input validation
+  if (is.vector(query) && length(query) == 2) {
+    query = t(matrix(query))
+  }
+  if (!is.matrix(query) || NCOL(query) != 2) {
+    stop("Input query must be a matrix with ncol = 2.")
+  }
+  
+  # get dimensions
+  n = NROW(query)
   d = 2
   
   rank.id = switch(rank.data,
@@ -95,7 +126,7 @@ tos.rank.tos.2d = function(object, query, scale = TRUE, rank.data = "uniform", r
       }
     }
     
-    lp.id[query.data.id] = F
+    lp.id[query.data.id] = FALSE
   }
   
   # compute the ranks geometrically
@@ -123,7 +154,7 @@ tos.rank.tos.2d = function(object, query, scale = TRUE, rank.data = "uniform", r
   # compute the ranks through LP
   if (any(lp.id)) {
     acc.verts = c(0, cumsum(as.vector(table(object$Vertex.RVD[, 1]))))
-    dual.potential = dualPotential2D(query[lp.id, , drop = F],
+    dual.potential = dualPotential2D(query[lp.id, , drop = FALSE],
                                      object$Data,
                                      object$Vertex.RVD[, 2:3],
                                      object$Height,
@@ -139,12 +170,24 @@ tos.rank.tos.2d = function(object, query, scale = TRUE, rank.data = "uniform", r
 #'
 #' The 3D implementation of \code{tos.rank}.
 #' @param object a fitted 3D optimal transport map object.
-#' @param query a numeric matrix where each row represents a query point.
+#' @param query a numeric matrix where each row represents a query point
+#' (or a vector of length 3 representing a single point).
 #' @param scale logical indicating if the queries should be scaled.
 #' @param rank.data choose the method for assigning ranks to the data points. 
 #' Can be \code{max}, \code{min}, or \code{center}.
 #' @param \dots additional arguments, currently without effect.
 #' @return a list containing the ranks of the data and the corresponding convex conjugate potential values.
+#' @examples 
+#' # generate some data
+#' X = c(2.3, 0.8, 1.2, 0.6, 0.2, 0.5, -0.7, -0.6, -0.2, 3.2)
+#' Y = c(1.5, -0.8, 0.6, -2.1, 1.3, 1.3, -1.1, 1.0, -0.2, 1.0)
+#' Z = c(0.8, -0.3, -1.3, -1.8, 1.2, -0.7, -0.8, 1.3, -0.9, 2.0)
+#' 
+#' # compute the optimal transport map from U[0, 1]^3 to the data
+#' XYZ.OTM = tos.fit(cbind(X, Y, Z))
+#' 
+#' # compute the rank of point (0, 0, 0).
+#' tos.rank(XYZ.OTM, c(0, 0, 0))
 #' @keywords internal
 #' @importFrom stats aggregate na.omit
 #' @export
@@ -153,6 +196,15 @@ tos.rank.tos.3d = function(object,
                            scale = TRUE,
                            rank.data = "center",
                            ...) {
+  # input validation
+  if (is.vector(query) && length(query) == 3) {
+    query = t(matrix(query))
+  }
+  if (!is.matrix(query) || NCOL(query) != 3) {
+    stop("Input query must be a matrix with ncol = 3.")
+  }
+  
+  # get dimensions
   n = nrow(query)
   d = 3
   
@@ -189,7 +241,7 @@ tos.rank.tos.3d = function(object,
       tos.ranks[query.data.id, ] = t(sapply(data.rank, choose.vert, type = rank.id))
     }
     
-    lp.id[query.data.id] = F
+    lp.id[query.data.id] = FALSE
   }
   
   # get unique vertices from each cell
@@ -202,7 +254,7 @@ tos.rank.tos.3d = function(object,
   # compute the ranks through LP
   if (any(lp.id)) {
     acc.verts = c(0, cumsum(as.vector(table(unique.vert[, 1]))))
-    dual.potential = dualPotential3D(query[lp.id, , drop = F],
+    dual.potential = dualPotential3D(query[lp.id, , drop = FALSE],
                                      object$Data,
                                      unique.vert[, 4:6],
                                      object$Height,

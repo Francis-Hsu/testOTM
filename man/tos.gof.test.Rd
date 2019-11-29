@@ -9,12 +9,11 @@ tos.gof.test(
   Y,
   mc = 10000,
   n.perm = 0,
-  scale = c(0, 1),
   rank.data = "uniform",
   epsilon = 1e-06,
   maxit = 100,
-  verbose = F,
-  na.rm = F
+  verbose = FALSE,
+  na.rm = FALSE
 )
 }
 \arguments{
@@ -25,8 +24,6 @@ tos.gof.test(
 \item{mc}{number of quasi-Monte Carlo samples used to evaluate the test statistic.}
 
 \item{n.perm}{number of permutations used for computing \eqn{p}-value.}
-
-\item{scale}{a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.}
 
 \item{rank.data}{choose the method for assigning ranks to the data points. 
 Can be \code{max}, \code{min}, \code{center}, or \code{uniform}. 
@@ -50,14 +47,26 @@ a list which contains the permutation test statistics and the \eqn{p}-value.
 \code{tos.gof.test} tests whether the samples come from the same population. 
 The \eqn{p}-value is computed through permutations. For a very small sample (size less than \eqn{8}), 
 all possible permutations are generated (assuming a suitable \code{n.perm} is provided). 
-For larger sample size, Monte Carlo permutation sampling is used to approximate the permutations \eqn{p}-value.
+For larger sample size, Monte Carlo permutation sampling is used to approximate the permutation \eqn{p}-value.
 
-Given samples \eqn{X_1, \dots, X_n} and \eqn{Y_1, \dots, Y_m}, we use the following statistic for goodness-of-fit testing:
+Given samples \eqn{X_1, \dots, X_n} and \eqn{Y_1, \dots, Y_m}, we use the following statistic to test goodness-of-fit:
 \deqn{T_{X,Y}=\int_{[0, 1]^d}\|\hat{R}_{X,Y}[\hat{Q}_{X}(u)]-\hat{R}_{X,Y}[\hat{Q}_{Y}(u)]\|_2^2\,d\mu(u),} 
 where \eqn{\mu\sim U[0, 1]^d}. Evaluation of this integral is done through quasi-Monte Carlo with Sobol sequence.
 }
+\examples{
+# genrate a sample
+X = cbind(c(0.5, 0.8, -0.2, -1.5, 1.4, 0.5, -1.1, -0.1, -1.1, -2.6), 
+          c(1.6, -1.0, -0.1, 0.5, -1.3, 2.9, -0.4, 1.3, -1.8, -2.5))
+
+# generate another sample
+Y = cbind(c(2.3, 0.8, 1.2, 0.6, 0.2, 0.5, -0.7, -0.6, -0.2, 3.2),
+          c(1.5, -0.8, 0.6, -2.1, 1.3, 1.3, -1.1, 1.0, -0.2, 1.0))
+
+# test whether the two samples are from the same distribution
+tos.gof.test(X, Y, n.perm = 50)
+}
 \references{
-Promit Ghosal and Bodhisattva Sen. 2019. 
+Promit Ghosal and Bodhisattva Sen (2019). 
 \emph{Multivariate Ranks and Quantiles Using Optimal Transportation and Applications to Goodness-of-Fit Testing}.
 \url{http://arxiv.org/abs/1905.05340}.
 }

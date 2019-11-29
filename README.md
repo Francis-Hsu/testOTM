@@ -50,11 +50,15 @@ X = t(eS$vectors %*% diag(sqrt(pmax(eS$values, 0)), p) %*% matrix(rnorm(p * n), 
 X.OTM = tos.fit(X)
 
 # plot the restricted Voronoi diagram and the restricted Delaunay triangulation
-par(mfrow = c(1, 2))
+oldpar = par(mfrow = c(1, 2))
 plot(X.OTM, which = "Both", draw.center = F, draw.map = T)
 ```
 
 ![](man/figures/README-example-1.png)<!-- -->
+
+``` r
+par(oldpar)
+```
 
 ## Acknowledgment
 

@@ -22,16 +22,23 @@
 #' \item{Height}{Height of the Laguerre cells, used for computing Alexandrov's potential.}
 #' \item{Location}{The numeric centering applied to the data.}
 #' \item{Scale}{The numeric scalings applied to the data.}
+#' @examples
+#' # generate some data
+#' X = c(0.5, 0.8, -0.2, -1.5, 1.4, 0.5, -1.1, -0.1, -1.1, -2.6)
+#' Y = c(1.6, -1.0, -0.1, 0.5, -1.3, 2.9, -0.4, 1.3, -1.8, -2.5)
+#' 
+#' # compute the optimal transport map from U[0, 1]^2 to the data
+#' XY.OTM = tos.fit(cbind(X, Y))
 #' @keywords optimize graphs
-#' @references Bruno Lévy and Erica L. Schwindt. 2018.
+#' @references Bruno Levy and Erica L. Schwindt (2018).
 #' \emph{Notions of Optimal Transport Theory and How to Implement Them on a Computer}.
-#' Computers & Graphics 72: 135–48.
+#' Computers & Graphics 72: 135-48.
 #' \url{https://doi.org/10.1016/j.cag.2018.01.009}.
 #' @importFrom stats complete.cases
 #' @export
 tos.fit = function(data,
                    scale = c(0.05, 0.95),
-                   na.rm = F,
+                   na.rm = FALSE,
                    epsilon = 1e-6,
                    maxit = 100,
                    verbose = F) {
@@ -116,6 +123,16 @@ tos.fit = function(data,
 #' @param ylab a label for the y axis.
 #' @param pch a vector of plotting characters or symbols. 
 #' @param \dots other graphical parameters to plot.
+#' @examples 
+#' # generate some data
+#' X = c(0.5, 0.8, -0.2, -1.5, 1.4, 0.5, -1.1, -0.1, -1.1, -2.6)
+#' Y = c(1.6, -1.0, -0.1, 0.5, -1.3, 2.9, -0.4, 1.3, -1.8, -2.5)
+#' 
+#' # compute the optimal transport map from U[0, 1]^2 to the data
+#' XY.OTM = tos.fit(cbind(X, Y))
+#' 
+#' # plot the RVD
+#' plot(XY.OTM, which = "RVD", draw.map = TRUE)
 #' @keywords hplot
 #' @importFrom graphics plot.default segments points
 #' @export
@@ -124,9 +141,9 @@ plot.tos.2d = function(x,
                        col.data = "dodgerblue3",
                        col.center = "darkorange1",
                        col.edge = "black",
-                       draw.data = T,
-                       draw.center = T,
-                       draw.map = F,
+                       draw.data = TRUE,
+                       draw.center = TRUE,
+                       draw.map = FALSE,
                        xlim = c(0, 1),
                        ylim = c(0, 1),
                        xlab = expression('x'),
@@ -222,7 +239,7 @@ plot.tos.2d = function(x,
 #' \code{plot.tos.3d} plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
 #' 3D semi-discrete optimal transport map.
 #' @param x a fitted \code{tos.3d} object.
-#' @param interactive logical indicating if the plot should be interactive.
+#' @param inter logical indicating if the plot should be interactive.
 #' @param which specify which graph(s) to plot. Can be \code{None}, \code{RVD}, \code{RDT}, or \code{Both}.
 #' @param col.data color of the data points.
 #' @param col.center color of the Voronoi centroids.
@@ -245,20 +262,31 @@ plot.tos.2d = function(x,
 #' \code{theta} gives the azimuthal direction and \code{phi} the colatitude.
 #' @param pch a vector of plotting characters or symbols.
 #' @param \dots other graphical parameters to plot.
+#' @examples 
+#' # generate some data
+#' X = c(2.3, 0.8, 1.2, 0.6, 0.2, 0.5, -0.7, -0.6, -0.2, 3.2)
+#' Y = c(1.5, -0.8, 0.6, -2.1, 1.3, 1.3, -1.1, 1.0, -0.2, 1.0)
+#' Z = c(0.8, -0.3, -1.3, -1.8, 1.2, -0.7, -0.8, 1.3, -0.9, 2.0)
+#' 
+#' # compute the optimal transport map from U[0, 1]^3 to the data
+#' XYZ.OTM = tos.fit(cbind(X, Y, Z))
+#' 
+#' # plot the (non-interactive) RVD
+#' plot(XYZ.OTM, interactive = FALSE, which = "RVD", draw.map = TRUE)
 #' @keywords hplot
 #' @importFrom plot3D points3D segments3D
 #' @importFrom rgl clear3d plot3d points3d segments3d
 #' @export
 plot.tos.3d = function(x,
-                       interactive = TRUE,
+                       inter = interactive(),
                        which = "Both",
                        col.data = "dodgerblue3",
                        col.center = "darkorange1",
                        col.rvd = "black",
                        col.rdt = "firebrick3",
-                       draw.data = T,
-                       draw.center = T,
-                       draw.map = F,
+                       draw.data = TRUE,
+                       draw.center = TRUE,
+                       draw.map = FALSE,
                        draw.id = NULL,
                        xlim = c(0, 1),
                        ylim = c(0, 1),
@@ -281,13 +309,13 @@ plot.tos.3d = function(x,
     id.draw = draw.id
   }
   
-  if (interactive) {
+  if (inter) {
     # clear exisiting plot, if any
     clear3d(type = "all")
     
     # plot data
     plot3d(
-      x$Data[id.draw, , drop = F],
+      x$Data[id.draw, , drop = FALSE],
       type = ifelse(draw.data, "p", "n"),
       col = col.data,
       pch = pch,
@@ -303,7 +331,7 @@ plot.tos.3d = function(x,
     
     # plot centroids
     if (draw.center) {
-      points3d(x$Centroid[id.draw, , drop = F],
+      points3d(x$Centroid[id.draw, , drop = FALSE],
                col = col.center,
                pch = pch,
                size = size,
@@ -349,9 +377,9 @@ plot.tos.3d = function(x,
   } else {
     # plot data
     points3D(
-      x = x$Data[id.draw, 1, drop = F],
-      y = x$Data[id.draw, 2, drop = F],
-      z = x$Data[id.draw, 3, drop = F],
+      x = x$Data[id.draw, 1, drop = FALSE],
+      y = x$Data[id.draw, 2, drop = FALSE],
+      z = x$Data[id.draw, 3, drop = FALSE],
       alpha = ifelse(draw.data, 1, 0),
       col = col.data,
       pch = pch,
@@ -369,9 +397,9 @@ plot.tos.3d = function(x,
     # plot centroids
     if (draw.center) {
       points3D(
-        x = x$Centroid[id.draw, 1, drop = F],
-        y = x$Centroid[id.draw, 2, drop = F],
-        z = x$Centroid[id.draw, 3, drop = F],
+        x = x$Centroid[id.draw, 1, drop = FALSE],
+        y = x$Centroid[id.draw, 2, drop = FALSE],
+        z = x$Centroid[id.draw, 3, drop = FALSE],
         col = col.center,
         pch = pch,
         add = T,

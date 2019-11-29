@@ -19,4 +19,12 @@ a matrix containing the scaled data.
 \description{
 \code{scaling.min.max} rescales the range of a data set to [min, max].
 }
+\examples{
+# generate some data
+X = c(1.5, 3.2, 2.6, 0.3, 5.1)
+Y = c(3.3, 6.4, 1.8, 0.7, 2.2)
+
+# scale (X, Y) into [0, 1] range
+scaling.min.max(cbind(X, Y), 0, 1)
+}
 \keyword{utilities}

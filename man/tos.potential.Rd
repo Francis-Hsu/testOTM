@@ -9,7 +9,8 @@ tos.potential(object, query, scale = TRUE, ...)
 \arguments{
 \item{object}{a fitted optimal transport map object.}
 
-\item{query}{a numeric matrix where each row represents a query point.}
+\item{query}{a numeric matrix where each row represents a query point
+(or a vector of length 2 representing a single point).}
 
 \item{scale}{logical indicating if the queries should be scaled.}
 
@@ -21,8 +22,19 @@ a matrix containing the potentials of the queries.
 \description{
 \code{tos.potential} computes the Alexandrov potential function.
 }
+\examples{
+# generate some data
+X = c(0.5, 0.8, -0.2, -1.5, 1.4, 0.5, -1.1, -0.1, -1.1, -2.6)
+Y = c(1.6, -1.0, -0.1, 0.5, -1.3, 2.9, -0.4, 1.3, -1.8, -2.5)
+
+# compute the optimal transport map from U[0, 1]^2 to the data
+XY.OTM = tos.fit(cbind(X, Y))
+
+# compute the potential of point (0, 0)
+tos.potential(XY.OTM, c(0, 0))
+}
 \references{
-Xianfeng Gu, Feng Luo, Jian Sun, and Shing-Tung Yau. 2015.
+Xianfeng Gu, Feng Luo, Jian Sun, and Shing-Tung Yau (2015).
 \emph{Variational Principles for Minkowski Type Problems, Discrete Optimal Transport, and Discrete Monge-Ampere Equations}.
 Asian Journal of Mathematics 20 (January).
 \url{https://doi.org/10.4310/AJM.2016.v20.n2.a7}.

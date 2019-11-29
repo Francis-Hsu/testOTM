@@ -9,7 +9,8 @@ tos.depth(object, query, scale = TRUE, rank.data = "uniform", ...)
 \arguments{
 \item{object}{a fitted optimal transport map object.}
 
-\item{query}{a numeric matrix where each row represents a query point.}
+\item{query}{a numeric matrix where each row represents a query point
+(or a vector of length 2 or 3 representing a single point).}
 
 \item{scale}{logical indicating if the queries should be scaled.}
 
@@ -23,8 +24,19 @@ a vector containing depths of the queries.
 \description{
 \code{tos.depth} computes the optimal transport depth relative to the multivariate uniform distribution \eqn{U[0, 1]^d}.
 }
+\examples{
+# generate some data
+X = c(0.5, 0.8, -0.2, -1.5, 1.4, 0.5, -1.1, -0.1, -1.1, -2.6)
+Y = c(1.6, -1.0, -0.1, 0.5, -1.3, 2.9, -0.4, 1.3, -1.8, -2.5)
+
+# compute the optimal transport map from U[0, 1]^2 to the data
+XY.OTM = tos.fit(cbind(X, Y))
+
+# compute the depth of point (0, 0).
+tos.depth(XY.OTM, c(0, 0))
+}
 \references{
-Victor Chernozhukov, Alfred Galichon, Marc Hallin, and Marc Henry. 2017.
+Victor Chernozhukov, Alfred Galichon, Marc Hallin, and Marc Henry (2017).
 \emph{Monge–Kantorovich Depth, Quantiles, Ranks and Signs}.
 The Annals of Statistics 45 (1): 223–56.
 \url{https://doi.org/10.1214/16-AOS1450}.

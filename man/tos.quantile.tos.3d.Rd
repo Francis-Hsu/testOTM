@@ -9,7 +9,8 @@
 \arguments{
 \item{object}{a fitted 3D optimal transport map object.}
 
-\item{query}{a numeric matrix where each row represents a query point.}
+\item{query}{a numeric matrix where each row represents a query point
+(or a vector of length 3 representing a single point).}
 
 \item{scale}{logical indicating if the queries should be scaled.}
 
@@ -20,5 +21,17 @@ a list containing the quantiles of the queries and the indices of the correspond
 }
 \description{
 The 3D implementation for \code{tos.quantile}.
+}
+\examples{
+# generate some data
+X = c(2.3, 0.8, 1.2, 0.6, 0.2, 0.5, -0.7, -0.6, -0.2, 3.2)
+Y = c(1.5, -0.8, 0.6, -2.1, 1.3, 1.3, -1.1, 1.0, -0.2, 1.0)
+Z = c(0.8, -0.3, -1.3, -1.8, 1.2, -0.7, -0.8, 1.3, -0.9, 2.0)
+
+# compute the optimal transport map from U[0, 1]^3 to the data
+XYZ.OTM = tos.fit(cbind(X, Y, Z))
+
+# compute the quantile of point (0, 0, 0).
+tos.quantile(XYZ.OTM, c(0, 0, 0))
 }
 \keyword{internal}

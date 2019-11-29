@@ -7,7 +7,7 @@
 tos.fit(
   data,
   scale = c(0.05, 0.95),
-  na.rm = F,
+  na.rm = FALSE,
   epsilon = 1e-06,
   maxit = 100,
   verbose = F
@@ -48,10 +48,18 @@ Input data needs be scaled within the [0, 1] range for computation.
 Supply \code{scale} to let \code{tos.fit} handles the scaling internally.
 Centering and scaling factors will be returned to help transforming the results back to their original range.
 }
+\examples{
+# generate some data
+X = c(0.5, 0.8, -0.2, -1.5, 1.4, 0.5, -1.1, -0.1, -1.1, -2.6)
+Y = c(1.6, -1.0, -0.1, 0.5, -1.3, 2.9, -0.4, 1.3, -1.8, -2.5)
+
+# compute the optimal transport map from U[0, 1]^2 to the data
+XY.OTM = tos.fit(cbind(X, Y))
+}
 \references{
-Bruno Lévy and Erica L. Schwindt. 2018.
+Bruno Levy and Erica L. Schwindt (2018).
 \emph{Notions of Optimal Transport Theory and How to Implement Them on a Computer}.
-Computers & Graphics 72: 135–48.
+Computers & Graphics 72: 135-48.
 \url{https://doi.org/10.1016/j.cag.2018.01.009}.
 }
 \keyword{graphs}

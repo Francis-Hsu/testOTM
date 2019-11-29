@@ -10,9 +10,9 @@
   col.data = "dodgerblue3",
   col.center = "darkorange1",
   col.edge = "black",
-  draw.data = T,
-  draw.center = T,
-  draw.map = F,
+  draw.data = TRUE,
+  draw.center = TRUE,
+  draw.map = FALSE,
   xlim = c(0, 1),
   ylim = c(0, 1),
   xlab = expression("x"),
@@ -53,5 +53,16 @@
 \description{
 \code{plot.tos.2d} plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
 2D semi-discrete optimal transport map.
+}
+\examples{
+# generate some data
+X = c(0.5, 0.8, -0.2, -1.5, 1.4, 0.5, -1.1, -0.1, -1.1, -2.6)
+Y = c(1.6, -1.0, -0.1, 0.5, -1.3, 2.9, -0.4, 1.3, -1.8, -2.5)
+
+# compute the optimal transport map from U[0, 1]^2 to the data
+XY.OTM = tos.fit(cbind(X, Y))
+
+# plot the RVD
+plot(XY.OTM, which = "RVD", draw.map = TRUE)
 }
 \keyword{hplot}

@@ -34,7 +34,7 @@ As mentioned, the core of the ideas used by this package is optimal transportati
 
 In application, we do not usually know the target measure $\nu$, but rather have a finite sample $\{X_i\}_{i=1}^n\stackrel{\text{i.i.d.}}{\sim}\nu$. We thus replace the unknown $\nu$ by its empirical distribution $\hat{\nu}_n$, which satisfies \[\hat{\nu}_n(B)=\frac{1}{n}\sum_{i=1}^n\delta_{X_i}(B)\] for all Borel $B\subset\mathcal{Y}$. Accordingly, we define the empirical quantile function $\hat{Q}_n$ to be the solution of the optimal transport problem when $\hat{\nu}_n$ is used instead of $\nu$.
 
-An important result, known as Brenier-McCann's Theorem [@B1991; @M1995], implies that there exists a piecewise affine function $\hat{\psi}_n$ such that $\hat{Q}_n=\nabla\hat{\psi}_n$. Since the rank function in 1D is the inverse of the quantile map, the multivariate empirical rank function can be defined as \[\hat{R}_n(\mathbf{x})=\operatorname*{arg\,min}_{\mathbf{y}\in\mathcal{Y}}\{\mathbf{x}^\top\mathbf{y}-\hat{\psi}_n(\mathbf{y})\},\] and it can be computed through linear programming. This definition is justified by the inversion rule of sub-gradient: \[\mathbf{x}\in\partial\hat{\psi}_n(\mathbf{y})\iff\mathbf{y}\in\partial\hat{\psi}{}_n^\ast(\mathbf{x}),\] where $\hat{\psi}{}_n^\ast$ is the Legendre-Fenchel dual of $\hat{\psi}_n$.
+An important result, known as Brenier-McCann's Theorem [@B1991; @M1995], implies that there exists a piecewise affine function $\hat{\psi}_n$ such that $\hat{Q}_n=\nabla\hat{\psi}_n$. Since the rank function in 1D is the inverse of the quantile map, the multivariate empirical rank function can be defined as \[\hat{R}_n(\mathbf{x})=\operatorname*{arg\,min}_{\mathbf{y}\in\mathcal{Y}}\{\mathbf{x}^\top\mathbf{y}-\hat{\psi}_n(\mathbf{y})\},\] and it can be computed through linear programming. This definition is justified by the inversion rule of sub-gradient: \[\mathbf{x}\in\partial\hat{\psi}_n(\mathbf{y})\iff\mathbf{y}\in\partial\hat{\psi}_n\hspace{-5pt}{}^\ast(\mathbf{x}),\] where $\hat{\psi}_n\hspace{-5pt}{}^\ast$ is the Legendre-Fenchel dual of $\hat{\psi}_n$.
 
 ## Visualizing the Transport Map, Rank, and Quantiles
 When the source measure $\mu$ is absolutely continuous and the target measure $\nu$ is discrete, the optimal transport problem is said to be semi-discrete. The solution in this case turns out to have a nice geometric interpretation: it is a partition of $\mathcal{X}$ by convex sets (cells) which correspond to $X_i$'s (seeds), and every element in the cells is tranported to the corresponding seeds. This partition is called the (restricted) power diagram or the Laguerre diagram (which in fact is a generalization of the Voronoi diagram), see [@FA1987] for more information.
@@ -56,10 +56,11 @@ X = t(eS$vectors %*% diag(sqrt(pmax(eS$values, 0)), p) %*% matrix(rnorm(p * n), 
 X.OTM = tos.fit(X)
 
 # plot the restricted Voronoi diagram and the restricted Delaunay triangulation
-par(mfrow = c(1, 2))
+oldpar = par(mfrow = c(1, 2))
 plot(X.OTM, which = "Both", draw.center = T, draw.map = T)
+par(oldpar)
 ```
-The two plots being produced are the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT). RVD is the partition we mentioned above, where each polygon (cell) corresponds to one datum (blue point), and any point within that cell will be transported to the datum by the optimal transport map. The orange points are the centroids of the cells. By setting `draw.map = T`, dashed lines will be drawn between the centroids and the data to indicate the correspondence. RDT, on the other hand, is the dual graph of the RVD and has many computational applications, see for example [@CDS2013; @TOG2017] for more information.
+The two plots being produced are the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT). RVD is the partition we mentioned above, where each polygon (cell) corresponds to one datum (<font color="#1874CD">blue</font> point), and any point within that cell will be transported to the datum by the optimal transport map. The <font color="#FF7F00">orange</font> points are the centroids of the cells. By setting `draw.map = T`, dashed lines will be drawn between the centroids and the data to indicate the correspondence. RDT, on the other hand, is the dual graph of the RVD and has many computational applications, see for example [@CDS2013; @TOG2017] for more information.
 
 Now with a fitted `tos.2d` object available, we can use it to compute the 2D empirical ranks and quantiles. The following snippet shows how to do so for some arbitrary points $\{Y_i\}_{i=1}^{5}$:
 ```{r rank, message=FALSE}
@@ -78,7 +79,7 @@ Y = scale(Y, X.OTM$Location, X.OTM$Scale)
 Y = Y * diff(range(X.OTM$Data)) + min(X.OTM$Data)
 
 # plot ranks
-par(mfrow = c(1, 2))
+oldpar = par(mfrow = c(1, 2))
 plot(X.OTM, which = "RVD", draw.center = F, draw.map = F, draw.data = F)
 points(Y, col = "firebrick3", pch = 20)
 points(R$Rank, col = "forestgreen", pch = 20)
@@ -88,8 +89,9 @@ segments(R$Rank[, 1], R$Rank[, 2], Y[, 1], Y[, 2], lty = 2)
 plot(X.OTM, which = "RVD", draw.center = T, draw.map = T, draw.data = T)
 points(Y, col = "firebrick3", pch = 20)
 segments(Q$Quantiles[, 1], Q$Quantiles[, 2], Y[, 1], Y[, 2], lty = 2)
+par(oldpar)
 ```
-The plot on the left shows the query points (red) and their corresponding ranks (green). By the nature of their definition, ranks are always vertices of some cells in the RVD, except when the query is one of the data point $X_i$, in which case $\hat{R}_n$ is not uniquely defined and can be any point in the closure of the cell corresponds to $X_i$. By default, `tos.rank` will sample a point uniformly from that cell.
+The plot on the left shows the query points (<font color="#CD2626">red</font>) and their corresponding ranks (<font color="#228B22">green</font>). By the nature of their definition, ranks are always vertices of some cells in the RVD, except when the query is one of the data point $X_i$, in which case $\hat{R}_n$ is not uniquely defined and can be any point in the closure of the cell corresponds to $X_i$. By default, `tos.rank` will sample a point uniformly from that cell.
 
 The plot on the right, meanwhile, shows the quantiles of the query points. As pointed out earlier, the query points will be map to the data points that correspond to the cells they are in.
 
@@ -106,10 +108,10 @@ X = t(eS$vectors %*% diag(sqrt(pmax(eS$values, 0)), p) %*% matrix(rnorm(p * n), 
 X.OTM = tos.fit(X)
 
 # plot the restricted Voronoi diagram and the restricted Delaunay triangulation
-plot(X.OTM, which = "RVD", draw.center = T, draw.map = T)
+plot(X.OTM, inter = TRUE, which = "RVD", draw.center = T, draw.map = T)
 
 # embed the plot into the current document
-rglwidget(elementId = "plot3drgl", height = 600, width = 600)
+rglwidget(elementId = "plot3drgl", height = 500, width = 500)
 ```
 
 [Back to Top](#top)
@@ -177,5 +179,9 @@ filled.contour(q, q, matrix(D, k, k), color.palette = function(n) cm.colors(n))
 ```
 
 [Back to Top](#top)
+
+```{r unseed, include = FALSE}
+rm(.Random.seed, envir = globalenv())
+```
 
 ## Reference

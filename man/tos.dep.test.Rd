@@ -8,11 +8,10 @@ tos.dep.test(
   X,
   Y,
   n.perm = 0,
-  scale = c(0, 1),
   rank.data = "uniform",
   epsilon = 1e-06,
   maxit = 100,
-  verbose = F
+  verbose = FALSE
 )
 }
 \arguments{
@@ -21,8 +20,6 @@ tos.dep.test(
 \item{Y}{input data vector.}
 
 \item{n.perm}{number of permutations used for computing \eqn{p}-value.}
-
-\item{scale}{a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.}
 
 \item{rank.data}{choose the method for assigning ranks to the data points. 
 Can be \code{max}, \code{min}, \code{center}, or \code{uniform}.}
@@ -44,14 +41,24 @@ the semi-discrete optimal transport map.
 \code{tos.dep.test} tests the null hypothesis that \eqn{X} and \eqn{Y} are independent. 
 The \eqn{p}-value is computed through permutations. For a very small sample (size less than \eqn{8}), 
 all possible permutations are generated (assuming a suitable \code{n.perm} is provided). 
-For larger sample size, Monte Carlo permutation sampling is used to approximate the permutations \eqn{p}-value.
+For larger sample size, Monte Carlo permutation sampling is used to approximate the permutation \eqn{p}-value.
 
-Given samples \eqn{(X_1, Y_1), \dots, (X_n, Y_n)}, the following statistic is used for test of independence:
-\deqn{T_n=\sum_{i=1}^n\|\hat{R}(X_i, Y_i)-\tilde{R}(X_i, Y_i)\|^2,} 
+Given samples \eqn{Z_1=(X_1, Y_1), \dots, Z_n=(X_n, Y_n)}, the following statistic is used for the test of independence:
+\deqn{T_n=\sum_{i=1}^n\|\hat{R}(Z_i)-\tilde{R}(Z_i)\|_2^2,} 
 where \eqn{\tilde{R}} is the joining of the usual 1D ranks.
 }
+\examples{
+# genrate a sample
+X = rnorm(50)
+
+# generate another sample
+Y = rnorm(50)
+
+# test whether the two samples are independent
+tos.dep.test(X, Y, n.perm = 50)
+}
 \references{
-Promit Ghosal and Bodhisattva Sen. 2019. 
+Promit Ghosal and Bodhisattva Sen (2019). 
 \emph{Multivariate Ranks and Quantiles Using Optimal Transportation and Applications to Goodness-of-Fit Testing}.
 \url{http://arxiv.org/abs/1905.05340}.
 }

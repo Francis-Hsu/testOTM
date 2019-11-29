@@ -5,7 +5,6 @@
 #' @param Y input data matrix, of size \eqn{m} by \eqn{2} or \eqn{3}.
 #' @param mc number of quasi-Monte Carlo samples used to evaluate the test statistic.
 #' @param n.perm number of permutations used for computing \eqn{p}-value.
-#' @param scale a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.
 #' @param rank.data choose the method for assigning ranks to the data points. 
 #' Can be \code{max}, \code{min}, \code{center}, or \code{uniform}. 
 #' \code{uniform} is not currently implemented for 3D, and \code{center} will be used if it is chosen.
@@ -16,20 +15,39 @@
 #' @details \code{tos.gof.test} tests whether the samples come from the same population. 
 #' The \eqn{p}-value is computed through permutations. For a very small sample (size less than \eqn{8}), 
 #' all possible permutations are generated (assuming a suitable \code{n.perm} is provided). 
-#' For larger sample size, Monte Carlo permutation sampling is used to approximate the permutations \eqn{p}-value.
+#' For larger sample size, Monte Carlo permutation sampling is used to approximate the permutation \eqn{p}-value.
 #' 
-#' Given samples \eqn{X_1, \dots, X_n} and \eqn{Y_1, \dots, Y_m}, we use the following statistic for goodness-of-fit testing:
+#' Given samples \eqn{X_1, \dots, X_n} and \eqn{Y_1, \dots, Y_m}, we use the following statistic to test goodness-of-fit:
 #' \deqn{T_{X,Y}=\int_{[0, 1]^d}\|\hat{R}_{X,Y}[\hat{Q}_{X}(u)]-\hat{R}_{X,Y}[\hat{Q}_{Y}(u)]\|_2^2\,d\mu(u),} 
 #' where \eqn{\mu\sim U[0, 1]^d}. Evaluation of this integral is done through quasi-Monte Carlo with Sobol sequence.
 #' @return a list which contains the permutation test statistics and the \eqn{p}-value.
+#' @examples 
+#' # genrate a sample
+#' X = cbind(c(0.5, 0.8, -0.2, -1.5, 1.4, 0.5, -1.1, -0.1, -1.1, -2.6), 
+#'           c(1.6, -1.0, -0.1, 0.5, -1.3, 2.9, -0.4, 1.3, -1.8, -2.5))
+#' 
+#' # generate another sample
+#' Y = cbind(c(2.3, 0.8, 1.2, 0.6, 0.2, 0.5, -0.7, -0.6, -0.2, 3.2),
+#'           c(1.5, -0.8, 0.6, -2.1, 1.3, 1.3, -1.1, 1.0, -0.2, 1.0))
+#' 
+#' # test whether the two samples are from the same distribution
+#' tos.gof.test(X, Y, n.perm = 50)
 #' @seealso \code{\link{tos.rank}} for optimal transport rank.
 #' @keywords htest multivariate
-#' @references Promit Ghosal and Bodhisattva Sen. 2019. 
+#' @references Promit Ghosal and Bodhisattva Sen (2019). 
 #' \emph{Multivariate Ranks and Quantiles Using Optimal Transportation and Applications to Goodness-of-Fit Testing}.
 #' \url{http://arxiv.org/abs/1905.05340}.
 #' @importFrom randtoolbox sobol
 #' @export
-tos.gof.test = function(X, Y, mc = 10000, n.perm = 0, scale = c(0, 1), rank.data = "uniform", epsilon = 1e-6, maxit = 100, verbose = F, na.rm = F) {
+tos.gof.test = function(X,
+                        Y,
+                        mc = 10000,
+                        n.perm = 0,
+                        rank.data = "uniform",
+                        epsilon = 1e-6,
+                        maxit = 100,
+                        verbose = FALSE,
+                        na.rm = FALSE) {
   # get number of elements
   D = NCOL(X)
   NX = NROW(X)
@@ -63,12 +81,6 @@ tos.gof.test = function(X, Y, mc = 10000, n.perm = 0, scale = c(0, 1), rank.data
     message("Consider setting n.perm to a larger value, otherwise the permutation p-value may not be reliable.")
   }
   
-  if (!is.null(scale)) {
-    if (scale[1] < 0 || scale[2] > 1) {
-      stop("Scaling range must be within [0, 1].")
-    }
-  }
-  
   if (na.rm) {
     X = X[complete.cases(X), ]
     Y = Y[complete.cases(Y), ]
@@ -87,7 +99,7 @@ tos.gof.test = function(X, Y, mc = 10000, n.perm = 0, scale = c(0, 1), rank.data
   }
   
   # scale X and Y together
-  XY = scaling.min.max(rbind(X, Y), scale[1], scale[2])
+  XY = scaling.min.max(rbind(X, Y), 0, 1)
   
   # generate quasi-MC sequence
   U = sobol(mc, D)
@@ -188,7 +200,6 @@ tos.gof.test = function(X, Y, mc = 10000, n.perm = 0, scale = c(0, 1), rank.data
 #' @param X input data vector.
 #' @param Y input data vector.
 #' @param n.perm number of permutations used for computing \eqn{p}-value.
-#' @param scale a numeric vector indicating the minimum and maximum of the scaled data. Set to \code{NULL} to skip scaling.
 #' @param rank.data choose the method for assigning ranks to the data points. 
 #' Can be \code{max}, \code{min}, \code{center}, or \code{uniform}.
 #' @param epsilon convergence threshold for optimization.
@@ -197,19 +208,34 @@ tos.gof.test = function(X, Y, mc = 10000, n.perm = 0, scale = c(0, 1), rank.data
 #' @details \code{tos.dep.test} tests the null hypothesis that \eqn{X} and \eqn{Y} are independent. 
 #' The \eqn{p}-value is computed through permutations. For a very small sample (size less than \eqn{8}), 
 #' all possible permutations are generated (assuming a suitable \code{n.perm} is provided). 
-#' For larger sample size, Monte Carlo permutation sampling is used to approximate the permutations \eqn{p}-value.
+#' For larger sample size, Monte Carlo permutation sampling is used to approximate the permutation \eqn{p}-value.
 #' 
-#' Given samples \eqn{(X_1, Y_1), \dots, (X_n, Y_n)}, the following statistic is used for test of independence:
-#' \deqn{T_n=\sum_{i=1}^n\|\hat{R}(X_i, Y_i)-\tilde{R}(X_i, Y_i)\|^2,} 
+#' Given samples \eqn{Z_1=(X_1, Y_1), \dots, Z_n=(X_n, Y_n)}, the following statistic is used for the test of independence:
+#' \deqn{T_n=\sum_{i=1}^n\|\hat{R}(Z_i)-\tilde{R}(Z_i)\|_2^2,} 
 #' where \eqn{\tilde{R}} is the joining of the usual 1D ranks.
 #' @return a list which contains the permutation test statistics and the \eqn{p}-value.
+#' @examples 
+#' # genrate a sample
+#' X = rnorm(50)
+#' 
+#' # generate another sample
+#' Y = rnorm(50)
+#' 
+#' # test whether the two samples are independent
+#' tos.dep.test(X, Y, n.perm = 50)
 #' @seealso \code{\link{tos.rank}} for semi-discrete optimal transport rank.
 #' @keywords htest multivariate
-#' @references Promit Ghosal and Bodhisattva Sen. 2019. 
+#' @references Promit Ghosal and Bodhisattva Sen (2019). 
 #' \emph{Multivariate Ranks and Quantiles Using Optimal Transportation and Applications to Goodness-of-Fit Testing}.
 #' \url{http://arxiv.org/abs/1905.05340}.
 #' @export
-tos.dep.test = function(X, Y, n.perm = 0, scale = c(0, 1), rank.data = "uniform", epsilon = 1e-6, maxit = 100, verbose = F) {
+tos.dep.test = function(X,
+                        Y,
+                        n.perm = 0,
+                        rank.data = "uniform",
+                        epsilon = 1e-6,
+                        maxit = 100,
+                        verbose = FALSE) {
   # get number of elements
   NX = NROW(X)
   NY = NROW(Y)
@@ -227,12 +253,6 @@ tos.dep.test = function(X, Y, n.perm = 0, scale = c(0, 1), rank.data = "uniform"
     stop("Mismatch in lengths of the input data.")
   }
   N = NX
-  
-  if (!is.null(scale)) {
-    if (scale[1] < 0 || scale[2] > 1) {
-      stop("Scaling range must be within [0, 1].")
-    }
-  }
   
   if (n.perm < 0 || n.perm %% 1 != 0) {
     stop("n.perm must be an integera greater than or equal to 0.")
@@ -268,9 +288,8 @@ tos.dep.test = function(X, Y, n.perm = 0, scale = c(0, 1), rank.data = "uniform"
   }
   
   # scale X and Y
-  tempXY = matrix(scaling.min.max(c(X, Y), scale[1], scale[2]), N)
-  sX = tempXY[, 1]
-  sY = tempXY[, 2]
+  XY = cbind(X, Y)
+  tempXY = scaling.min.max(XY, 0, 1)
   
   # storage for test statistics
   dep.stats = rep(0, n.perm + 1)
@@ -291,7 +310,19 @@ tos.dep.test = function(X, Y, n.perm = 0, scale = c(0, 1), rank.data = "uniform"
       }
       
       # permute the input
-      tempXY = matrix(c(sX, sY)[perm.id], N)
+      tempXY = scaling.min.max(matrix(XY[perm.id], ncol = 2), 0, 1)
+      
+      # jitter to prevent collision
+      dupXY = duplicated(tempXY)
+      if (any(dupXY)) {
+        a = 1 / 100
+        al = tempXY[dupXY, , drop = FALSE] - a
+        al[al < 0] = 0
+        au = tempXY[dupXY, , drop = FALSE] + a
+        au[au > 1] = 1
+        
+        tempXY[dupXY, ] = matrix(runif(length(tempXY[dupXY, , drop = FALSE]), al, au), NROW(tempXY[dupXY, , drop = FALSE]))
+      }
       
       # compute permutation RVD
       dep.elem = jointRankHelper2D(tempXY, rank.id == 0, epsilon, maxit, verbose)

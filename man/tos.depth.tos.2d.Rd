@@ -9,7 +9,8 @@
 \arguments{
 \item{object}{a fitted 2D optimal transport map object.}
 
-\item{query}{a numeric matrix where each row represents a query point.}
+\item{query}{a numeric matrix where each row represents a query point
+(or a vector of length 2 representing a single point).}
 
 \item{rank.data}{choose the method for assigning ranks to the data points.}
 
@@ -20,5 +21,16 @@ a vector containing depths of the queries.
 }
 \description{
 The 2D implementation of \code{tos.depth}.
+}
+\examples{
+# generate some data
+X = c(0.5, 0.8, -0.2, -1.5, 1.4, 0.5, -1.1, -0.1, -1.1, -2.6)
+Y = c(1.6, -1.0, -0.1, 0.5, -1.3, 2.9, -0.4, 1.3, -1.8, -2.5)
+
+# compute the optimal transport map from U[0, 1]^2 to the data
+XY.OTM = tos.fit(cbind(X, Y))
+
+# compute the depth of point (0, 0).
+tos.depth(XY.OTM, c(0, 0))
 }
 \keyword{internal}

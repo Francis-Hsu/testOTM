@@ -16,7 +16,8 @@ tos.rank(
 \arguments{
 \item{object}{a fitted optimal transport map object.}
 
-\item{query}{a numeric matrix where each row represents a query point.}
+\item{query}{a numeric matrix where each row represents a query point 
+(or a vector of length 2 or 3 representing a single point).}
 
 \item{scale}{logical indicating if the queries should be scaled.}
 
@@ -48,8 +49,19 @@ Set \code{rank.algo} to \code{lp} to use the former and \code{geom} for the latt
 Note the geometric method is slow and does not work for points lie outside the RDT, it is also not implemented for 3D, 
 \code{lp} method will be used in these cases.
 }
+\examples{
+# generate some data
+X = c(0.5, 0.8, -0.2, -1.5, 1.4, 0.5, -1.1, -0.1, -1.1, -2.6)
+Y = c(1.6, -1.0, -0.1, 0.5, -1.3, 2.9, -0.4, 1.3, -1.8, -2.5)
+
+# compute the optimal transport map from U[0, 1]^2 to the data
+XY.OTM = tos.fit(cbind(X, Y))
+
+# compute the rank of point (0, 0).
+tos.rank(XY.OTM, c(0, 0))
+}
 \references{
-Promit Ghosal and Bodhisattva Sen. 2019. 
+Promit Ghosal and Bodhisattva Sen (2019). 
 \emph{Multivariate Ranks and Quantiles Using Optimal Transportation and Applications to Goodness-of-Fit Testing}.
 \url{http://arxiv.org/abs/1905.05340}.
 }

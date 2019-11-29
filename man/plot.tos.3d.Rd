@@ -6,15 +6,15 @@
 \usage{
 \method{plot}{tos.3d}(
   x,
-  interactive = TRUE,
+  inter = interactive(),
   which = "Both",
   col.data = "dodgerblue3",
   col.center = "darkorange1",
   col.rvd = "black",
   col.rdt = "firebrick3",
-  draw.data = T,
-  draw.center = T,
-  draw.map = F,
+  draw.data = TRUE,
+  draw.center = TRUE,
+  draw.map = FALSE,
   draw.id = NULL,
   xlim = c(0, 1),
   ylim = c(0, 1),
@@ -32,7 +32,7 @@
 \arguments{
 \item{x}{a fitted \code{tos.3d} object.}
 
-\item{interactive}{logical indicating if the plot should be interactive.}
+\item{inter}{logical indicating if the plot should be interactive.}
 
 \item{which}{specify which graph(s) to plot. Can be \code{None}, \code{RVD}, \code{RDT}, or \code{Both}.}
 
@@ -78,5 +78,17 @@ Set to \code{NULL} to plot all points. If it is not \code{NULL} and RDT is to be
 \description{
 \code{plot.tos.3d} plots the restricted Voronoi diagram (RVD) and the restricted Delaunay triangulation (RDT) of a given
 3D semi-discrete optimal transport map.
+}
+\examples{
+# generate some data
+X = c(2.3, 0.8, 1.2, 0.6, 0.2, 0.5, -0.7, -0.6, -0.2, 3.2)
+Y = c(1.5, -0.8, 0.6, -2.1, 1.3, 1.3, -1.1, 1.0, -0.2, 1.0)
+Z = c(0.8, -0.3, -1.3, -1.8, 1.2, -0.7, -0.8, 1.3, -0.9, 2.0)
+
+# compute the optimal transport map from U[0, 1]^3 to the data
+XYZ.OTM = tos.fit(cbind(X, Y, Z))
+
+# plot the (non-interactive) RVD
+plot(XYZ.OTM, interactive = FALSE, which = "RVD", draw.map = TRUE)
 }
 \keyword{hplot}

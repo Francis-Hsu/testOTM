@@ -5,16 +5,9 @@
 \name{testOTM}
 \alias{testOTM}
 \alias{testOTM-package}
-\title{testOTM: Multivariate Ranks and Quantiles by Optimal Transport}
+\title{testOTM: Multivariate Ranks and Quantiles by Optimal Transportation}
 \description{
-Multivariate ranks and quantiles based on the theory of optimal transportation, with applications in non-parametric testing.
-}
-\references{
-\itemize{
-\item Geogram, \url{http://alice.loria.fr/software/geogram/doc/html/index.html}.
-\item Ghosal, Promit, and Bodhisattva Sen. 2019. “Multivariate Ranks and Quantiles Using Optimal Transportation and Applications to Goodness-of-Fit Testing.” \url{http://arxiv.org/abs/1905.05340}.
-\item Lévy, Bruno, and Erica L. Schwindt. 2018. “Notions of Optimal Transport Theory and How to Implement Them on a Computer.” Computers & Graphics 72: 135–48. \url{https://doi.org/10.1016/j.cag.2018.01.009}.
-}
+Multivariate ranks and quantiles based on the theory of optimal transportation, following the definitions by Chernozhukov et al. (2017) <doi:10.1214/16-AOS1450>. This package also provides applications of these notions in nonparametric testing, which are suggested by Ghosal and Sen (2019) <arXiv:1905.05340>. The optimal transport maps are computed by the Geogram library, using methods mentioned in Lévy and Schwindt (2018) <doi:10.1016/j.cag.2018.01.009>.
 }
 \seealso{
 Useful links:
@@ -29,7 +22,7 @@ Useful links:
 
 Other contributors:
 \itemize{
-  \item Bruno Lévy (author of Geogram) [contributor, copyright holder]
+  \item Bruno Lévy (Geogram) [contributor, copyright holder]
 }
 
 }

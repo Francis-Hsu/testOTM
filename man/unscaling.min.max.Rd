@@ -19,4 +19,15 @@ a matrix containing the unscaled data.
 \description{
 Undo min-max scaling
 }
+\examples{
+# generate some data
+X = c(1.5, 3.2, 2.6, 0.3, 5.1)
+Y = c(3.3, 6.4, 1.8, 0.7, 2.2)
+
+# scale (X, Y) into [0, 1] range
+Z = scaling.min.max(cbind(X, Y), 0, 1)
+
+# undo the min-max scaling
+unscaling.min.max(Z, attr(Z, "scaled:center"), attr(Z, "scaled:scale"))
+}
 \keyword{utilities}
